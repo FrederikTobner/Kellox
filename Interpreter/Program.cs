@@ -1,5 +1,5 @@
-﻿using Interpreter;
-using System.Text;
+﻿using System.Text;
+
 namespace Interpreter;
 class CustomInterpreter
 {
@@ -48,7 +48,7 @@ class CustomInterpreter
 
     private static void Run(string file)
     {
-        Scanner scanner = new Scanner(file);
+        Scanner scanner = new(file);
         List<Token> tokens = scanner.ScanTokens();
 
         // For now, just print the tokens.
@@ -64,7 +64,7 @@ class CustomInterpreter
         errorOccurred = true;
     }
 
-    private static void Error(int line, string message)
+    internal static void Error(int line, string message)
     {
         Report(line, "", message);
     }
