@@ -33,25 +33,22 @@ class CustomInterpreter
 
     private static void RunPrompt()
     {
-        for (; ; )
+        Console.WriteLine("> ");
+        string? line = Console.ReadLine();
+        while (line != string.Empty && line is not null)
         {
-            Console.WriteLine("> ");
-            string? line = Console.ReadLine();
-            if (line is null)
-            {
-                break;
-            }
             Run(line);
             errorOccurred = false;
+            Console.WriteLine("> ");
+            line = Console.ReadLine();
         }
     }
 
     private static void Run(string file)
     {
-        Scanner scanner = new(file);
+        TokenScanner scanner = new(file);
         List<Token> tokens = scanner.ScanTokens();
-
-        // For now, just print the tokens.
+        // For now, just prints the tokens.
         foreach (Token? token in tokens)
         {
             Console.WriteLine(token);
@@ -64,8 +61,5 @@ class CustomInterpreter
         errorOccurred = true;
     }
 
-    internal static void Error(int line, string message)
-    {
-        Report(line, "", message);
-    }
+    internal static void Error(int line, string message) => Report(line, "", message);
 }

@@ -1,15 +1,16 @@
 ﻿
 namespace Interpreter
 {
-    internal class Scanner
+    internal class TokenScanner
     {
+        private static readonly Dictionary<string, TokenType> keywords = InitializeKeywords();
         private readonly string source;
         private readonly List<Token> tokens = new();
         private int start = 0;
         private int current = 0;
         private int line = 1;
 
-        public Scanner(string source)
+        public TokenScanner(string source)
         {
             this.source = source;
         }
@@ -129,8 +130,6 @@ namespace Interpreter
             }
         }
 
-        private static readonly Dictionary<string, TokenType> keywords = InitializeKeywords();
-
         private static Dictionary<string, TokenType> InitializeKeywords()
         {
             Dictionary<string, TokenType> words = new();
@@ -156,6 +155,8 @@ namespace Interpreter
         private static bool IsAlpha(char c) => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c is '_';
 
         private static bool IsAlphaNumeric(char c) => IsAlpha(c) || IsDigit(c);
+
+        private bool IsAtEnd() => current >= source.Length;
 
         private void Identifier()
         {
@@ -193,14 +194,11 @@ namespace Interpreter
             Advance();
 
             // Trim the surrounding quotes.
-            string value = source.Substring(start + 1, current - start - 1);
+            string value = source.Substring(start + 1, current - start - 2);
             AddToken(TokenType.STRING, value);
         }
 
-        private static bool IsDigit(char c)
-        {
-            return c >= '0' && c <= '9';
-        }
+        private static bool IsDigit(char c) => c >= '0' && c <= '9';
 
         private void Number()
         {
@@ -224,7 +222,10 @@ namespace Interpreter
 
         private char PeekNext()
         {
-            if (current + 1 >= source.Length) return '\0';
+            if (current + 1 >= source.Length)
+            {
+                return '\0';
+            }
             return source[current + 1];
         }
 
@@ -253,8 +254,6 @@ namespace Interpreter
         }
 
         private char Advance() => source[current++];
-
-        private bool IsAtEnd() => current >= source.Length;
     }
 }
 
