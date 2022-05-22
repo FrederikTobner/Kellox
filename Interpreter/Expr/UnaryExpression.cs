@@ -2,21 +2,21 @@
 
 namespace Interpreter.Expr
 {
-    internal class UnaryExpression : Expression
+    internal class UnaryExpression : IExpression
     {
         public Token OperatorToken { get; private set; }
 
-        public Expression Right { get; private set; }
+        public IExpression Right { get; private set; }
 
-        public UnaryExpression(Token operatorToken, Expression right)
+        public UnaryExpression(Token operatorToken, IExpression right)
         {
             this.OperatorToken = operatorToken;
             this.Right = right;
         }
 
-        public override string ToString() => Parenthesize(this.OperatorToken.Lexeme, this.Right);
+        public override string ToString() => IExpression.Parenthesize(this.OperatorToken.Lexeme, this.Right);
 
-        public override object? EvaluateExpression()
+        public object? EvaluateExpression()
         {
             object? result = this.Right.EvaluateExpression();
             if (result is null)
@@ -26,7 +26,7 @@ namespace Interpreter.Expr
             switch (this.OperatorToken.TokenType)
             {
                 case TokenType.BANG:
-                    return !IsTruthy(Right);
+                    return !IExpression.IsTruthy(Right);
                 case TokenType.MINUS:
                     if (result is double resultNumber)
                     {

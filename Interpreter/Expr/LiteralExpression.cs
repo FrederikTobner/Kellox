@@ -1,6 +1,6 @@
 ﻿namespace Interpreter.Expr
 {
-    internal class LiteralExpression : Expression
+    internal class LiteralExpression : IExpression
     {
         public object? Value { get; init; }
 
@@ -22,6 +22,6 @@
             return "nil";
         }
 
-        public override object? EvaluateExpression() => Value;
+        public object? EvaluateExpression() => Value;
     }
 }

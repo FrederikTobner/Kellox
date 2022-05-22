@@ -2,24 +2,23 @@
 
 namespace Interpreter
 {
-    internal abstract class Expression
+    internal interface IExpression
     {
-        public abstract override string ToString();
+        public abstract string ToString();
 
         public abstract object? EvaluateExpression();
 
-        protected static string Parenthesize(string name, params Expression[] expressions)
+        protected static string Parenthesize(string name, params IExpression[] expressions)
         {
             StringBuilder builder = new();
 
             builder.Append('(').Append(name);
-            foreach (Expression expression in expressions)
+            foreach (IExpression expression in expressions)
             {
                 builder.Append(' ');
                 builder.Append(expression.ToString());
             }
             builder.Append(')');
-
             return builder.ToString();
         }
 

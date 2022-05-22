@@ -1,15 +1,18 @@
 ﻿using Interpreter.Exceptions;
+using Interpreter.Stmt;
 
 namespace Interpreter
 {
     internal class CustomInterpreter
     {
-        internal static void Interpret(Expression expression)
+        internal static void Interpret(List<IStatement> statements)
         {
             try
             {
-                object? value = expression.EvaluateExpression();
-                Console.WriteLine(value?.ToString());
+                foreach (var statement in statements)
+                {
+                    statement.ExecuteStatement();
+                }
             }
             catch (RunTimeError ex)
             {

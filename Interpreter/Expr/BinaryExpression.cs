@@ -2,24 +2,24 @@
 
 namespace Interpreter.Expr
 {
-    internal class BinaryExpression : Expression
+    internal class BinaryExpression : IExpression
     {
-        public Expression Left { get; init; }
+        public IExpression Left { get; init; }
 
         public Token OperatorToken { get; init; }
 
-        public Expression Right { get; init; }
+        public IExpression Right { get; init; }
 
-        public BinaryExpression(Expression left, Token operatorToken, Expression right)
+        public BinaryExpression(IExpression left, Token operatorToken, IExpression right)
         {
             Left = left;
             OperatorToken = operatorToken;
             Right = right;
         }
 
-        public override string ToString() => Parenthesize(OperatorToken.Lexeme, Left, Right);
+        public override string ToString() => IExpression.Parenthesize(OperatorToken.Lexeme, Left, Right);
 
-        public override object? EvaluateExpression()
+        public object? EvaluateExpression()
         {
             object? leftResult = Left.EvaluateExpression();
             object? rightResult = Right.EvaluateExpression();
@@ -35,8 +35,8 @@ namespace Interpreter.Expr
                     TokenType.PLUS => leftNumber + rightNumber,
                     TokenType.SLASH => leftNumber / rightNumber,
                     TokenType.STAR => leftNumber * rightNumber,
-                    TokenType.BANG_EQUAL => !IsEqual(leftNumber, rightNumber),
-                    TokenType.EQUAL_EQUAL => IsEqual(leftNumber, rightNumber),
+                    TokenType.BANG_EQUAL => !IExpression.IsEqual(leftNumber, rightNumber),
+                    TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftNumber, rightNumber),
                     _ => throw new RunTimeError(OperatorToken, "Operator not supported"),
                 };
             }
@@ -51,8 +51,8 @@ namespace Interpreter.Expr
             }
             return OperatorToken.TokenType switch
             {
-                TokenType.BANG_EQUAL => !IsEqual(leftResult, rightResult),
-                TokenType.EQUAL_EQUAL => IsEqual(leftResult, rightResult),
+                TokenType.BANG_EQUAL => !IExpression.IsEqual(leftResult, rightResult),
+                TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftResult, rightResult),
                 _ => throw new RunTimeError(OperatorToken, "Operator not supported")
             };
         }

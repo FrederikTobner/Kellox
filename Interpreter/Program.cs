@@ -1,4 +1,5 @@
 ﻿using Interpreter.Expr;
+using Interpreter.Stmt;
 using System.Text;
 
 namespace Interpreter;
@@ -8,7 +9,8 @@ class Program
     static void Main(string[] args)
     {
         //TestExpression();
-        TestInterpreter(args);
+        //TestInterpreter(args);
+        TestInterpreterFromFile();
 
     }
 
@@ -29,9 +31,14 @@ class Program
         }
     }
 
+    private static void TestInterpreterFromFile()
+    {
+        RunFile(".\\SimpleProgram.txt");
+    }
+
     private static void TestExpression()
     {
-        Expression expression = new BinaryExpression(
+        IExpression expression = new BinaryExpression(
         new UnaryExpression(
             new Token(TokenType.MINUS, "-", null, 1),
             new LiteralExpression(123)),
@@ -69,14 +76,14 @@ class Program
         TokenScanner scanner = new(file);
         List<Token> tokens = scanner.ScanTokens();
         Parser parser = new(tokens);
-        Expression? expression = parser.Parse();
+        List<IStatement> statements = parser.Parse();
         if (errorOccurred)
         {
             return;
         }
-        if (expression is not null)
+        if (statements is not null)
         {
-            CustomInterpreter.Interpret(expression);
+            CustomInterpreter.Interpret(statements);
         }
     }
 

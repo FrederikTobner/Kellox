@@ -1,16 +1,16 @@
 ﻿namespace Interpreter.Expr
 {
-    internal class GroupingExpression : Expression
+    internal class GroupingExpression : IExpression
     {
-        public Expression Expression { get; init; }
+        public IExpression Expression { get; init; }
 
-        public GroupingExpression(Expression expression)
+        public GroupingExpression(IExpression expression)
         {
             this.Expression = expression;
         }
 
-        public override string ToString() => Parenthesize("group", Expression);
+        public override string ToString() => IExpression.Parenthesize("group", Expression);
 
-        public override object? EvaluateExpression() => this.Expression.EvaluateExpression();
+        public object? EvaluateExpression() => this.Expression.EvaluateExpression();
     }
 }

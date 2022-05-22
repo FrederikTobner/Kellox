@@ -1,5 +1,6 @@
 ﻿using Interpreter.Exceptions;
 using Interpreter.Expr;
+using Interpreter.Stmt;
 
 namespace Interpreter
 {
@@ -13,31 +14,39 @@ namespace Interpreter
             this.tokens = tokens;
         }
 
-        internal Expression? Parse()
+        internal List<IStatement> Parse()
         {
-            try
+            List<IStatement> statements = new();
+            while (!IsAtEnd())
             {
-                return Expression();
+                if (Match(TokenType.PRINT))
+                {
+                    statements.Add(new PrintStatement(Expression()));
+                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
+                }
+                else
+                {
+                    statements.Add(new ExpressionStatement(Expression()));
+                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
+                }
             }
-            catch (Exception)
-            {
-                return null;
-            }
+
+            return statements;
         }
 
-        private Expression Expression()
+        private IExpression Expression()
         {
             return Equality();
         }
 
-        private Expression Equality()
+        private IExpression Equality()
         {
-            Expression expression = Comparison();
+            IExpression expression = Comparison();
 
             while (Match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL))
             {
                 Token operatorToken = Previous();
-                Expression right = Comparison();
+                IExpression right = Comparison();
                 expression = new BinaryExpression(expression, operatorToken, right);
             }
 
@@ -82,61 +91,61 @@ namespace Interpreter
 
         private Token Previous() => tokens[current - 1];
 
-        private Expression Comparison()
+        private IExpression Comparison()
         {
-            Expression expr = Term();
+            IExpression expr = Term();
 
             while (Match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
             {
                 Token operatorToken = Previous();
-                Expression right = Term();
+                IExpression right = Term();
                 expr = new BinaryExpression(expr, operatorToken, right);
             }
 
             return expr;
         }
 
-        private Expression Term()
+        private IExpression Term()
         {
-            Expression expression = Factor();
+            IExpression expression = Factor();
 
             while (Match(TokenType.MINUS, TokenType.PLUS))
             {
                 Token operatorToken = Previous();
-                Expression right = Factor();
+                IExpression right = Factor();
                 expression = new BinaryExpression(expression, operatorToken, right);
             }
 
             return expression;
         }
 
-        private Expression Factor()
+        private IExpression Factor()
         {
-            Expression expression = Unary();
+            IExpression expression = Unary();
 
             while (Match(TokenType.SLASH, TokenType.STAR))
             {
                 Token operatorToken = Previous();
-                Expression right = Unary();
+                IExpression right = Unary();
                 expression = new BinaryExpression(expression, operatorToken, right);
             }
 
             return expression;
         }
 
-        private Expression Unary()
+        private IExpression Unary()
         {
             if (Match(TokenType.BANG, TokenType.MINUS))
             {
                 Token operatorToken = Previous();
-                Expression right = Unary();
+                IExpression right = Unary();
                 return new UnaryExpression(operatorToken, right);
             }
 
             return Primary();
         }
 
-        private Expression Primary()
+        private IExpression Primary()
         {
             if (Match(TokenType.FALSE))
             {
@@ -158,7 +167,7 @@ namespace Interpreter
 
             if (Match(TokenType.LEFT_PAREN))
             {
-                Expression expr = Expression();
+                IExpression expr = Expression();
                 Consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.");
                 return new GroupingExpression(expr);
             }
