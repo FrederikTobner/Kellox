@@ -1,8 +1,9 @@
-﻿using Interpreter.Expr;
+﻿using Interpreter.Exceptions;
+using Interpreter.Expr;
 
 namespace Interpreter
 {
-    internal class Parser
+    internal partial class Parser
     {
         private readonly List<Token> tokens;
         private int current;
@@ -194,13 +195,8 @@ namespace Interpreter
         }
         private static ParseError Error(Token token, string message)
         {
-            CustomInterpreter.Error(token, message);
+            Program.Error(token, message);
             return new ParseError();
-        }
-
-        private class ParseError : ApplicationException
-        {
-
         }
     }
 }

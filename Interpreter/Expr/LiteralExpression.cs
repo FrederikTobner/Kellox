@@ -9,7 +9,6 @@
             this.Value = value;
         }
 
-
         public override string ToString()
         {
             if (Value is not null)
@@ -22,5 +21,7 @@
             }
             return "nil";
         }
+
+        public override object? EvaluateExpression() => Value;
     }
 }

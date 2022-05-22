@@ -127,7 +127,7 @@ namespace Interpreter
                     }
                     else
                     {
-                        CustomInterpreter.Error(line, "Unexpected character.");
+                        Program.Error(line, "Unexpected character.");
                     }
                     break;
             }
@@ -167,7 +167,7 @@ namespace Interpreter
 
             if (IsAtEnd())
             {
-                CustomInterpreter.Error(line, "Unterminated string.");
+                Program.Error(line, "Unterminated string.");
                 return;
             }
 

@@ -10,5 +10,7 @@
         }
 
         public override string ToString() => Parenthesize("group", Expression);
+
+        public override object? EvaluateExpression() => this.Expression.EvaluateExpression();
     }
 }
