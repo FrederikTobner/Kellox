@@ -19,7 +19,14 @@ namespace Interpreter
             List<IStatement> statements = new();
             while (!IsAtEnd())
             {
-                if (Match(TokenType.PRINT))
+                if (Match(TokenType.VAR))
+                {
+                    Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
+                    current++;
+                    statements.Add(new DeclarationStatement(token, Expression()));
+                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
+                }
+                else if (Match(TokenType.PRINT))
                 {
                     statements.Add(new PrintStatement(Expression()));
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
@@ -36,7 +43,25 @@ namespace Interpreter
 
         private IExpression Expression()
         {
-            return Equality();
+            return Assignment();
+        }
+        private IExpression Assignment()
+        {
+            IExpression expression = Equality();
+
+            if (Match(TokenType.EQUAL))
+            {
+                Token equals = Previous();
+                IExpression value = Assignment();
+                if (expression is VariableExpression variableExpression)
+                {
+                    Token name = variableExpression.Token;
+                    return new AssignmentExpression(name, value);
+                }
+
+                Error(equals, "Invalid assignment target.");
+            }
+            return expression;
         }
 
         private IExpression Equality()
@@ -163,6 +188,11 @@ namespace Interpreter
             if (Match(TokenType.NUMBER, TokenType.STRING))
             {
                 return new LiteralExpression(Previous().Literal);
+            }
+
+            if (Match(TokenType.IDENTIFIER))
+            {
+                return new VariableExpression(Previous());
             }
 
             if (Match(TokenType.LEFT_PAREN))

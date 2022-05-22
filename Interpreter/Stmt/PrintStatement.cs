@@ -2,7 +2,7 @@
 {
     internal class PrintStatement : IStatement
     {
-        IExpression expression;
+        readonly IExpression expression;
 
         public PrintStatement(IExpression expression)
         {

@@ -5,6 +5,13 @@ namespace Interpreter
 {
     internal class CustomInterpreter
     {
+        internal static CustomEnvironment customEnvironment = new CustomEnvironment();
+
+        public CustomInterpreter()
+        {
+
+        }
+
         internal static void Interpret(List<IStatement> statements)
         {
             try
