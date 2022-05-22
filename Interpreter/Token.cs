@@ -2,19 +2,22 @@
 {
     internal class Token
     {
-        readonly TokenType tokenType;
-        readonly string lexeme;
-        readonly object? literal;
-        readonly int line;
+        public string Lexeme { get; init; }
+
+        public object? Literal { get; init; }
+
+        public int Line { get; init; }
+
+        internal TokenType TokenType { get; init; }
+
 
         public Token(TokenType tokenType, string lexeme, object? literal, int line)
         {
-            this.tokenType = tokenType;
-            this.lexeme = lexeme;
-            this.literal = literal;
-            this.line = line;
+            this.TokenType = tokenType;
+            this.Lexeme = lexeme;
+            this.Literal = literal;
+            this.Line = line;
         }
-
-        public override string ToString() => tokenType.ToString() + " " + lexeme + " " + literal;
+        public override string ToString() => TokenType.ToString() + " " + Lexeme + " " + Literal;
     }
 }

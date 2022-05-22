@@ -3,16 +3,19 @@ namespace Interpreter
 {
     internal class TokenScanner
     {
-        private static readonly Dictionary<string, TokenType> keywords = InitializeKeywords();
-        private readonly string source;
-        private readonly List<Token> tokens = new();
+
         private int start = 0;
         private int current = 0;
         private int line = 1;
 
+        public string Source { get; init; }
+
+        public List<Token> Tokens { get; init; }
+
         public TokenScanner(string source)
         {
-            this.source = source;
+            this.Source = source;
+            this.Tokens = new();
         }
 
         internal List<Token> ScanTokens()
@@ -22,16 +25,16 @@ namespace Interpreter
                 start = current;
                 ScanToken();
             }
-            tokens.Add(new Token(TokenType.EOF, "", null, line));
-            return tokens;
+            Tokens.Add(new Token(TokenType.EOF, "", null, line));
+            return Tokens;
         }
 
         private void AddToken(TokenType tokenType) => AddToken(tokenType, null);
 
         private void AddToken(TokenType tokenType, Object? literal)
         {
-            string text = source[start..current];
-            tokens.Add(new Token(tokenType, text, literal, line));
+            string text = Source[start..current];
+            Tokens.Add(new Token(tokenType, text, literal, line));
         }
 
         private void ScanToken()
@@ -130,33 +133,11 @@ namespace Interpreter
             }
         }
 
-        private static Dictionary<string, TokenType> InitializeKeywords()
-        {
-            Dictionary<string, TokenType> words = new();
-            words.Add("and", TokenType.AND);
-            words.Add("class", TokenType.CLASS);
-            words.Add("else", TokenType.ELSE);
-            words.Add("false", TokenType.FALSE);
-            words.Add("for", TokenType.FOR);
-            words.Add("fun", TokenType.FUN);
-            words.Add("if", TokenType.IF);
-            words.Add("nil", TokenType.NIL);
-            words.Add("or", TokenType.OR);
-            words.Add("print", TokenType.PRINT);
-            words.Add("return", TokenType.RETURN);
-            words.Add("super", TokenType.SUPER);
-            words.Add("this", TokenType.THIS);
-            words.Add("true", TokenType.TRUE);
-            words.Add("var", TokenType.VAR);
-            words.Add("while", TokenType.WHILE);
-            return words;
-        }
-
         private static bool IsAlpha(char c) => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c is '_';
 
         private static bool IsAlphaNumeric(char c) => IsAlpha(c) || IsDigit(c);
 
-        private bool IsAtEnd() => current >= source.Length;
+        private bool IsAtEnd() => current >= Source.Length;
 
         private void Identifier()
         {
@@ -165,8 +146,8 @@ namespace Interpreter
                 Advance();
             }
 
-            string text = source[start..current];
-            if (!keywords.TryGetValue(text, out TokenType type))
+            string text = Source[start..current];
+            if (!KeywordsUtils.GetTokenType(text, out TokenType type))
             {
                 type = TokenType.IDENTIFIER;
             }
@@ -194,7 +175,7 @@ namespace Interpreter
             Advance();
 
             // Trim the surrounding quotes.
-            string value = source.Substring(start + 1, current - start - 2);
+            string value = Source.Substring(start + 1, current - start - 2);
             AddToken(TokenType.STRING, value);
         }
 
@@ -217,16 +198,16 @@ namespace Interpreter
                     Advance();
                 }
             }
-            AddToken(TokenType.NUMBER, Convert.ToDouble(source[start..current]));
+            AddToken(TokenType.NUMBER, Convert.ToDouble(Source[start..current]));
         }
 
         private char PeekNext()
         {
-            if (current + 1 >= source.Length)
+            if (current + 1 >= Source.Length)
             {
                 return '\0';
             }
-            return source[current + 1];
+            return Source[current + 1];
         }
 
         private char Peek()
@@ -235,7 +216,7 @@ namespace Interpreter
             {
                 return '\0';
             }
-            return source[current];
+            return Source[current];
         }
 
         private bool Match(char expected)
@@ -244,7 +225,7 @@ namespace Interpreter
             {
                 return false;
             }
-            if (source[current] != expected)
+            if (Source[current] != expected)
             {
                 return false;
             }
@@ -253,7 +234,7 @@ namespace Interpreter
             return true;
         }
 
-        private char Advance() => source[current++];
+        private char Advance() => Source[current++];
     }
 }
 

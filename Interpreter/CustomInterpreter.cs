@@ -1,10 +1,18 @@
-﻿using System.Text;
+﻿using Interpreter.Expr;
+using System.Text;
 
 namespace Interpreter;
 class CustomInterpreter
 {
-    static Boolean errorOccurred = false;
+    static bool errorOccurred = false;
     static void Main(string[] args)
+    {
+        //TestExpression();
+        TestInterpreter(args);
+
+    }
+
+    private static void TestInterpreter(string[] args)
     {
         if (args.Length > 1)
         {
@@ -21,6 +29,18 @@ class CustomInterpreter
         }
     }
 
+    private static void TestExpression()
+    {
+        Expression expression = new BinaryExpression(
+        new UnaryExpression(
+            new Token(TokenType.MINUS, "-", null, 1),
+            new LiteralExpression(123)),
+        new Token(TokenType.STAR, "*", null, 1),
+        new GroupingExpression(
+            new LiteralExpression(45.67)));
+
+        Console.WriteLine(expression.ToString());
+    }
     private static void RunFile(string path)
     {
         byte[] file = File.ReadAllBytes(path);
@@ -48,11 +68,13 @@ class CustomInterpreter
     {
         TokenScanner scanner = new(file);
         List<Token> tokens = scanner.ScanTokens();
-        // For now, just prints the tokens.
-        foreach (Token? token in tokens)
-        {
-            Console.WriteLine(token);
-        }
+        Parser parser = new(tokens);
+        Expression? expression = parser.Parse();
+
+        // Stop if there was a syntax error.
+        if (errorOccurred) return;
+
+        Console.WriteLine(expression?.ToString());
     }
 
     private static void Report(int line, string where, string message)
@@ -62,4 +84,16 @@ class CustomInterpreter
     }
 
     internal static void Error(int line, string message) => Report(line, "", message);
+
+    internal static void Error(Token token, string message)
+    {
+        if (token.TokenType == TokenType.EOF)
+        {
+            Report(token.Line, " at end", message);
+        }
+        else
+        {
+            Report(token.Line, " at '" + token.Lexeme + "'", message);
+        }
+    }
 }
