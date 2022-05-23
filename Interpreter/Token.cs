@@ -18,6 +18,6 @@
             this.Literal = literal;
             this.Line = line;
         }
-        public override string ToString() => TokenType.ToString() + " " + Lexeme + " " + Literal;
+        public override string ToString() => this.TokenType.ToString() + " " + this.Lexeme + " " + this.Literal;
     }
 }

@@ -206,7 +206,10 @@ namespace Interpreter
 
         private Token Consume(TokenType type, string message)
         {
-            if (Check(type)) return Advance();
+            if (Check(type))
+            {
+                return Advance();
+            }
 
             throw Error(Peek(), message);
         }
@@ -220,12 +223,19 @@ namespace Interpreter
                 switch (Peek().TokenType)
                 {
                     case TokenType.CLASS:
+                        break;
                     case TokenType.FUN:
+                        break;
                     case TokenType.VAR:
+                        break;
                     case TokenType.FOR:
+                        break;
                     case TokenType.IF:
+                        break;
                     case TokenType.WHILE:
+                        break;
                     case TokenType.PRINT:
+                        break;
                     case TokenType.RETURN:
                         return;
                 }

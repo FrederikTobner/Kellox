@@ -48,6 +48,7 @@ class Program
 
         Console.WriteLine(expression.ToString());
     }
+
     private static void RunFile(string path)
     {
         byte[] file = File.ReadAllBytes(path);

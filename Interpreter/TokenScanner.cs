@@ -109,13 +109,13 @@ namespace Interpreter
                 case '\r':
                     break;
                 case '\t':
-                    // Ignore whitespace.
                     break;
-
                 case '\n':
                     line++;
                     break;
-                case '"': AString(); break;
+                case '"':
+                    AString();
+                    break;
                 default:
                     if (IsDigit(c))
                     {
@@ -170,11 +170,9 @@ namespace Interpreter
                 Program.Error(line, "Unterminated string.");
                 return;
             }
-
-            // The closing ".
             Advance();
 
-            // Trim the surrounding quotes.
+            // Trims the surrounding quotes.
             string value = Source.Substring(start + 1, current - start - 2);
             AddToken(TokenType.STRING, value);
         }
@@ -191,8 +189,8 @@ namespace Interpreter
             // Look for a fractional part.
             if (Peek() is '.' && IsDigit(PeekNext()))
             {
-                // Consume the "."
-                Advance();
+                // Consumes the "."
+                //Advance();
                 while (IsDigit(Peek()))
                 {
                     Advance();
