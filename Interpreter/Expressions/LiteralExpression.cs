@@ -1,4 +1,4 @@
-﻿namespace Interpreter.Expr
+﻿namespace Interpreter.Expressions
 {
     internal class LiteralExpression : IExpression
     {

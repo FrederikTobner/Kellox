@@ -127,7 +127,7 @@ namespace Interpreter
                     }
                     else
                     {
-                        Program.Error(line, "Unexpected character.");
+                        CustomInterpreter.Error(line, "Unexpected character.");
                     }
                     break;
             }
@@ -167,7 +167,7 @@ namespace Interpreter
 
             if (IsAtEnd())
             {
-                Program.Error(line, "Unterminated string.");
+                CustomInterpreter.Error(line, "Unterminated string.");
                 return;
             }
             Advance();
@@ -181,6 +181,8 @@ namespace Interpreter
 
         private void Number()
         {
+            int digitsAfterPoint = 0;
+
             while (IsDigit(Peek()))
             {
                 Advance();
@@ -190,13 +192,15 @@ namespace Interpreter
             if (Peek() is '.' && IsDigit(PeekNext()))
             {
                 // Consumes the "."
-                //Advance();
+                Advance();
                 while (IsDigit(Peek()))
                 {
                     Advance();
+                    digitsAfterPoint++;
                 }
             }
-            AddToken(TokenType.NUMBER, Convert.ToDouble(Source[start..current]));
+            double number = Convert.ToDouble(Source[start..current]) / Math.Pow(10, digitsAfterPoint);
+            AddToken(TokenType.NUMBER, number);
         }
 
         private char PeekNext()

@@ -1,6 +1,6 @@
 ﻿using Interpreter.Exceptions;
-using Interpreter.Expr;
-using Interpreter.Stmt;
+using Interpreter.Expressions;
+using Interpreter.Statements;
 
 namespace Interpreter
 {
@@ -244,7 +244,7 @@ namespace Interpreter
         }
         private static ParseError Error(Token token, string message)
         {
-            Program.Error(token, message);
+            CustomInterpreter.Error(token, message);
             return new ParseError();
         }
     }

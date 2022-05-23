@@ -1,4 +1,4 @@
-﻿namespace Interpreter.Stmt
+﻿namespace Interpreter.Statements
 {
     internal class DeclarationStatement : IStatement
     {

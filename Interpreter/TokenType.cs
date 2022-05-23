@@ -14,6 +14,7 @@
         SEMICOLON,
         SLASH,
         STAR,
+
         // One or two character tokens.
         BANG,
         BANG_EQUAL,
@@ -23,10 +24,12 @@
         GREATER_EQUAL,
         LESS,
         LESS_EQUAL,
+
         // Literals.
         IDENTIFIER,
         STRING,
         NUMBER,
+
         // Keywords.
         AND,
         CLASS,
@@ -44,6 +47,7 @@
         TRUE,
         VAR,
         WHILE,
+
         // End of the file
         EOF
     }

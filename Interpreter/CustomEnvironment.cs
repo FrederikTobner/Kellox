@@ -4,11 +4,11 @@ namespace Interpreter
 {
     internal class CustomEnvironment
     {
-        private readonly Dictionary<string, object> values;
+        private readonly Dictionary<string, object?> values;
 
         public CustomEnvironment()
         {
-            values = new Dictionary<string, object>();
+            values = new Dictionary<string, object?>();
         }
 
         public void Define(string name, object? value)
@@ -16,7 +16,7 @@ namespace Interpreter
             values.Add(name, value);
         }
 
-        public object Get(Token name)
+        public object? Get(Token name)
         {
             if (values.ContainsKey(name.Lexeme))
             {
@@ -25,7 +25,7 @@ namespace Interpreter
             throw new RunTimeError(name, "Undefiened variable \'" + name.Lexeme + "\'.");
         }
 
-        public void Assign(Token name, object value)
+        public void Assign(Token name, object? value)
         {
             if (values.ContainsKey(name.Lexeme))
             {

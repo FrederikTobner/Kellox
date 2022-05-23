@@ -1,6 +1,6 @@
 ﻿using Interpreter.Exceptions;
 
-namespace Interpreter.Expr
+namespace Interpreter.Expressions
 {
     internal class BinaryExpression : IExpression
     {
