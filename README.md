@@ -1,5 +1,5 @@
 # Interpreter
-Interpreter based on the book Crafting interpreters
+Interpreter based on the book [Crafting interpreters](https://craftinginterpreters.com/contents.html)
 
 Example Statements:
 ```
