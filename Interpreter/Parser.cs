@@ -19,32 +19,66 @@ namespace Interpreter
             List<IStatement> statements = new();
             while (!IsAtEnd())
             {
-                if (Match(TokenType.VAR))
-                {
-                    Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
-                    current++;
-                    statements.Add(new DeclarationStatement(token, Expression()));
+                IStatement statement = Statement();
+                statements.Add(statement);
+                if (statement is not BlockStatement)
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
-                }
-                else if (Match(TokenType.PRINT))
-                {
-                    statements.Add(new PrintStatement(Expression()));
-                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
-                }
-                else
-                {
-                    statements.Add(new ExpressionStatement(Expression()));
-                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
-                }
             }
 
             return statements;
+        }
+
+        private IStatement Statement()
+        {
+            if (Match(TokenType.VAR))
+            {
+                return Declaration();
+
+            }
+            else if (Match(TokenType.PRINT))
+            {
+                return new PrintStatement(Expression());
+            }
+            else if (Match(TokenType.LEFT_BRACE))
+            {
+                return new BlockStatement(ReadBlock());
+            }
+            else
+            {
+                return new ExpressionStatement(Expression());
+            }
+        }
+
+        private List<IStatement> ReadBlock()
+        {
+            List<IStatement> statements = new();
+
+            while (!Check(TokenType.RIGHT_BRACE) && !IsAtEnd())
+            {
+                IStatement statement = Statement();
+                statements.Add(statement);
+                if (statement is not BlockStatement)
+                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
+
+            }
+            Consume(TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
+
+            return statements;
+        }
+
+        private IStatement Declaration()
+        {
+            Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
+            current++;
+            return new DeclarationStatement(token, Expression());
+
         }
 
         private IExpression Expression()
         {
             return Assignment();
         }
+
         private IExpression Assignment()
         {
             IExpression expression = Equality();
