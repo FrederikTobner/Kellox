@@ -17,6 +17,9 @@ namespace Interpreter.Expressions
             Right = right;
         }
 
+        /// <summary>
+        /// Returns a representation of the Expression as a string
+        /// </summary>
         public override string ToString() => IExpression.Parenthesize(OperatorToken.Lexeme, Left, Right);
 
         public object? EvaluateExpression()

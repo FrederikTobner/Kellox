@@ -9,6 +9,9 @@
             this.Expression = expression;
         }
 
+        /// <summary>
+        /// Returns a representation of the Expression as a string
+        /// </summary>
         public override string ToString() => IExpression.Parenthesize("group", Expression);
 
         public object? EvaluateExpression() => this.Expression.EvaluateExpression();

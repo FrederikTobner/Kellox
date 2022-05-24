@@ -9,6 +9,9 @@
             this.Value = value;
         }
 
+        /// <summary>
+        /// Returns a representation of the Expression as a string
+        /// </summary>
         public override string ToString()
         {
             if (Value is not null)

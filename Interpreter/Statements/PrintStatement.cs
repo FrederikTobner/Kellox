@@ -8,7 +8,8 @@
         {
             this.expression = expression;
         }
-        public void ExecuteStatement()
+
+        public void ExecuteInnerStatements()
         {
             object? obj = expression.EvaluateExpression();
             if (obj is not null)

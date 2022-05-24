@@ -2,6 +2,6 @@
 {
     internal interface IStatement
     {
-        void ExecuteStatement();
+        void ExecuteInnerStatements();
     }
 }

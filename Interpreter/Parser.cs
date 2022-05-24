@@ -22,7 +22,9 @@ namespace Interpreter
                 IStatement statement = Statement();
                 statements.Add(statement);
                 if (statement is not BlockStatement)
+                {
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
+                }
             }
 
             return statements;
@@ -58,11 +60,11 @@ namespace Interpreter
                 IStatement statement = Statement();
                 statements.Add(statement);
                 if (statement is not BlockStatement)
+                {
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
-
+                }
             }
             Consume(TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
-
             return statements;
         }
 
@@ -74,10 +76,7 @@ namespace Interpreter
 
         }
 
-        private IExpression Expression()
-        {
-            return Assignment();
-        }
+        private IExpression Expression() => Assignment();
 
         private IExpression Assignment()
         {
@@ -112,6 +111,11 @@ namespace Interpreter
             return expression;
         }
 
+        /// <summary>
+        /// Determines weather the next Token is from the specified TokenType
+        /// </summary>
+        /// <param name="types">Type of the Token</param>
+        /// <returns></returns>
         private bool Match(params TokenType[] types)
         {
             foreach (TokenType type in types)
@@ -126,14 +130,12 @@ namespace Interpreter
             return false;
         }
 
-        private bool Check(TokenType type)
-        {
-            if (IsAtEnd())
-            {
-                return false;
-            }
-            return Peek().TokenType == type;
-        }
+        /// <summary>
+        /// Returns the type of the next Token
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private bool Check(TokenType type) => !IsAtEnd() && Peek().TokenType == type;
 
         private Token Advance()
         {
@@ -146,22 +148,30 @@ namespace Interpreter
 
         private bool IsAtEnd() => Peek().TokenType == TokenType.EOF;
 
+
+        /// <summary>
+        /// Returns current Token
+        /// </summary>
         private Token Peek() => tokens[current];
 
+
+        /// <summary>
+        /// Returns the prevoius Token
+        /// </summary>
         private Token Previous() => tokens[current - 1];
 
         private IExpression Comparison()
         {
-            IExpression expr = Term();
+            IExpression expression = Term();
 
             while (Match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
             {
                 Token operatorToken = Previous();
                 IExpression right = Term();
-                expr = new BinaryExpression(expr, operatorToken, right);
+                expression = new BinaryExpression(expression, operatorToken, right);
             }
 
-            return expr;
+            return expression;
         }
 
         private IExpression Term()
@@ -238,15 +248,22 @@ namespace Interpreter
             throw Error(Peek(), "Expect expression");
         }
 
+        /// <summary>
+        /// Checks wheather the next token is of the given type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
         private Token Consume(TokenType type, string message)
         {
             if (Check(type))
             {
                 return Advance();
             }
-
             throw Error(Peek(), message);
         }
+
+
         private void Synchronize()
         {
             Advance();

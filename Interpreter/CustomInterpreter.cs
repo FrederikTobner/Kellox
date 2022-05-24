@@ -7,15 +7,24 @@ namespace Interpreter
 {
     internal static class CustomInterpreter
     {
-        internal static CustomEnvironment customEnvironment = new();
+        /// <summary>
+        /// Boolean value indicating wheather an error has ocurred during the interpretation of the program
+        /// </summary>
+        private static bool errorOccurred;
 
-        internal static void Interpret(List<IStatement> statements)
+        internal static CustomEnvironment currentEnvironment = new();
+
+        /// <summary>
+        /// Interprets and executes a List of Statements/Program
+        /// </summary>
+        /// <param name="progeam">The program that shall be executed</param>
+        internal static void Interpret(CustomProgram program)
         {
             try
             {
-                foreach (var statement in statements)
+                foreach (IStatement statement in program)
                 {
-                    statement.ExecuteStatement();
+                    statement.ExecuteInnerStatements();
                 }
             }
             catch (RunTimeError ex)
@@ -24,13 +33,19 @@ namespace Interpreter
             }
         }
 
+        /// <summary>
+        /// Reports a error that has orrured during runtime
+        /// </summary>
+        /// <param name="runTimeError">The Error that has occured during runtime</param>
         private static void ReportRunTimeError(RunTimeError runTimeError)
         {
             Error(runTimeError.Token.Line, runTimeError.Message);
         }
 
-        static bool errorOccurred = false;
-
+        /// <summary>
+        /// Tests the interpreter (from file or as command prompt if no file is specified)
+        /// </summary>
+        /// <param name="args"></param>
         internal static void TestInterpreter(string[] args)
         {
             if (args.Length > 1)
@@ -48,11 +63,18 @@ namespace Interpreter
             }
         }
 
+        /// <summary>
+        /// Tests the interrpreter by forcing it to read the specified file
+        /// </summary>
+        /// <param name="path">The path of the file</param>
         internal static void TestInterpreterFromFile(string path)
         {
             RunFile(path);
         }
 
+        /// <summary>
+        /// Tests printing of a nested Expression
+        /// </summary>
         internal static void TestExpression()
         {
             IExpression expression = new BinaryExpression(
@@ -66,6 +88,9 @@ namespace Interpreter
             Console.WriteLine(expression.ToString());
         }
 
+        /// <summary>
+        /// Executes from a file
+        /// </summary>
         private static void RunFile(string path)
         {
             byte[] file = File.ReadAllBytes(path);
@@ -76,6 +101,9 @@ namespace Interpreter
             }
         }
 
+        /// <summary>
+        /// Executes from a Command prompt
+        /// </summary>
         private static void RunPrompt()
         {
             Console.WriteLine("> ");
@@ -89,19 +117,23 @@ namespace Interpreter
             }
         }
 
-        private static void Run(string file)
+        /// <summary>
+        /// Executes a lux program
+        /// </summary>
+        /// <param name="programCode">The program that shall be executed</param>
+        private static void Run(string programCode)
         {
-            TokenScanner scanner = new(file);
+            TokenScanner scanner = new(programCode);
             List<Token> tokens = scanner.ScanTokens();
             Parser parser = new(tokens);
-            List<IStatement> statements = parser.Parse();
+            CustomProgram program = new(parser.Parse());
             if (errorOccurred)
             {
                 return;
             }
-            if (statements is not null)
+            if (program.Runnable)
             {
-                CustomInterpreter.Interpret(statements);
+                Interpret(program);
             }
         }
 
@@ -115,13 +147,14 @@ namespace Interpreter
 
         internal static void Error(Token token, string message)
         {
-            if (token.TokenType == TokenType.EOF)
+            switch (token.TokenType)
             {
-                Report(token.Line, " at end", message);
-            }
-            else
-            {
-                Report(token.Line, " at '" + token.Lexeme + "'", message);
+                case TokenType.EOF:
+                    Report(token.Line, " at end", message);
+                    break;
+                default:
+                    Report(token.Line, " at '" + token.Lexeme + "'", message);
+                    break;
             }
         }
     }

@@ -4,22 +4,25 @@ namespace Interpreter
 {
     internal class BlockStatement : IStatement
     {
-        List<IStatement> statements;
+        private readonly List<IStatement> statements;
 
         public BlockStatement(List<IStatement> statements)
         {
             this.statements = statements;
         }
 
-        public void ExecuteStatement()
+        /// <summary>
+        /// Executes the statements in the block
+        /// </summary>
+        public void ExecuteInnerStatements()
         {
-            CustomEnvironment environment = CustomInterpreter.customEnvironment;
-            CustomInterpreter.customEnvironment = new CustomEnvironment(environment);
+            CustomEnvironment environment = CustomInterpreter.currentEnvironment;
+            CustomInterpreter.currentEnvironment = new CustomEnvironment(environment);
             foreach (IStatement statement in statements)
             {
-                statement.ExecuteStatement();
+                statement.ExecuteInnerStatements();
             }
-            CustomInterpreter.customEnvironment = environment;
+            CustomInterpreter.currentEnvironment = environment;
         }
     }
 }

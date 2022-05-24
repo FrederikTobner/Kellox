@@ -11,14 +11,14 @@
             this.expression = expression;
         }
 
-        public void ExecuteStatement()
+        public void ExecuteInnerStatements()
         {
             object? value = null;
             if (expression != null)
             {
                 value = expression.EvaluateExpression();
             }
-            CustomInterpreter.customEnvironment.Define(name.Lexeme, value);
+            CustomInterpreter.currentEnvironment.Define(name.Lexeme, value);
         }
     }
 }

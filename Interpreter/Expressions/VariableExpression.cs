@@ -11,8 +11,11 @@
 
         internal Token Token => token;
 
-        public object? EvaluateExpression() => CustomInterpreter.customEnvironment.Get(token);
+        public object? EvaluateExpression() => CustomInterpreter.currentEnvironment.Get(token);
 
+        /// <summary>
+        /// Returns a representation of the Expression as a string
+        /// </summary>
         public override string ToString() => $"Var ({token.Lexeme}) ";
     }
 }
