@@ -6,6 +6,10 @@
 
         internal static bool GetTokenType(string key, out TokenType type) => keywords.TryGetValue(key, out type);
 
+        /// <summary>
+        /// Initializes the Dictionary with the Keywords of the language
+        /// </summary>
+        /// <returns></returns>
         private static Dictionary<string, TokenType> InitializeKeywords()
         {
             Dictionary<string, TokenType> words = new();

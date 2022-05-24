@@ -4,7 +4,7 @@ using System.Collections;
 namespace Interpreter
 {
     /// <summary>
-    /// Model of a program written in Lux
+    /// Model of a program written in Lox
     /// </summary>
     internal class CustomProgram : IEnumerable<IStatement>
     {

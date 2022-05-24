@@ -9,7 +9,7 @@
             this.expression = expression;
         }
 
-        public void ExecuteInnerStatements()
+        public void ExecuteStatements()
         {
             object? obj = expression.EvaluateExpression();
             if (obj is not null)

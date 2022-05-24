@@ -14,13 +14,13 @@ namespace Interpreter
         /// <summary>
         /// Executes the statements in the block
         /// </summary>
-        public void ExecuteInnerStatements()
+        public void ExecuteStatements()
         {
             CustomEnvironment environment = CustomInterpreter.currentEnvironment;
             CustomInterpreter.currentEnvironment = new CustomEnvironment(environment);
             foreach (IStatement statement in statements)
             {
-                statement.ExecuteInnerStatements();
+                statement.ExecuteStatements();
             }
             CustomInterpreter.currentEnvironment = environment;
         }

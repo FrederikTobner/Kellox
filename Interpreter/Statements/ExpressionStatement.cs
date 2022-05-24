@@ -9,7 +9,7 @@
             this.expression = expression;
         }
 
-        public void ExecuteInnerStatements()
+        public void ExecuteStatements()
         {
             expression.EvaluateExpression();
         }

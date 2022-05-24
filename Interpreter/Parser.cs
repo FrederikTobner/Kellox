@@ -4,6 +4,9 @@ using Interpreter.Statements;
 
 namespace Interpreter
 {
+    /// <summary>
+    /// Takes a flat sequence of tokens and builds a syntax tree based on the tokens
+    /// </summary>
     internal partial class Parser
     {
         private readonly List<Token> tokens;
@@ -295,7 +298,7 @@ namespace Interpreter
         }
         private static ParseError Error(Token token, string message)
         {
-            CustomInterpreter.Error(token, message);
+            Program.Error(token, message);
             return new ParseError();
         }
     }

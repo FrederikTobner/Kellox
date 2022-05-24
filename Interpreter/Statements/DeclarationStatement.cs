@@ -11,7 +11,7 @@
             this.expression = expression;
         }
 
-        public void ExecuteInnerStatements()
+        public void ExecuteStatements()
         {
             object? value = null;
             if (expression != null)

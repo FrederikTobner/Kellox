@@ -1,7 +1,10 @@
 ﻿
 namespace Interpreter
 {
-    internal class TokenScanner
+    /// <summary>
+    /// Performs a lexical analysis on a linear stream of characters and groups them together to Tokens
+    /// </summary>
+    internal class Lexer
     {
 
         private int start = 0;
@@ -12,7 +15,7 @@ namespace Interpreter
 
         public List<Token> Tokens { get; init; }
 
-        public TokenScanner(string source)
+        public Lexer(string source)
         {
             this.Source = source;
             this.Tokens = new();
@@ -31,12 +34,15 @@ namespace Interpreter
 
         private void AddToken(TokenType tokenType) => AddToken(tokenType, null);
 
-        private void AddToken(TokenType tokenType, Object? literal)
+        private void AddToken(TokenType tokenType, object? literal)
         {
             string text = Source[start..current];
             Tokens.Add(new Token(tokenType, text, literal, line));
         }
 
+        /// <summary>
+        /// Scans the next Token
+        /// </summary>
         private void ScanToken()
         {
             char c = Advance();
@@ -127,7 +133,7 @@ namespace Interpreter
                     }
                     else
                     {
-                        CustomInterpreter.Error(line, "Unexpected character.");
+                        Program.Error(line, "Unexpected character.");
                     }
                     break;
             }
@@ -167,7 +173,7 @@ namespace Interpreter
 
             if (IsAtEnd())
             {
-                CustomInterpreter.Error(line, "Unterminated string.");
+                Program.Error(line, "Unterminated string.");
                 return;
             }
             Advance();
