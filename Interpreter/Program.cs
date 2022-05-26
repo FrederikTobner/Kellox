@@ -9,6 +9,9 @@ class Program
     /// </summary>
     private static bool errorOccurred;
 
+    /// <summary>
+    /// Path of the SampleProgram
+    /// </summary>
     private const string sampleProgramPath = ".\\SampleProgram.txt";
 
     static void Main(string[] args)

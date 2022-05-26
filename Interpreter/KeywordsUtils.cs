@@ -2,8 +2,14 @@
 {
     internal static class KeywordsUtils
     {
+        /// <summary>
+        /// /The Dictionary containing the keywords
+        /// </summary>
         private static readonly Dictionary<string, TokenType> keywords = InitializeKeywords();
 
+        /// <summary>
+        /// Gets the type of a given Token
+        /// </summary>
         internal static bool GetTokenType(string key, out TokenType type) => keywords.TryGetValue(key, out type);
 
         /// <summary>

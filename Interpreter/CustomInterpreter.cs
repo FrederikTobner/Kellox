@@ -1,7 +1,5 @@
 ﻿using Interpreter.Exceptions;
-using Interpreter.Expressions;
 using Interpreter.Statements;
-using System.Text;
 
 namespace Interpreter
 {
@@ -12,7 +10,7 @@ namespace Interpreter
         /// <summary>
         /// Interprets and executes a List of Statements/Program
         /// </summary>
-        /// <param name="progeam">The program that shall be executed</param>
+        /// <param name="program">The program that shall be executed</param>
         internal static void Interpret(CustomProgram program)
         {
             try

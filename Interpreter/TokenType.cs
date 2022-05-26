@@ -1,5 +1,8 @@
 ﻿namespace Interpreter
 {
+    /// <summary>
+    /// The different Types of Tokens in the Lox
+    /// </summary>
     internal enum TokenType
     {
         // Single-character tokens.

@@ -7,12 +7,29 @@ namespace Interpreter
     internal class Lexer
     {
 
+        /// <summary>
+        /// StartIndex
+        /// </summary>
         private int start = 0;
+
+        /// <summary>
+        /// CurrentPosition
+        /// </summary>
         private int current = 0;
+
+        /// <summary>
+        /// The current line in the sourceFile
+        /// </summary>
         private int line = 1;
 
+        /// <summary>
+        /// The sourceCode
+        /// </summary>
         public string Source { get; init; }
 
+        /// <summary>
+        /// The Tokens that make up the sourceCode
+        /// </summary>
         public List<Token> Tokens { get; init; }
 
         public Lexer(string source)
@@ -21,6 +38,10 @@ namespace Interpreter
             this.Tokens = new();
         }
 
+        /// <summary>
+        /// Scans the Tokens in a file and returns the, as a List
+        /// </summary>
+        /// <returns></returns>
         internal List<Token> ScanTokens()
         {
             while (!IsAtEnd())
@@ -28,12 +49,19 @@ namespace Interpreter
                 start = current;
                 ScanToken();
             }
+            //Adding the end of file Token
             Tokens.Add(new Token(TokenType.EOF, "", null, line));
             return Tokens;
         }
 
+        /// <summary>
+        /// Adds a single Token
+        /// </summary>
         private void AddToken(TokenType tokenType) => AddToken(tokenType, null);
 
+        /// <summary>
+        /// Adds a single LiteralToken
+        /// </summary>       
         private void AddToken(TokenType tokenType, object? literal)
         {
             string text = Source[start..current];
@@ -139,12 +167,27 @@ namespace Interpreter
             }
         }
 
+        /// <summary>
+        /// Determines weather a char is from the Alphabet
+        /// </summary>
+        /// <param name="c">The char that is evaluated</param>
         private static bool IsAlpha(char c) => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c is '_';
 
+        /// <summary>
+        /// Determines weather a char is from the Alphabet or a number
+        /// </summary>
+        /// <param name="c">The char that is evaluated</param>
         private static bool IsAlphaNumeric(char c) => IsAlpha(c) || IsDigit(c);
 
+        /// <summary>
+        /// Indicates weather the Lexer has reached the end of the file
+        /// </summary>
+        /// <returns></returns>
         private bool IsAtEnd() => current >= Source.Length;
 
+        /// <summary>
+        /// Used to create a Token with the Tokentype identifier (meaning the name of a variable)
+        /// </summary>
         private void Identifier()
         {
             while (IsAlphaNumeric(Peek()))
@@ -160,6 +203,9 @@ namespace Interpreter
             AddToken(type);
         }
 
+        /// <summary>
+        /// Used to create a Token with the Tokentype String (a string literal)
+        /// </summary>
         private void AString()
         {
             while (Peek() is not '\"' && !IsAtEnd())
@@ -183,8 +229,15 @@ namespace Interpreter
             AddToken(TokenType.STRING, value);
         }
 
+        /// <summary>
+        /// Determines weather a char is a number (0-9)
+        /// </summary>
+        /// <param name="c">The char that is evaluated</param>
         private static bool IsDigit(char c) => c >= '0' && c <= '9';
 
+        /// <summary>
+        /// Used to create a Token with the Tokentype Number (a number literal)
+        /// </summary>
         private void Number()
         {
             int digitsAfterPoint = 0;
@@ -209,6 +262,9 @@ namespace Interpreter
             AddToken(TokenType.NUMBER, number);
         }
 
+        /// <summary>
+        /// ´Returns the char one position ahead of the current Position
+        /// </summary>
         private char PeekNext()
         {
             if (current + 1 >= Source.Length)
@@ -218,6 +274,9 @@ namespace Interpreter
             return Source[current + 1];
         }
 
+        /// <summary>
+        /// Returns the char at the current position
+        /// </summary>
         private char Peek()
         {
             if (IsAtEnd())
@@ -227,6 +286,9 @@ namespace Interpreter
             return Source[current];
         }
 
+        /// <summary>
+        /// Matches the char of the current position with the passed char
+        /// </summary>
         private bool Match(char expected)
         {
             if (IsAtEnd())
@@ -242,6 +304,9 @@ namespace Interpreter
             return true;
         }
 
+        /// <summary>
+        /// Advances a postion further in the sourceCode
+        /// </summary>
         private char Advance() => Source[current++];
     }
 }

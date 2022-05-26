@@ -33,6 +33,10 @@ namespace Interpreter
             return statements;
         }
 
+        /// <summary>
+        /// Determines the next Statement that shall be executed
+        /// </summary>
+        /// <returns></returns>
         private IStatement Statement()
         {
             if (Match(TokenType.VAR))
@@ -54,6 +58,9 @@ namespace Interpreter
             }
         }
 
+        /// <summary>
+        /// Used to handle a new Blockstatement
+        /// </summary>
         private List<IStatement> ReadBlock()
         {
             List<IStatement> statements = new();
@@ -71,6 +78,9 @@ namespace Interpreter
             return statements;
         }
 
+        /// <summary>
+        /// Used to handle a new Declarationstatement
+        /// </summary>
         private IStatement Declaration()
         {
             Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
@@ -79,8 +89,14 @@ namespace Interpreter
 
         }
 
+        /// <summary>
+        /// Used to handle a new Expressionstatement
+        /// </summary>
         private IExpression Expression() => Assignment();
 
+        /// <summary>
+        /// Used to handle a new AssignmentStatement
+        /// </summary>
         private IExpression Assignment()
         {
             IExpression expression = Equality();

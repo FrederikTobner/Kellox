@@ -2,6 +2,9 @@
 {
     internal class LiteralExpression : IExpression
     {
+        /// <summary>
+        /// The Value of the literal of the Expression
+        /// </summary>
         public object? Value { get; init; }
 
         public LiteralExpression(object? value)

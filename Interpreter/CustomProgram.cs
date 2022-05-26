@@ -10,6 +10,9 @@ namespace Interpreter
     {
         private readonly List<IStatement> statements;
 
+        /// <summary>
+        /// Boolean value that determines weather the program is runnable
+        /// </summary>
         public bool Runnable => statements is not null;
 
         public CustomProgram(List<IStatement> statements)
@@ -17,6 +20,9 @@ namespace Interpreter
             this.statements = statements;
         }
 
+        /// <summary>
+        /// Gets the Enumerator for CustomProgram
+        /// </summary>
         public IEnumerator<IStatement> GetEnumerator()
         {
             for (int i = 0; i < statements.Count; i++)
