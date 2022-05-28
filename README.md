@@ -1,12 +1,16 @@
 # Interpreter
 Interpreter based on the book [Crafting interpreters](https://craftinginterpreters.com/contents.html)
 
-Example Statements:
+## Example programs
+Print all Fibonacci numbers that are less than 1000
 ```
-var a = nil;  
-print a;  
-print 3 + 2;  
-print 7 == 1 + 2 * 3;  
-print "Hallo Welt!";
+var x = 0;
+var temp = 0;
+for(var b = 1; x < 1000;b = temp + x)
+{
+	print x;
+	temp = x;
+	x = b;
+}
 ```
   
