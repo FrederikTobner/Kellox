@@ -5,6 +5,9 @@
     /// </summary>
     internal class PrintStatement : IStatement
     {
+        /// <summary>
+        /// The Expression that shall be printed e.g "Hallo" / 6.3
+        /// </summary>
         public IExpression Expression { get; init; }
 
         public PrintStatement(IExpression expression)

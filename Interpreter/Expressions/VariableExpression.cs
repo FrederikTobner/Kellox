@@ -2,6 +2,9 @@
 {
     internal class VariableExpression : IExpression
     {
+        /// <summary>
+        /// The Token of the Variable expression (the variable name/identifier)
+        /// </summary>
         public Token Token { get; init; }
 
         public VariableExpression(Token token)

@@ -5,8 +5,14 @@
     /// </summary>
     internal class AssignmentExpression : IExpression
     {
+        /// <summary>
+        /// The Token of the Assignment expression (the variable name/identifier)
+        /// </summary>
         public Token Token { get; init; }
 
+        /// <summary>
+        /// The Token of the Assignement expression (the value associated with the variable identifier)
+        /// </summary>
         public IExpression Value { get; init; }
 
         public AssignmentExpression(Token token, IExpression value)

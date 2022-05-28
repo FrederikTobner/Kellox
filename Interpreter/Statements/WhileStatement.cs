@@ -5,19 +5,25 @@
     /// </summary>
     internal class WhileStatement : IStatement
     {
-        public IExpression Expression { get; init; }
+        /// <summary>
+        /// The Condition of the WhileStatement e.g. true / a < 6
+        /// </summary>
+        public IExpression Condition { get; init; }
 
+        /// <summary>
+        /// The body of the whileStatement e.g. a Block//PrintStatement
+        /// </summary>
         public IStatement Body { get; init; }
 
         public WhileStatement(IExpression expression, IStatement body)
         {
-            this.Expression = expression;
+            this.Condition = expression;
             this.Body = body;
         }
 
         public void ExecuteStatement()
         {
-            while (IExpression.IsTruthy(Expression.EvaluateExpression()))
+            while (IExpression.IsTruthy(Condition.EvaluateExpression()))
             {
                 Body.ExecuteStatement();
             }

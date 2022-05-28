@@ -6,8 +6,19 @@
     internal class IfStatement : IStatement
     {
 
+        /// <summary>
+        /// The Condition of the if-Statement
+        /// </summary>
         public IExpression Condition { get; init; }
+
+        /// <summary>
+        /// The Thenbranch of the if-Statement e.g a Block- or Printstatement
+        /// </summary>
         public IStatement ThenBranch { get; init; }
+
+        /// <summary>
+        /// The ElseBranch of the if-Statement e.g a Block- or Printstatement
+        /// </summary>
         public IStatement? ElseBranch { get; init; }
 
         public IfStatement(IExpression condition, IStatement ifStatement, IStatement? elseStatement)

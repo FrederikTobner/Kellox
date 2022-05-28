@@ -3,14 +3,23 @@
 namespace Interpreter.Expressions
 {
     /// <summary>
-    /// Models a binary expression
+    /// Models a binary expression e.g. a+b, a!=b
     /// </summary>
     internal class BinaryExpression : IExpression
     {
+        /// <summary>
+        /// The expression left of the operator
+        /// </summary>
         public IExpression Left { get; init; }
 
+        /// <summary>
+        /// The operator connecting the two expressions
+        /// </summary>
         public Token OperatorToken { get; init; }
 
+        /// <summary>
+        /// The expression right of the operator
+        /// </summary>
         public IExpression Right { get; init; }
 
         public BinaryExpression(IExpression left, Token operatorToken, IExpression right)

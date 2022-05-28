@@ -9,7 +9,14 @@ namespace Interpreter
     /// </summary>
     internal partial class Parser
     {
+        /// <summary>
+        /// Flat sequence of Tokens
+        /// </summary>
         private readonly List<Token> tokens;
+
+        /// <summary>
+        /// The current Position in the sequence of tokens
+        /// </summary>
         private int current;
 
         public Parser(List<Token> tokens)
@@ -17,6 +24,9 @@ namespace Interpreter
             this.tokens = tokens;
         }
 
+        /// <summary>
+        /// Builds a List of Statements out of a flat sequence of Tokens
+        /// </summary>
         internal List<IStatement> Parse()
         {
             List<IStatement> statements = new();
@@ -24,7 +34,7 @@ namespace Interpreter
             {
                 IStatement statement = Statement();
                 statements.Add(statement);
-                //There is now Semicilon after a Block/IfStatement
+                //There is no Semicilon after a Block/IfStatement/WhileStatement
                 if (statement is not BlockStatement && statement is not IfStatement && statement is not WhileStatement)
                 {
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
@@ -70,6 +80,9 @@ namespace Interpreter
             }
         }
 
+        /// <summary>
+        /// Creates an OrExpressionn
+        /// </summary>
         private IExpression OrExpression()
         {
             IExpression expression = AndExpression();
@@ -82,6 +95,9 @@ namespace Interpreter
             return expression;
         }
 
+        /// <summary>
+        /// Creates an AndExpressionn
+        /// </summary>
         private IExpression AndExpression()
         {
             IExpression expression = Equality();
@@ -114,6 +130,9 @@ namespace Interpreter
             return statements;
         }
 
+        /// <summary>
+        /// Creates a while statement
+        /// </summary>
         private IStatement CreateWhileStatement()
         {
             Consume(TokenType.LEFT_PAREN, "Expect \'(\' after while.");
@@ -124,52 +143,54 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Creates a for statement (based on while statement)
+        /// Creates a for statement (based on while statement - just syntax sugar))
         /// </summary>
         private IStatement CreateForStatement()
         {
             Consume(TokenType.LEFT_PAREN, "Expect \'(\' after for.");
 
-            IStatement? initializer = null;
+            IStatement? initializerExpression = null;
             if (Match(TokenType.VAR))
             {
-                initializer = CreateDeclarationStatement();
+                initializerExpression = CreateDeclarationStatement();
             }
             else if (!Match(TokenType.SEMICOLON))
             {
-                initializer = new ExpressionStatement(Expression());
+                initializerExpression = new ExpressionStatement(Expression());
             }
 
-            IExpression? condition = null;
+            IExpression? conditionalExpression = null;
             if (Check(TokenType.SEMICOLON))
             {
-                Consume(TokenType.SEMICOLON, "Expect \';\' after loop condition");
-                condition = Expression();
+                Advance();
+                conditionalExpression = Expression();
             }
-            Consume(TokenType.SEMICOLON, "Expect \';\' after loop condition");
 
-            IExpression? increment = null;
+            IExpression? incrementExpression = null;
             if (!Check(TokenType.RIGHT_PAREN))
             {
-                increment = Expression();
+                Consume(TokenType.SEMICOLON, "Expect \';\' after loop condition");
+                incrementExpression = Expression();
             }
             Consume(TokenType.RIGHT_PAREN, "Expect \')\' after for.");
 
             IStatement body = Statement();
 
-            if (increment is not null)
+            if (incrementExpression is not null)
             {
-                IStatement[] statements = { body, new ExpressionStatement(increment) };
+                //Adds the increment-expression at the end of the while body if it is not null
+                IStatement[] statements = { body, new ExpressionStatement(incrementExpression) };
                 body = new BlockStatement(statements.ToList());
             }
-            if (condition is null)
+            if (conditionalExpression is null)
             {
-                condition = new LiteralExpression(true);
+                //If there is no Ccondition specified it is always true
+                conditionalExpression = new LiteralExpression(true);
             }
-            body = new WhileStatement(condition, body);
-            if (initializer is not null)
+            body = new WhileStatement(conditionalExpression, body);
+            if (initializerExpression is not null)
             {
-                IStatement[] statements = { initializer, body };
+                IStatement[] statements = { initializerExpression, body };
                 body = new BlockStatement(statements.ToList());
             }
             return body;
@@ -230,6 +251,9 @@ namespace Interpreter
             return expression;
         }
 
+        /// <summary>
+        /// Crates a new EqualityStatement (a != x/ a == x)
+        /// </summary>
         private IExpression Equality()
         {
             IExpression expression = Comparison();
@@ -245,10 +269,9 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Determines weather the next Token is from the specified TokenType
+        /// Determines weather the next Token is from the specified TokenTypes
         /// </summary>
-        /// <param name="types">Type of the Token</param>
-        /// <returns></returns>
+        /// <param name="types">Types of the Tokens</param>
         private bool Match(params TokenType[] types)
         {
             foreach (TokenType type in types)
@@ -259,17 +282,18 @@ namespace Interpreter
                     return true;
                 }
             }
-
             return false;
         }
 
         /// <summary>
-        /// Returns the type of the next Token
+        /// Checks if the next Token is of a given type
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <param name="type">The type that shall be checked</param>
         private bool Check(TokenType type) => !IsAtEnd() && Peek().TokenType == type;
 
+        /// <summary>
+        /// Advances a position further in the flat sequence of Tokens
+        /// </summary>
         private Token Advance()
         {
             if (!IsAtEnd())
@@ -279,6 +303,9 @@ namespace Interpreter
             return Previous();
         }
 
+        /// <summary>
+        /// Determines whether the ned of the file has been reached
+        /// </summary>
         private bool IsAtEnd() => Peek().TokenType == TokenType.EOF;
 
 
@@ -293,38 +320,42 @@ namespace Interpreter
         /// </summary>
         private Token Previous() => tokens[current - 1];
 
+        /// <summary>
+        ///  Creates a new Comparison Expression E.g. a > x / a >= x / a < x / a <= x
+        /// </summary>
         private IExpression Comparison()
         {
             IExpression expression = Term();
-
             while (Match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
             {
                 Token operatorToken = Previous();
                 IExpression right = Term();
                 expression = new BinaryExpression(expression, operatorToken, right);
             }
-
             return expression;
         }
 
+        /// <summary>
+        /// Creates a new Term expression (a + b / a - b)
+        /// </summary>
         private IExpression Term()
         {
             IExpression expression = Factor();
-
             while (Match(TokenType.MINUS, TokenType.PLUS))
             {
                 Token operatorToken = Previous();
                 IExpression right = Factor();
                 expression = new BinaryExpression(expression, operatorToken, right);
             }
-
             return expression;
         }
 
+        /// <summary>
+        /// Creates a new Factor expression (a * b / a / b)
+        /// </summary>
         private IExpression Factor()
         {
             IExpression expression = Unary();
-
             while (Match(TokenType.SLASH, TokenType.STAR))
             {
                 Token operatorToken = Previous();
@@ -335,6 +366,9 @@ namespace Interpreter
             return expression;
         }
 
+        /// <summary>
+        /// Creates a new unary expression (!a / -a)
+        /// </summary>
         private IExpression Unary()
         {
             if (Match(TokenType.BANG, TokenType.MINUS))
@@ -347,6 +381,9 @@ namespace Interpreter
             return Primary();
         }
 
+        /// <summary>
+        /// Creates the primary types of expressions (literal, variable & group)
+        /// </summary>
         private IExpression Primary()
         {
             if (Match(TokenType.FALSE))
@@ -382,7 +419,7 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Checks wheather the next token is of the given type
+        /// Checks weather the next token is of the given type
         /// </summary>
         /// <param name="type"></param>
         /// <param name="message"></param>
@@ -397,6 +434,9 @@ namespace Interpreter
         }
 
 
+        /// <summary>
+        /// Can be used to parse statements after a statment that has caused a RunTimeError
+        /// </summary>
         private void Synchronize()
         {
             Advance();
@@ -426,6 +466,12 @@ namespace Interpreter
                 Advance();
             }
         }
+
+        /// <summary>
+        /// Logs a ParseError
+        /// </summary>
+        /// <param name="token">The Token that has triggered the parseError</param>
+        /// <param name="message">The Message that shall be displayed</param>
         private static ParseError Error(Token token, string message)
         {
             Program.Error(token, message);

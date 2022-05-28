@@ -5,6 +5,9 @@
     /// </summary>
     internal class GroupingExpression : IExpression
     {
+        /// <summary>
+        /// The inner Expression e.g. for (a==b) -> a==b
+        /// </summary>
         public IExpression Expression { get; init; }
 
         public GroupingExpression(IExpression expression)

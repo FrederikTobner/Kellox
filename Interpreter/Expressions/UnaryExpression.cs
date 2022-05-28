@@ -9,6 +9,9 @@ namespace Interpreter.Expressions
         /// </summary>
         public Token OperatorToken { get; init; }
 
+        /// <summary>
+        /// The expression right of the operator (e.g. a variable identifier / a literal ("a" / true / 5.0))
+        /// </summary>
         public IExpression Right { get; init; }
 
         public UnaryExpression(Token operatorToken, IExpression right)
