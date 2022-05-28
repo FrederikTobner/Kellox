@@ -49,7 +49,7 @@ namespace Interpreter
             }
             if (enclosing != null)
             {
-                return enclosing.values[name.Lexeme];
+                return enclosing.Get(name);
             }
             throw new RunTimeError(name, "Undefiened variable \'" + name.Lexeme + "\'.");
         }

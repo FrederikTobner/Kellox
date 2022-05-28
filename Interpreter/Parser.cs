@@ -25,12 +25,11 @@ namespace Interpreter
                 IStatement statement = Statement();
                 statements.Add(statement);
                 //There is now Semicilon after a Block/IfStatement
-                if (statement is not BlockStatement && statement is not IfStatement)
+                if (statement is not BlockStatement && statement is not IfStatement && statement is not WhileStatement)
                 {
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
                 }
             }
-
             return statements;
         }
 
@@ -40,18 +39,26 @@ namespace Interpreter
         /// <returns></returns>
         private IStatement Statement()
         {
-            if (Match(TokenType.IF))
+            if (Match(TokenType.FOR))
+            {
+                return CreateForStatement();
+            }
+            else if (Match(TokenType.IF))
             {
                 return CreateIfStatement();
             }
             else if (Match(TokenType.VAR))
             {
-                return Declaration();
+                return CreateDeclarationStatement();
 
             }
             else if (Match(TokenType.PRINT))
             {
                 return new PrintStatement(Expression());
+            }
+            else if (Match(TokenType.WHILE))
+            {
+                return CreateWhileStatement();
             }
             else if (Match(TokenType.LEFT_BRACE))
             {
@@ -100,11 +107,72 @@ namespace Interpreter
                 statements.Add(statement);
                 if (statement is not BlockStatement)
                 {
-                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
+                    Consume(TokenType.SEMICOLON, "Expect \';\' after value");
                 }
             }
             Consume(TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
             return statements;
+        }
+
+        private IStatement CreateWhileStatement()
+        {
+            Consume(TokenType.LEFT_PAREN, "Expect \'(\' after while.");
+            IExpression condition = Expression();
+            Consume(TokenType.RIGHT_PAREN, "Expect \')\' after condition.");
+            IStatement body = Statement();
+            return new WhileStatement(condition, body);
+        }
+
+        /// <summary>
+        /// Creates a for statement (based on while statement)
+        /// </summary>
+        private IStatement CreateForStatement()
+        {
+            Consume(TokenType.LEFT_PAREN, "Expect \'(\' after for.");
+
+            IStatement? initializer = null;
+            if (Match(TokenType.VAR))
+            {
+                initializer = CreateDeclarationStatement();
+            }
+            else if (!Match(TokenType.SEMICOLON))
+            {
+                initializer = new ExpressionStatement(Expression());
+            }
+
+            IExpression? condition = null;
+            if (Check(TokenType.SEMICOLON))
+            {
+                Consume(TokenType.SEMICOLON, "Expect \';\' after loop condition");
+                condition = Expression();
+            }
+            Consume(TokenType.SEMICOLON, "Expect \';\' after loop condition");
+
+            IExpression? increment = null;
+            if (!Check(TokenType.RIGHT_PAREN))
+            {
+                increment = Expression();
+            }
+            Consume(TokenType.RIGHT_PAREN, "Expect \')\' after for.");
+
+            IStatement body = Statement();
+
+            if (increment is not null)
+            {
+                IStatement[] statements = { body, new ExpressionStatement(increment) };
+                body = new BlockStatement(statements.ToList());
+            }
+            if (condition is null)
+            {
+                condition = new LiteralExpression(true);
+            }
+            body = new WhileStatement(condition, body);
+            if (initializer is not null)
+            {
+                IStatement[] statements = { initializer, body };
+                body = new BlockStatement(statements.ToList());
+            }
+            return body;
         }
 
         /// <summary>
@@ -127,7 +195,7 @@ namespace Interpreter
         /// <summary>
         /// Used to handle a new Declarationstatement
         /// </summary>
-        private IStatement Declaration()
+        private IStatement CreateDeclarationStatement()
         {
             Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
             current++;

@@ -12,7 +12,7 @@
             this.Expression = expression;
         }
 
-        public void ExecuteStatements()
+        public void ExecuteStatement()
         {
             Expression.EvaluateExpression();
         }

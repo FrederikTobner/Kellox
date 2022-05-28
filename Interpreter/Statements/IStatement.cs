@@ -5,6 +5,6 @@
         /// <summary>
         /// Executes the Statement
         /// </summary>
-        void ExecuteStatements();
+        void ExecuteStatement();
     }
 }

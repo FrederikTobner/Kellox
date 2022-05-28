@@ -1,5 +1,8 @@
 ﻿namespace Interpreter.Statements
 {
+    /// <summary>
+    /// Models a if statement in lox
+    /// </summary>
     internal class IfStatement : IStatement
     {
 
@@ -14,15 +17,15 @@
             this.ElseBranch = elseStatement;
         }
 
-        public void ExecuteStatements()
+        public void ExecuteStatement()
         {
             if (IExpression.IsTruthy(Condition.EvaluateExpression()))
             {
-                ThenBranch.ExecuteStatements();
+                ThenBranch.ExecuteStatement();
             }
             else if (ElseBranch is not null)
             {
-                ElseBranch.ExecuteStatements();
+                ElseBranch.ExecuteStatement();
             }
         }
     }

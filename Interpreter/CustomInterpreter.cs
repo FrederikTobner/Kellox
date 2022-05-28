@@ -20,7 +20,7 @@ namespace Interpreter
             {
                 foreach (IStatement statement in program)
                 {
-                    statement.ExecuteStatements();
+                    statement.ExecuteStatement();
                 }
             }
             catch (RunTimeError ex)

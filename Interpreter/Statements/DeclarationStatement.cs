@@ -21,7 +21,7 @@
             this.Expression = expression;
         }
 
-        public void ExecuteStatements()
+        public void ExecuteStatement()
         {
             object? value = null;
             if (Expression is not null)

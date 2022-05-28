@@ -12,13 +12,13 @@ class Program
     /// <summary>
     /// Path of the SampleProgram
     /// </summary>
-    private static readonly string sampleProgramPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\SampleProgram.txt";
+    private static readonly string sampleProgramPath = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}\\SampleProgram.txt";
 
     static void Main(string[] args)
     {
         //TestExpression();
         //TestInterpreter(args);
-        TestInterpreterFromFile(sampleProgramPath);
+        TestInterpreterSampleProgram();
     }
 
     /// <summary>
@@ -126,13 +126,9 @@ class Program
     }
 
     /// <summary>
-    /// Tests the interrpreter by forcing it to read the specified file
+    /// Tests the interrpreter by running the sample Program
     /// </summary>
-    /// <param name="path">The path of the file</param>
-    internal static void TestInterpreterFromFile(string path)
-    {
-        RunFile(path);
-    }
+    internal static void TestInterpreterSampleProgram() => RunFile(sampleProgramPath);
 
     /// <summary>
     /// Tests printing of a nested Expression

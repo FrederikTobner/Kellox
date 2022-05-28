@@ -12,7 +12,7 @@
             this.Expression = expression;
         }
 
-        public void ExecuteStatements()
+        public void ExecuteStatement()
         {
             object? obj = Expression.EvaluateExpression();
             if (obj is not null)
