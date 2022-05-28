@@ -5,16 +5,16 @@
     /// </summary>
     internal class ExpressionStatement : IStatement
     {
-        readonly IExpression expression;
+        public IExpression Expression { get; init; }
 
         public ExpressionStatement(IExpression expression)
         {
-            this.expression = expression;
+            this.Expression = expression;
         }
 
         public void ExecuteStatements()
         {
-            expression.EvaluateExpression();
+            Expression.EvaluateExpression();
         }
     }
 }

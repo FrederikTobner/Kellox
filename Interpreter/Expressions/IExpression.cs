@@ -3,7 +3,7 @@
 namespace Interpreter
 {
     /// <summary>
-    /// A Expression that can be evaluated and converted to a string
+    /// Interface for a Expression that can be evaluated and converted to a string
     /// </summary>
     internal interface IExpression
     {

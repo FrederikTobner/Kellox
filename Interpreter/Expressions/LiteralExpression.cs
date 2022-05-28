@@ -1,5 +1,8 @@
 ﻿namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a literal expression
+    /// </summary>
     internal class LiteralExpression : IExpression
     {
         /// <summary>

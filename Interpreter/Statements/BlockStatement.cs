@@ -10,11 +10,11 @@ namespace Interpreter
         /// <summary>
         /// The statements inside this block statement
         /// </summary>
-        private readonly List<IStatement> statements;
+        public IReadOnlyList<IStatement> Statements { get; init; }
 
         public BlockStatement(List<IStatement> statements)
         {
-            this.statements = statements;
+            this.Statements = statements;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Interpreter
         {
             CustomEnvironment environment = CustomInterpreter.currentEnvironment;
             CustomInterpreter.currentEnvironment = new CustomEnvironment(environment);
-            foreach (IStatement statement in statements)
+            foreach (IStatement statement in Statements)
             {
                 statement.ExecuteStatements();
             }

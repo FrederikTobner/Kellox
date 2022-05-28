@@ -4,9 +4,12 @@ namespace Interpreter.Expressions
 {
     internal class UnaryExpression : IExpression
     {
-        public Token OperatorToken { get; private set; }
+        /// <summary>
+        /// The operator of the unary Expression
+        /// </summary>
+        public Token OperatorToken { get; init; }
 
-        public IExpression Right { get; private set; }
+        public IExpression Right { get; init; }
 
         public UnaryExpression(Token operatorToken, IExpression right)
         {
@@ -35,9 +38,9 @@ namespace Interpreter.Expressions
                     {
                         return -resultNumber;
                     }
-                    throw new RunTimeError(this.OperatorToken, "Operand must be a number.");
+                    throw new RunTimeError(this.OperatorToken, "Operand can only be used on a number.");
                 default:
-                    throw new Exception("");
+                    throw new RunTimeError(this.OperatorToken, "Operand can not be used for a unary Expression.");
             }
         }
     }

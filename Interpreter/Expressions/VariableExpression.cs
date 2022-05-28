@@ -2,20 +2,18 @@
 {
     internal class VariableExpression : IExpression
     {
-        private readonly Token token;
+        public Token Token { get; init; }
 
         public VariableExpression(Token token)
         {
-            this.token = token;
+            this.Token = token;
         }
 
-        internal Token Token => token;
-
-        public object? EvaluateExpression() => CustomInterpreter.currentEnvironment.Get(token);
+        public object? EvaluateExpression() => CustomInterpreter.currentEnvironment.Get(Token);
 
         /// <summary>
         /// Returns a representation of the Expression as a string
         /// </summary>
-        public override string ToString() => $"Var ({token.Lexeme}) ";
+        public override string ToString() => $"Var ({Token.Lexeme}) ";
     }
 }

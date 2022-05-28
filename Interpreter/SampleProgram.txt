@@ -1,0 +1,20 @@
+var a = 5.1;
+if(a > 6){
+print "Big";
+print "Big";
+}
+else{
+print "Small";
+print "Small";
+}
+print nil;
+var p = "po";
+var t = "trans";
+var r = "reon";
+print t + p + r;
+print a;
+print 3 + 2;
+print 7 == 1 + 2 * 3;
+print "Hallo Welt!";
+print "hi" or 2;
+print nil or "yes";

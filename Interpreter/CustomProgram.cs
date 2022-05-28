@@ -8,16 +8,16 @@ namespace Interpreter
     /// </summary>
     internal class CustomProgram : IEnumerable<IStatement>
     {
-        private readonly List<IStatement> statements;
+        public IReadOnlyList<IStatement> Statements { get; init; }
 
         /// <summary>
         /// Boolean value that determines weather the program is runnable
         /// </summary>
-        public bool Runnable => statements is not null;
+        public bool Runnable => Statements is not null;
 
-        public CustomProgram(List<IStatement> statements)
+        public CustomProgram(IReadOnlyList<IStatement> statements)
         {
-            this.statements = statements;
+            this.Statements = statements;
         }
 
         /// <summary>
@@ -25,9 +25,9 @@ namespace Interpreter
         /// </summary>
         public IEnumerator<IStatement> GetEnumerator()
         {
-            for (int i = 0; i < statements.Count; i++)
+            for (int i = 0; i < Statements.Count; i++)
             {
-                yield return statements[i];
+                yield return Statements[i];
             }
         }
 

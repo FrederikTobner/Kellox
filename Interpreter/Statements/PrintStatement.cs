@@ -5,16 +5,16 @@
     /// </summary>
     internal class PrintStatement : IStatement
     {
-        readonly IExpression expression;
+        public IExpression Expression { get; init; }
 
         public PrintStatement(IExpression expression)
         {
-            this.expression = expression;
+            this.Expression = expression;
         }
 
         public void ExecuteStatements()
         {
-            object? obj = expression.EvaluateExpression();
+            object? obj = Expression.EvaluateExpression();
             if (obj is not null)
             {
                 Console.WriteLine(obj);

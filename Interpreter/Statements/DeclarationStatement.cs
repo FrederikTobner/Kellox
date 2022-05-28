@@ -8,27 +8,27 @@
         /// <summary>
         /// The Identifier Token of this declaration statement
         /// </summary>
-        private readonly Token name;
+        public Token Name { get; init; }
 
         /// <summary>
         /// The expression that evaluated and assigned to the variable
         /// </summary>
-        private readonly IExpression expression;
+        public IExpression Expression { get; init; }
 
         public DeclarationStatement(Token name, IExpression expression)
         {
-            this.name = name;
-            this.expression = expression;
+            this.Name = name;
+            this.Expression = expression;
         }
 
         public void ExecuteStatements()
         {
             object? value = null;
-            if (expression != null)
+            if (Expression is not null)
             {
-                value = expression.EvaluateExpression();
+                value = Expression.EvaluateExpression();
             }
-            CustomInterpreter.currentEnvironment.Define(name.Lexeme, value);
+            CustomInterpreter.currentEnvironment.Define(Name.Lexeme, value);
         }
     }
 }

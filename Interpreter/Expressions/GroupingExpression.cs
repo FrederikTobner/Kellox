@@ -1,5 +1,8 @@
 ﻿namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a grouping expression
+    /// </summary>
     internal class GroupingExpression : IExpression
     {
         public IExpression Expression { get; init; }

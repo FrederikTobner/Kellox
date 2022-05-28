@@ -3,26 +3,26 @@
     internal class IfStatement : IStatement
     {
 
-        private readonly IExpression condition;
-        private readonly IStatement thenBranch;
-        private readonly IStatement? elseBranch;
+        public IExpression Condition { get; init; }
+        public IStatement ThenBranch { get; init; }
+        public IStatement? ElseBranch { get; init; }
 
         public IfStatement(IExpression condition, IStatement ifStatement, IStatement? elseStatement)
         {
-            this.condition = condition;
-            this.thenBranch = ifStatement;
-            this.elseBranch = elseStatement;
+            this.Condition = condition;
+            this.ThenBranch = ifStatement;
+            this.ElseBranch = elseStatement;
         }
 
         public void ExecuteStatements()
         {
-            if (IExpression.IsTruthy(condition.EvaluateExpression()))
+            if (IExpression.IsTruthy(Condition.EvaluateExpression()))
             {
-                thenBranch.ExecuteStatements();
+                ThenBranch.ExecuteStatements();
             }
-            else if (elseBranch is not null)
+            else if (ElseBranch is not null)
             {
-                elseBranch.ExecuteStatements();
+                ElseBranch.ExecuteStatements();
             }
         }
     }

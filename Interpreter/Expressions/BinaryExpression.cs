@@ -2,6 +2,9 @@
 
 namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a binary expression
+    /// </summary>
     internal class BinaryExpression : IExpression
     {
         public IExpression Left { get; init; }

@@ -42,7 +42,7 @@ namespace Interpreter
         {
             if (Match(TokenType.IF))
             {
-                return ReadIfStatement();
+                return CreateIfStatement();
             }
             else if (Match(TokenType.VAR))
             {
@@ -61,6 +61,30 @@ namespace Interpreter
             {
                 return new ExpressionStatement(Expression());
             }
+        }
+
+        private IExpression OrExpression()
+        {
+            IExpression expression = AndExpression();
+            while (Match(TokenType.OR))
+            {
+                Token operatorToken = Previous();
+                IExpression right = AndExpression();
+                expression = new LogicalExpression(expression, right, operatorToken);
+            }
+            return expression;
+        }
+
+        private IExpression AndExpression()
+        {
+            IExpression expression = Equality();
+            while (Match(TokenType.AND))
+            {
+                Token operatorToken = Previous();
+                IExpression right = Equality();
+                expression = new LogicalExpression(expression, right, operatorToken);
+            }
+            return expression;
         }
 
         /// <summary>
@@ -83,7 +107,10 @@ namespace Interpreter
             return statements;
         }
 
-        private IStatement ReadIfStatement()
+        /// <summary>
+        /// Used to handle a new IfStatement
+        /// </summary>
+        private IStatement CreateIfStatement()
         {
             Consume(TokenType.LEFT_PAREN, "Expect \'(\' after \'if\'.");
             IExpression condition = Expression();
@@ -118,7 +145,7 @@ namespace Interpreter
         /// </summary>
         private IExpression Assignment()
         {
-            IExpression expression = Equality();
+            IExpression expression = OrExpression();
 
             if (Match(TokenType.EQUAL))
             {

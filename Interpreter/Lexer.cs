@@ -35,7 +35,7 @@ namespace Interpreter
         public Lexer(string source)
         {
             this.Source = source;
-            this.Tokens = new();
+            this.Tokens = new List<Token>();
         }
 
         /// <summary>

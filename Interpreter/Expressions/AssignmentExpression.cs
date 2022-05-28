@@ -1,26 +1,29 @@
 ﻿namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models an assignment expression
+    /// </summary>
     internal class AssignmentExpression : IExpression
     {
-        readonly Token token;
+        public Token Token { get; init; }
 
-        readonly IExpression value;
+        public IExpression Value { get; init; }
 
         public AssignmentExpression(Token token, IExpression value)
         {
-            this.token = token;
-            this.value = value;
+            this.Token = token;
+            this.Value = value;
         }
 
         /// <summary>
         /// Returns a representation of the Expression as a string
         /// </summary>
-        public override string ToString() => IExpression.Parenthesize(token.Lexeme, value);
+        public override string ToString() => IExpression.Parenthesize(Token.Lexeme, Value);
 
         public object? EvaluateExpression()
         {
-            object? result = value.EvaluateExpression();
-            CustomInterpreter.currentEnvironment.Assign(token, result);
+            object? result = Value.EvaluateExpression();
+            CustomInterpreter.currentEnvironment.Assign(Token, result);
             return result;
         }
     }

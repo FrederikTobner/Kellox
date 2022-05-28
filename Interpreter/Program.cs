@@ -12,7 +12,7 @@ class Program
     /// <summary>
     /// Path of the SampleProgram
     /// </summary>
-    private const string sampleProgramPath = ".\\SampleProgram.txt";
+    private static readonly string sampleProgramPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\SampleProgram.txt";
 
     static void Main(string[] args)
     {
@@ -82,8 +82,14 @@ class Program
         errorOccurred = true;
     }
 
+    /// <summary>
+    /// Reports an error that occured during the lexical analysis in specific line
+    /// </summary>
     internal static void Error(int line, string message) => Report(line, "", message);
 
+    /// <summary>
+    /// Reports an error that occured during the lexical analysis that was caused by a specific token
+    /// </summary>
     internal static void Error(Token token, string message)
     {
         switch (token.TokenType)
