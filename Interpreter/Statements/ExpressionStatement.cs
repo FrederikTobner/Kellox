@@ -1,5 +1,8 @@
 ﻿namespace Interpreter.Statements
 {
+    /// <summary>
+    /// Models a epression statement
+    /// </summary>
     internal class ExpressionStatement : IStatement
     {
         readonly IExpression expression;

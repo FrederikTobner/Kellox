@@ -36,7 +36,7 @@ namespace Interpreter
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected static bool IsTruthy(object obj) => obj switch
+        public static bool IsTruthy(object? obj) => obj switch
         {
             null => false,
             bool b => b,

@@ -1,5 +1,8 @@
 ﻿namespace Interpreter.Statements
 {
+    /// <summary>
+    /// Models a print statement
+    /// </summary>
     internal class PrintStatement : IStatement
     {
         readonly IExpression expression;

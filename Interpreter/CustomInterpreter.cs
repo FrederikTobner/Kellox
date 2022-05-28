@@ -5,6 +5,9 @@ namespace Interpreter
 {
     internal static class CustomInterpreter
     {
+        /// <summary>
+        /// The current Environment where the program is getting executed
+        /// </summary>
         internal static CustomEnvironment currentEnvironment = new();
 
         /// <summary>

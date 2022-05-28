@@ -21,7 +21,7 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Gets the Enumerator for CustomProgram
+        /// Expoes the Enumerator for CustomProgram
         /// </summary>
         public IEnumerator<IStatement> GetEnumerator()
         {

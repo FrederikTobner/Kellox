@@ -22,7 +22,7 @@ class Program
     }
 
     /// <summary>
-    /// Executes from a file
+    /// Executes a lox program from a file
     /// </summary>
     internal static void RunFile(string path)
     {
@@ -35,7 +35,7 @@ class Program
     }
 
     /// <summary>
-    /// Executes from a Command prompt
+    /// Executes a lox program from the Command prompt
     /// </summary>
     internal static void RunPrompt()
     {
@@ -73,7 +73,7 @@ class Program
     /// <summary>
     /// Reports an error that occured during the lexical analysis
     /// </summary>
-    /// <param name="line"></param>
+    /// <param name="line">The line where the error has occured</param>
     /// <param name="where"></param>
     /// <param name="message"></param>
     private static void Report(int line, string where, string message)

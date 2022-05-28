@@ -12,6 +12,9 @@
             this.token = token;
         }
 
+        /// <summary>
+        /// The Token that has triggered the runtime error
+        /// </summary>
         internal Token Token => token;
     }
 }

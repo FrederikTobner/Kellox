@@ -24,7 +24,8 @@ namespace Interpreter
             {
                 IStatement statement = Statement();
                 statements.Add(statement);
-                if (statement is not BlockStatement)
+                //There is now Semicilon after a Block/IfStatement
+                if (statement is not BlockStatement && statement is not IfStatement)
                 {
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
                 }
@@ -39,7 +40,11 @@ namespace Interpreter
         /// <returns></returns>
         private IStatement Statement()
         {
-            if (Match(TokenType.VAR))
+            if (Match(TokenType.IF))
+            {
+                return ReadIfStatement();
+            }
+            else if (Match(TokenType.VAR))
             {
                 return Declaration();
 
@@ -76,6 +81,20 @@ namespace Interpreter
             }
             Consume(TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
             return statements;
+        }
+
+        private IStatement ReadIfStatement()
+        {
+            Consume(TokenType.LEFT_PAREN, "Expect \'(\' after \'if\'.");
+            IExpression condition = Expression();
+            Consume(TokenType.RIGHT_PAREN, "Expect \')\' after if condition.");
+            IStatement thenBranch = Statement();
+            IStatement? elseBranch = null;
+            if (Match(TokenType.ELSE))
+            {
+                elseBranch = Statement();
+            }
+            return new IfStatement(condition, thenBranch, elseBranch);
         }
 
         /// <summary>

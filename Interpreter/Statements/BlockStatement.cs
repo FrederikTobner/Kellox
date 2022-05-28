@@ -2,8 +2,14 @@
 
 namespace Interpreter
 {
+    /// <summary>
+    /// Models a block statement
+    /// </summary>
     internal class BlockStatement : IStatement
     {
+        /// <summary>
+        /// The statements inside this block statement
+        /// </summary>
         private readonly List<IStatement> statements;
 
         public BlockStatement(List<IStatement> statements)
