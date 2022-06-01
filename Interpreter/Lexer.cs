@@ -2,23 +2,22 @@
 namespace Interpreter
 {
     /// <summary>
-    /// Performs a lexical analysis on a linear stream of characters and groups them together to Tokens
+    /// Performs a lexical analysis on a linear stream of characters and groups them together to a flat sequence of Tokens
     /// </summary>
     internal class Lexer
     {
-
         /// <summary>
-        /// StartIndex
+        /// StartIndex of the token that is currently getting evaluated in the sourcecode
         /// </summary>
         private int start = 0;
 
         /// <summary>
-        /// CurrentPosition
+        /// CurrentPosition in the sourcecode
         /// </summary>
         private int current = 0;
 
         /// <summary>
-        /// The current line in the sourceFile
+        /// The current line in the sourcecode
         /// </summary>
         private int line = 1;
 
@@ -41,7 +40,6 @@ namespace Interpreter
         /// <summary>
         /// Scans the Tokens in a file and returns the, as a List
         /// </summary>
-        /// <returns></returns>
         internal List<Token> ScanTokens()
         {
             while (!IsAtEnd())
@@ -182,7 +180,6 @@ namespace Interpreter
         /// <summary>
         /// Indicates weather the Lexer has reached the end of the file
         /// </summary>
-        /// <returns></returns>
         private bool IsAtEnd() => current >= Source.Length;
 
         /// <summary>
@@ -305,7 +302,7 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Advances a postion further in the sourceCode
+        /// Advances a postion further in the sourceCode (one character)
         /// </summary>
         private char Advance() => Source[current++];
     }

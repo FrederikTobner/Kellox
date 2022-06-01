@@ -14,7 +14,7 @@ class Program
     /// </summary>
     private static readonly string sampleProgramPath = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}\\SampleProgram.txt";
 
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         //TestExpression();
         //TestInterpreter(args);
@@ -59,14 +59,14 @@ class Program
         Lexer scanner = new(sourceCode);
         List<Token> tokens = scanner.ScanTokens();
         Parser parser = new(tokens);
-        CustomProgram program = new(parser.Parse());
+        LoxProgram program = new(parser.Parse());
         if (errorOccurred)
         {
             return;
         }
         if (program.Runnable)
         {
-            CustomInterpreter.Interpret(program);
+            LoxInterpreter.Interpret(program);
         }
     }
 

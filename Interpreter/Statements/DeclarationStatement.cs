@@ -28,7 +28,7 @@
             {
                 value = Expression.EvaluateExpression();
             }
-            CustomInterpreter.currentEnvironment.Define(Name.Lexeme, value);
+            LoxInterpreter.currentEnvironment.Define(Name.Lexeme, value);
         }
     }
 }

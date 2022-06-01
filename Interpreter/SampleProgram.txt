@@ -1,23 +1,20 @@
 var a = 5.3;
 if(a > 6){
-print "Big";
-print "Big";
+print "Then";
+print "Then";
 }
 else{
-print "Small";
-print "Small";
+print "Else";
+print "Else";
 }
 print nil;
-var p = "po";
-var t = "trans";
-var r = "reon";
-print t + p + r;
 print a;
 print 3 + 2;
 print 7 == 1 + 2 * 3;
-print "Hallo Welt!";
+print "Hallo" + " Welt!";
 print "hi" or 2;
 print nil or "yes";
+print true and false;
 var x = 0;
 var temp = 0;
 for(var b = 1; x < 1000;b = temp + x)

@@ -12,7 +12,7 @@
             this.Token = token;
         }
 
-        public object? EvaluateExpression() => CustomInterpreter.currentEnvironment.Get(Token);
+        public object? EvaluateExpression() => LoxInterpreter.currentEnvironment.Get(Token);
 
         /// <summary>
         /// Returns a representation of the Expression as a string

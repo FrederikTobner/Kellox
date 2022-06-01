@@ -29,7 +29,7 @@
         public object? EvaluateExpression()
         {
             object? result = Value.EvaluateExpression();
-            CustomInterpreter.currentEnvironment.Assign(Token, result);
+            LoxInterpreter.currentEnvironment.Assign(Token, result);
             return result;
         }
     }

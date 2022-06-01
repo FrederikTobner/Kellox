@@ -22,13 +22,13 @@ namespace Interpreter
         /// </summary>
         public void ExecuteStatement()
         {
-            CustomEnvironment environment = CustomInterpreter.currentEnvironment;
-            CustomInterpreter.currentEnvironment = new CustomEnvironment(environment);
+            LoxEnvironment environment = LoxInterpreter.currentEnvironment;
+            LoxInterpreter.currentEnvironment = new LoxEnvironment(environment);
             foreach (IStatement statement in Statements)
             {
                 statement.ExecuteStatement();
             }
-            CustomInterpreter.currentEnvironment = environment;
+            LoxInterpreter.currentEnvironment = environment;
         }
     }
 }

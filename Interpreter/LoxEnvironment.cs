@@ -6,20 +6,20 @@ namespace Interpreter
     /// Environment for the Programming Language
     /// Associates values to variables
     /// </summary>
-    internal class CustomEnvironment
+    internal class LoxEnvironment
     {
         /// <summary>
         /// The enclosing Environment 
         /// e.g. 'global' if the Scope is definied in the global Scope
         /// </summary>
-        private readonly CustomEnvironment? enclosing;
+        private readonly LoxEnvironment? enclosing;
 
         /// <summary>
         /// Dictionary that conntains all the values defined in this Environment
         /// </summary>
         private readonly Dictionary<string, object?> values;
 
-        public CustomEnvironment(CustomEnvironment? environment = null)
+        public LoxEnvironment(LoxEnvironment? environment = null)
         {
             values = new Dictionary<string, object?>();
             this.enclosing = environment;
@@ -40,7 +40,7 @@ namespace Interpreter
         /// </summary>
         /// <param name="name">The name of the variable</param>
         /// <returns>The value associated to the variable</returns>
-        /// <exception cref="RunTimeError"></exception>
+        /// <exception cref="RunTimeError">If the Variable is undefiened</exception>
         public object? Get(Token name)
         {
             if (values.ContainsKey(name.Lexeme))
@@ -59,7 +59,7 @@ namespace Interpreter
         /// </summary>
         /// <param name="name">The name of the variable</param>
         /// <param name="value">The value that shall be assigned to the variable</param>
-        /// <exception cref="RunTimeError"></exception>
+        /// <exception cref="RunTimeError">If the Variable is undefiened</exception>
         public void Assign(Token name, object? value)
         {
             if (values.ContainsKey(name.Lexeme))
@@ -67,7 +67,7 @@ namespace Interpreter
                 values[name.Lexeme] = value;
                 return;
             }
-            if (enclosing != null)
+            if (enclosing is not null)
             {
                 enclosing.Assign(name, value);
                 return;

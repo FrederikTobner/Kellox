@@ -6,7 +6,7 @@ namespace Interpreter
     /// <summary>
     /// Model of a program written in Lox
     /// </summary>
-    internal class CustomProgram : IEnumerable<IStatement>
+    internal class LoxProgram : IEnumerable<IStatement>
     {
         public IReadOnlyList<IStatement> Statements { get; init; }
 
@@ -15,7 +15,7 @@ namespace Interpreter
         /// </summary>
         public bool Runnable => Statements is not null;
 
-        public CustomProgram(IReadOnlyList<IStatement> statements)
+        public LoxProgram(IReadOnlyList<IStatement> statements)
         {
             this.Statements = statements;
         }

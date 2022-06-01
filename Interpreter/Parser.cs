@@ -60,7 +60,6 @@ namespace Interpreter
             else if (Match(TokenType.VAR))
             {
                 return CreateDeclarationStatement();
-
             }
             else if (Match(TokenType.PRINT))
             {

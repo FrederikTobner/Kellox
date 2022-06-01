@@ -3,18 +3,18 @@ using Interpreter.Statements;
 
 namespace Interpreter
 {
-    internal static class CustomInterpreter
+    internal static class LoxInterpreter
     {
         /// <summary>
         /// The current Environment where the program is getting executed
         /// </summary>
-        internal static CustomEnvironment currentEnvironment = new();
+        internal static LoxEnvironment currentEnvironment = new();
 
         /// <summary>
         /// Interprets and executes a List of Statements/Program
         /// </summary>
         /// <param name="program">The program that shall be executed</param>
-        internal static void Interpret(CustomProgram program)
+        internal static void Interpret(LoxProgram program)
         {
             try
             {
