@@ -4,6 +4,9 @@ namespace Interpreter.Functions
 {
     internal class LoxFunction : ILoxCallable
     {
+        /// <summary>
+        /// The function statement where the function is defined
+        /// </summary>
         private readonly FunctionStatement declaration;
 
         public LoxFunction(FunctionStatement declaration)
