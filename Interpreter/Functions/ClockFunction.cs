@@ -1,4 +1,4 @@
-﻿namespace Interpreter
+﻿namespace Interpreter.Functions
 {
     /// <summary>
     /// Native Function Clock implemented in the host language C#

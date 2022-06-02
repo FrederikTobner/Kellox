@@ -1,4 +1,5 @@
 ﻿using Interpreter.Exceptions;
+using Interpreter.Functions;
 using Interpreter.Statements;
 
 namespace Interpreter

@@ -35,7 +35,7 @@ namespace Interpreter
                 IStatement statement = Statement();
                 statements.Add(statement);
                 //There is no Semicilon after a Block/IfStatement/WhileStatement
-                if (statement is not BlockStatement && statement is not IfStatement && statement is not WhileStatement)
+                if (statement is not BlockStatement && statement is not IfStatement && statement is not WhileStatement && statement is not FunctionStatement)
                 {
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
                 }
@@ -55,6 +55,10 @@ namespace Interpreter
             else if (Match(TokenType.IF))
             {
                 return CreateIfStatement();
+            }
+            else if (Match(TokenType.FUN))
+            {
+                return CreateFunctionStatement("function");
             }
             else if (Match(TokenType.VAR))
             {
@@ -126,6 +130,34 @@ namespace Interpreter
             }
             Consume(TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
             return statements;
+        }
+
+        /// <summary>
+        /// Creates a new Function statement (declaration  not calle)
+        /// </summary>
+        private IStatement CreateFunctionStatement(string kind)
+        {
+            Token name = Consume(TokenType.IDENTIFIER, "Expect " + kind + " name.");
+            Consume(TokenType.LEFT_PAREN, "Expect \'(\' after " + kind + " name.");
+            //Handles arguments/parameters
+            List<Token> parameters = new();
+            if (!Check(TokenType.RIGHT_PAREN))
+            {
+                do
+                {
+                    if (parameters.Count >= 255)
+                    {
+                        Error(Peek(), "Can't have more than 255 parameters.");
+                    }
+                    parameters.Add(Consume(TokenType.IDENTIFIER, "Expect parameter name."));
+
+                } while (Match(TokenType.COMMA));
+            }
+            Consume(TokenType.RIGHT_PAREN, "Expect \')\' after parameters");
+            //Handles body
+            Consume(TokenType.LEFT_BRACE, "Expect \'}\' before " + kind + " body");
+            List<IStatement> body = ReadBlock();
+            return new FunctionStatement(name, parameters, body);
         }
 
         /// <summary>
