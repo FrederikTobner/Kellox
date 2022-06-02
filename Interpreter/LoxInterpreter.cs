@@ -5,10 +5,23 @@ namespace Interpreter
 {
     internal static class LoxInterpreter
     {
+
         /// <summary>
         /// The current Environment where the program is getting executed
         /// </summary>
-        internal static LoxEnvironment currentEnvironment = new();
+        internal readonly static LoxEnvironment globalEnvironment = InitializeGlobal();
+
+        private static LoxEnvironment InitializeGlobal()
+        {
+            LoxEnvironment loxEnvironment = new();
+            loxEnvironment.Define("clock", new ClockFunction());
+            return loxEnvironment;
+        }
+
+        /// <summary>
+        /// The current Environment where the program is getting executed
+        /// </summary>
+        internal static LoxEnvironment currentEnvironment = globalEnvironment;
 
         /// <summary>
         /// Interprets and executes a List of Statements/Program

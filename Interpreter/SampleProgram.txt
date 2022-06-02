@@ -7,6 +7,7 @@ else{
 print "Else";
 print "Else";
 }
+print clock();
 print nil;
 print a;
 print 3 + 2;
