@@ -1,4 +1,5 @@
-﻿using Interpreter.Statements;
+﻿using Interpreter.Exceptions;
+using Interpreter.Statements;
 
 namespace Interpreter.Functions
 {
@@ -23,8 +24,17 @@ namespace Interpreter.Functions
             {
                 environment.Define(declaration.Parameters[i].Lexeme, arguments[i]);
             }
+            LoxEnvironment oldEnvironment = LoxInterpreter.currentEnvironment;
             LoxInterpreter.currentEnvironment = environment;
-            new BlockStatement(declaration.Body).ExecuteStatement();
+            try
+            {
+                new BlockStatement(declaration.Body).ExecuteStatement();
+            }
+            catch (Return returnValue)
+            {
+                return returnValue.Value;
+            }
+            LoxInterpreter.currentEnvironment = oldEnvironment;
             return null;
         }
 

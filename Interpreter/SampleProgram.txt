@@ -1,12 +1,17 @@
-fun printFibonacci(upperBound){
-	var x = 0;
-	var temp = 0;
+fun printFibonacci(upperBound, startIndex){
+	var x = startIndex;
+	var temp = startIndex;
 	for(var b = 1; x < upperBound;b = temp + x)
 	{
 		print x;
 		temp = x;
 		x = b;
 	}
+}
+
+fun Add(x, y){
+var result = x + y;
+return result;
 }
 
 var a = 5.3;
@@ -21,10 +26,10 @@ print "Else";
 print clock();
 print nil;
 print a;
-print 3 + 2;
+print Add(3, 10);
 print 7 == 1 + 2 * 3;
 print "Hallo" + " Welt!";
 print "hi" or 2;
 print nil or "yes";
 print true and false;
-printFibonacci(1000);
+printFibonacci(1000, 0);

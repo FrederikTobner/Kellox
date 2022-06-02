@@ -35,7 +35,7 @@ namespace Interpreter
                 IStatement statement = Statement();
                 statements.Add(statement);
                 //There is no Semicilon after a Block/IfStatement/WhileStatement
-                if (statement is not BlockStatement && statement is not IfStatement && statement is not WhileStatement && statement is not FunctionStatement)
+                if (statement is not BlockStatement && statement is not IfStatement && statement is not WhileStatement && statement is not FunctionStatement && statement is not ReturnStatement)
                 {
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
                 }
@@ -68,6 +68,10 @@ namespace Interpreter
             {
                 return new PrintStatement(Expression());
             }
+            else if (Match(TokenType.RETURN))
+            {
+                return CreateReturnStatement();
+            }
             else if (Match(TokenType.WHILE))
             {
                 return CreateWhileStatement();
@@ -80,6 +84,18 @@ namespace Interpreter
             {
                 return new ExpressionStatement(Expression());
             }
+        }
+
+        private IStatement CreateReturnStatement()
+        {
+            Token keyword = Previous();
+            IExpression? value = null;
+            if (!Check(TokenType.SEMICOLON))
+            {
+                value = Expression();
+            }
+            Consume(TokenType.SEMICOLON, "Expect \';\' after return value");
+            return new ReturnStatement(keyword, value);
         }
 
         /// <summary>
@@ -123,7 +139,7 @@ namespace Interpreter
             {
                 IStatement statement = Statement();
                 statements.Add(statement);
-                if (statement is not BlockStatement)
+                if (statement is not BlockStatement && statement is not ReturnStatement)
                 {
                     Consume(TokenType.SEMICOLON, "Expect \';\' after value");
                 }
