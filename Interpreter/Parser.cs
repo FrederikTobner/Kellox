@@ -44,9 +44,8 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Determines the next Statement that shall be executed
+        /// Determines the next Statement that shall be executed based on the next Token
         /// </summary>
-        /// <returns></returns>
         private IStatement Statement()
         {
             if (Match(TokenType.FOR))
@@ -377,7 +376,46 @@ namespace Interpreter
                 return new UnaryExpression(operatorToken, right);
             }
 
-            return Primary();
+            return Call();
+        }
+
+        private IExpression Call()
+        {
+            IExpression expression = Primary();
+
+            while (true)
+            {
+                if (Match(TokenType.LEFT_PAREN))
+                {
+                    expression = FinishCall(expression);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return expression;
+        }
+
+        private IExpression FinishCall(IExpression calle)
+        {
+            List<IExpression> arguments = new();
+
+            if (!Check(TokenType.RIGHT_PAREN))
+            {
+                do
+                {
+                    if (arguments.Count >= 255)
+                    {
+                        Error(Peek(), "Can't have more than 255 argumenst");
+                    }
+                    arguments.Add(Expression());
+                } while (Match(TokenType.COMMA));
+            }
+
+            Token paren = Consume(TokenType.RIGHT_PAREN, "Expect \')\' after arguments.");
+            return new CallExpression(calle, paren, arguments);
         }
 
         /// <summary>
