@@ -1,6 +1,7 @@
 ﻿using Interpreter.Exceptions;
 using Interpreter.Functions;
 using Interpreter.Statements;
+using Interpreter.Utils;
 
 namespace Interpreter
 {
@@ -49,7 +50,7 @@ namespace Interpreter
         /// <param name="runTimeError">The Error that has occured during runtime</param>
         private static void ReportRunTimeError(RunTimeError runTimeError)
         {
-            Program.Error(runTimeError.Token.Line, runTimeError.Message);
+            ErrorUtils.Error(runTimeError.Token.Line, runTimeError.Message);
         }
     }
 }

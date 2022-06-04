@@ -1,4 +1,4 @@
-﻿namespace Interpreter
+﻿namespace Interpreter.Utils
 {
     internal static class KeywordsUtils
     {

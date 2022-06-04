@@ -8,7 +8,7 @@ namespace Interpreter.Statements
 
         public IExpression? Expression { get; init; }
 
-        public ReturnStatement(Token keyword, IExpression expression)
+        public ReturnStatement(Token keyword, IExpression? expression)
         {
             this.Keyword = keyword;
             this.Expression = expression;
@@ -22,11 +22,6 @@ namespace Interpreter.Statements
                 value = Expression.EvaluateExpression();
             }
             throw new Return(value);
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
     }
 }

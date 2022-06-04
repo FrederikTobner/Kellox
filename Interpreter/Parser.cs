@@ -1,6 +1,7 @@
 ﻿using Interpreter.Exceptions;
 using Interpreter.Expressions;
 using Interpreter.Statements;
+using Interpreter.Utils;
 
 namespace Interpreter
 {
@@ -35,7 +36,7 @@ namespace Interpreter
                 IStatement statement = Statement();
                 statements.Add(statement);
                 //There is no Semicilon after a Block/IfStatement/WhileStatement
-                if (statement is not BlockStatement && statement is not IfStatement && statement is not WhileStatement && statement is not FunctionStatement && statement is not ReturnStatement)
+                if (StatementConsumesSemicolon(statement))
                 {
                     Consume(TokenType.SEMICOLON, "Expect ';' after value");
                 }
@@ -86,6 +87,16 @@ namespace Interpreter
             }
         }
 
+        /// <summary>
+        /// Determines whether a statement is Consuming a semicolon
+        /// </summary>
+        /// <param name="statement">The statement that shall be evaluated</param>
+        private static bool StatementConsumesSemicolon(IStatement statement) => statement is not BlockStatement and not IfStatement and not WhileStatement and not FunctionStatement and not ReturnStatement;
+
+        /// <summary>
+        /// Creates a new Return statement
+        /// </summary>
+        /// <returns></returns>
         private IStatement CreateReturnStatement()
         {
             Token keyword = Previous();
@@ -139,7 +150,7 @@ namespace Interpreter
             {
                 IStatement statement = Statement();
                 statements.Add(statement);
-                if (statement is not BlockStatement && statement is not ReturnStatement)
+                if (StatementConsumesSemicolon(statement))
                 {
                     Consume(TokenType.SEMICOLON, "Expect \';\' after value");
                 }
@@ -189,7 +200,7 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Creates a for statement (based on while statement - just syntax sugar))
+        /// Creates a for statement (based on while statement - just syntax sugar)
         /// </summary>
         private IStatement CreateForStatement()
         {
@@ -267,7 +278,6 @@ namespace Interpreter
             Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
             current++;
             return new DeclarationStatement(token, Expression());
-
         }
 
         /// <summary>
@@ -559,7 +569,7 @@ namespace Interpreter
         /// <param name="message">The Message that shall be displayed</param>
         private static ParseError Error(Token token, string message)
         {
-            Program.Error(token, message);
+            ErrorUtils.Error(token, message);
             return new ParseError();
         }
     }

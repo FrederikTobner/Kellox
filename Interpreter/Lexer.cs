@@ -1,4 +1,6 @@
 ﻿
+using Interpreter.Utils;
+
 namespace Interpreter
 {
     /// <summary>
@@ -159,7 +161,7 @@ namespace Interpreter
                     }
                     else
                     {
-                        Program.Error(line, "Unexpected character.");
+                        ErrorUtils.Error(line, "Unexpected character.");
                     }
                     break;
             }
@@ -216,7 +218,7 @@ namespace Interpreter
 
             if (IsAtEnd())
             {
-                Program.Error(line, "Unterminated string.");
+                ErrorUtils.Error(line, "Unterminated string.");
                 return;
             }
             Advance();

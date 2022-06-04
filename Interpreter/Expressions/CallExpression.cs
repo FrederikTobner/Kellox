@@ -1,4 +1,5 @@
 ﻿using Interpreter.Exceptions;
+using Interpreter.Functions;
 
 namespace Interpreter.Expressions
 {
@@ -27,7 +28,7 @@ namespace Interpreter.Expressions
             {
                 arguments.Add(expression.EvaluateExpression());
             }
-            if (callee is ILoxCallable function)
+            if (callee is IFunction function)
             {
                 if (arguments.Count != function.Arity)
                 {

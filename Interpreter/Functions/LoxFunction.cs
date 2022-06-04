@@ -3,32 +3,42 @@ using Interpreter.Statements;
 
 namespace Interpreter.Functions
 {
-    internal class LoxFunction : ILoxCallable
+    internal class LoxFunction : IFunction
     {
         /// <summary>
         /// The function statement where the function is defined
         /// </summary>
-        private readonly FunctionStatement declaration;
+        public FunctionStatement Declaration { get; init; }
 
-        public LoxFunction(FunctionStatement declaration)
+        /// <summary>
+        /// Data structure that closes over and holds on to the surrounding variables where the function is declared
+        /// </summary>
+        public LoxEnvironment Closure { get; init; }
+
+        public LoxFunction(FunctionStatement Declaration, LoxEnvironment Closure)
         {
-            this.declaration = declaration;
+            this.Declaration = Declaration;
+            this.Closure = Closure;
         }
 
-        public int Arity => this.declaration.Parameters.Count;
+        /// <summary>
+        /// The arity of the function -> fancy term for the number of arguments a function expects
+        /// </summary>
+        public int Arity => this.Declaration.Parameters.Count;
 
         public object? Call(List<object?> arguments)
         {
-            LoxEnvironment environment = new(LoxInterpreter.globalEnvironment);
-            for (int i = 0; i < declaration.Parameters.Count; i++)
+            LoxEnvironment environment = new(Closure);
+            for (int i = 0; i < Declaration.Parameters.Count; i++)
             {
-                environment.Define(declaration.Parameters[i].Lexeme, arguments[i]);
+                environment.Define(Declaration.Parameters[i].Lexeme, arguments[i]);
             }
             LoxEnvironment oldEnvironment = LoxInterpreter.currentEnvironment;
             LoxInterpreter.currentEnvironment = environment;
+            //Catches Return and returns value
             try
             {
-                new BlockStatement(declaration.Body).ExecuteStatement();
+                new BlockStatement(Declaration.Body).ExecuteStatement();
             }
             catch (Return returnValue)
             {
@@ -38,6 +48,6 @@ namespace Interpreter.Functions
             return null;
         }
 
-        public override string ToString() => "<fn " + declaration.Name.Lexeme + ">";
+        public override string ToString() => "<fn " + Declaration.Name.Lexeme + ">";
     }
 }

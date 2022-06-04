@@ -3,7 +3,7 @@
     /// <summary>
     /// Native Function Clock implemented in the host language C#
     /// </summary>
-    internal class ClockFunction : ILoxCallable
+    internal class ClockFunction : IFunction
     {
         public int Arity => 0;
 
