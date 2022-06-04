@@ -32,7 +32,7 @@ namespace Interpreter.Expressions
             {
                 if (arguments.Count != function.Arity)
                 {
-                    throw new RunTimeError(this.Paren, "Expected " + function.Arity + " argumnets but got" + arguments.Count + ".");
+                    throw new RunTimeError(this.Paren, "Expected " + function.Arity + " argumnets but got " + arguments.Count + ".");
                 }
                 return function?.Call(arguments);
             }
