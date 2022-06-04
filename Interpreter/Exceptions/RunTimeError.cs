@@ -8,16 +8,11 @@
         /// <summary>
         /// The Token that has triggered the runtime error
         /// </summary>
-        private readonly Token token;
+        public Token Token { get; init; }
 
         public RunTimeError(Token token, string message) : base(message)
         {
-            this.token = token;
+            this.Token = token;
         }
-
-        /// <summary>
-        /// The Token that has triggered the runtime error
-        /// </summary>
-        internal Token Token => token;
     }
 }

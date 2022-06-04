@@ -21,9 +21,6 @@ namespace Interpreter.Functions
             this.Closure = Closure;
         }
 
-        /// <summary>
-        /// The arity of the function -> fancy term for the number of arguments a function expects
-        /// </summary>
         public int Arity => this.Declaration.Parameters.Count;
 
         public object? Call(List<object?> arguments)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Interpreter.Utils
 {
@@ -15,6 +11,11 @@ namespace Interpreter.Utils
         /// Boolean value indicating wheather an error has ocurred during the interpretation of the program
         /// </summary>
         public static bool ErrorOccurred { get; internal set; }
+
+        /// <summary>
+        /// Boolean value indicating wheather an error has ocurred while running the program
+        /// </summary>
+        public static bool RunTimeErrorOccurred { get; internal set; }
 
         /// <summary>
         /// Starts the interpreter (from file or as command prompt if no file is specified)
@@ -44,10 +45,15 @@ namespace Interpreter.Utils
         {
             byte[] file = File.ReadAllBytes(path);
             Run(Encoding.UTF8.GetString(file));
+            if (RunTimeErrorOccurred)
+            {
+                Environment.Exit(70);
+            }
             if (ErrorOccurred)
             {
                 Environment.Exit(65);
             }
+
         }
 
         /// <summary>

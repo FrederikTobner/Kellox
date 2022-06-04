@@ -33,12 +33,18 @@ namespace Interpreter
             List<IStatement> statements = new();
             while (!IsAtEnd())
             {
-                IStatement statement = Statement();
-                statements.Add(statement);
-                //There is no Semicilon after a Block/IfStatement/WhileStatement
-                if (StatementConsumesSemicolon(statement))
+                try
                 {
-                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
+                    IStatement statement = Statement();
+                    statements.Add(statement);
+                    if (StatementConsumesSemicolon(statement))
+                    {
+                        Consume(TokenType.SEMICOLON, "Expect ';' after value");
+                    }
+                }
+                catch (ParseError error)
+                {
+                    ErrorUtils.Error(error.ErrorToken, error.Message);
                 }
             }
             return statements;
@@ -174,7 +180,7 @@ namespace Interpreter
                 {
                     if (parameters.Count >= 255)
                     {
-                        Error(Peek(), "Can't have more than 255 parameters.");
+                        throw new ParseError(Peek(), "Can't have more than 255 parameters.");
                     }
                     parameters.Add(Consume(TokenType.IDENTIFIER, "Expect parameter name."));
 
@@ -302,7 +308,7 @@ namespace Interpreter
                     return new AssignmentExpression(name, value);
                 }
 
-                Error(equals, "Invalid assignment target.");
+                throw new ParseError(equals, "Invalid assignment target.");
             }
             return expression;
         }
@@ -466,7 +472,7 @@ namespace Interpreter
                 {
                     if (arguments.Count >= 255)
                     {
-                        Error(Peek(), "Can't have more than 255 argumenst");
+                        throw new ParseError(Peek(), "Can't have more than 255 argumenst");
                     }
                     arguments.Add(Expression());
                 } while (Match(TokenType.COMMA));
@@ -510,7 +516,7 @@ namespace Interpreter
                 Consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.");
                 return new GroupingExpression(expr);
             }
-            throw Error(Peek(), "Expect expression");
+            throw new ParseError(Peek(), "Expect expression");
         }
 
         /// <summary>
@@ -525,52 +531,7 @@ namespace Interpreter
             {
                 return Advance();
             }
-            throw Error(Peek(), message);
-        }
-
-
-        /// <summary>
-        /// Can be used to parse statements after a statment that has caused a RunTimeError
-        /// </summary>
-        private void Synchronize()
-        {
-            Advance();
-            while (!IsAtEnd())
-            {
-                if (Previous().TokenType == TokenType.SEMICOLON) return;
-
-                switch (Peek().TokenType)
-                {
-                    case TokenType.CLASS:
-                        break;
-                    case TokenType.FUN:
-                        break;
-                    case TokenType.VAR:
-                        break;
-                    case TokenType.FOR:
-                        break;
-                    case TokenType.IF:
-                        break;
-                    case TokenType.WHILE:
-                        break;
-                    case TokenType.PRINT:
-                        break;
-                    case TokenType.RETURN:
-                        return;
-                }
-                Advance();
-            }
-        }
-
-        /// <summary>
-        /// Logs a ParseError
-        /// </summary>
-        /// <param name="token">The Token that has triggered the parseError</param>
-        /// <param name="message">The Message that shall be displayed</param>
-        private static ParseError Error(Token token, string message)
-        {
-            ErrorUtils.Error(token, message);
-            return new ParseError();
+            throw new ParseError(Peek(), message);
         }
     }
 }

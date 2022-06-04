@@ -1,32 +1,34 @@
+if
 fun printFibonacci(upperBound, startIndex){
 	var x = startIndex;
 	var temp = startIndex;
 	var b = 0;
-	fun Inc(){
+	fun inc(){
 		b = temp + x;
 	}
-	for(b = 1; x < upperBound;Inc())
-	{
+	fun block(){
 		print x;
 		temp = x;
 		x = b;
+	}
+	for(b = 1; x < upperBound;inc())
+	{
+		block();
 	}
 }
 
 fun makeCounter() {
   var i = 0;
   fun count() {
-    i = i + 1;
-    print i;
+    return i = i + 1;
   }
 
   return count;
 }
-
 var counter = makeCounter();
-counter(); // "1".
-counter(); // "2"
-
+print counter(); // "1".
+print counter(); // "2"
+if
 var a = 5.3;
 if(a > 6){
 print "Then";
