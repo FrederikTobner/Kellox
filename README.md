@@ -38,7 +38,6 @@ for (var i = 0; i < 60; i = i + 1) {
 	print clock();
 	wait(1);
 	clear();
-	print clock();
 }
 ```
 Creates a counter
