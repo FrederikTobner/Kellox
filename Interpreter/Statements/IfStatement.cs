@@ -1,4 +1,6 @@
-﻿namespace Interpreter.Statements
+﻿using Interpreter.Expressions;
+
+namespace Interpreter.Statements
 {
     /// <summary>
     /// Models a if statement in lox

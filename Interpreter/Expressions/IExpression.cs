@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Interpreter
+namespace Interpreter.Expressions
 {
     /// <summary>
     /// Interface for a Expression that can be evaluated and converted to a string

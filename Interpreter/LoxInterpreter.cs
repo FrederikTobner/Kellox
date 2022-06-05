@@ -1,4 +1,5 @@
 ﻿using Interpreter.Exceptions;
+using Interpreter.Expressions;
 using Interpreter.Functions;
 using Interpreter.Statements;
 using Interpreter.Utils;
@@ -54,6 +55,11 @@ namespace Interpreter
         {
             RunnerUtils.RunTimeErrorOccurred = true;
             ErrorUtils.Error(runTimeError.Token.Line, runTimeError.Message);
+        }
+
+        internal static void Resolve(IExpression expression, int depth)
+        {
+            //locals.Add(expression, depth);
         }
     }
 }
