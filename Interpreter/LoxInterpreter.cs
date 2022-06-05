@@ -20,6 +20,7 @@ namespace Interpreter
             loxEnvironment.Define("clock", new ClockFunction());
             loxEnvironment.Define("wait", new WaitFunction());
             loxEnvironment.Define("clear", new ClearFunction());
+            loxEnvironment.Define("read", new ReadFunction());
             return loxEnvironment;
         }
 

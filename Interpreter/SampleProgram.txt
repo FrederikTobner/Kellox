@@ -38,6 +38,8 @@ print "hi" or 2;
 print nil or "yes";
 print true and false;
 
+var name = read();
+print "Hallo " + name;
 // prints the first 10 fibonacci numbers
 var fibo = fibonacci();
 for (var j = 0; j < 10; j = j + 1) {
