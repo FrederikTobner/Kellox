@@ -30,7 +30,6 @@ namespace Interpreter.Functions
             {
                 environment.Define(Declaration.Parameters[i].Lexeme, arguments[i]);
             }
-            LoxEnvironment oldEnvironment = LoxInterpreter.currentEnvironment;
             LoxInterpreter.currentEnvironment = environment;
             //Catches Return and returns value
             try
@@ -39,9 +38,10 @@ namespace Interpreter.Functions
             }
             catch (Return returnValue)
             {
+                LoxInterpreter.currentEnvironment = Closure;
                 return returnValue.Value;
             }
-            LoxInterpreter.currentEnvironment = oldEnvironment;
+            LoxInterpreter.currentEnvironment = Closure;
             return null;
         }
 
