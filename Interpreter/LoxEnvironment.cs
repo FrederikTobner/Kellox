@@ -54,6 +54,24 @@ namespace Interpreter
             throw new RunTimeError(name, "Undefiened variable \'" + name.Lexeme + "\'.");
         }
 
+        public object? GetAt(int distance, Token token)
+        {
+            return Ancestor(distance).Get(token);
+        }
+
+        private LoxEnvironment Ancestor(int depth)
+        {
+            LoxEnvironment environment = this;
+            for (int i = 0; i < depth; i++)
+            {
+                if (environment.enclosing is not null)
+                {
+                    environment = environment.enclosing;
+                }
+            }
+            return environment;
+        }
+
         /// <summary>
         /// Assigns a value to a variable in the environment
         /// </summary>
@@ -73,6 +91,11 @@ namespace Interpreter
                 return;
             }
             throw new RunTimeError(name, "Variable not defined yet. Assignment impossible");
+        }
+
+        public void AssignAt(int depth, Token name, object? value)
+        {
+            Ancestor(depth).values[name.Lexeme] = value;
         }
     }
 }

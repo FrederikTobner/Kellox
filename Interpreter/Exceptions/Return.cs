@@ -10,6 +10,11 @@
         /// </summary>
         public object? Value { get; init; }
 
+
+        /// <summary>
+        /// Constructor of the Return exception
+        /// </summary>
+        /// <param name="Value">Value that is returned</param>
         public Return(object? Value)
         {
             this.Value = Value;

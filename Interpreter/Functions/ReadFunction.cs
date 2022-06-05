@@ -7,7 +7,7 @@
         public object? Call(List<object?> arguments)
         {
             string? text = Console.ReadLine();
-            return text is null ? "" : text;
+            return text is not null ? text : string.Empty;
         }
     }
 }

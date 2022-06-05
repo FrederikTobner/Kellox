@@ -17,7 +17,12 @@ namespace Interpreter.Statements
         /// </summary>
         public IExpression? Expression { get; init; }
 
-        public DeclarationStatement(Token name, IExpression? expression)
+        /// <summary>
+        /// The Cunstructor of the DeclarationStatement class
+        /// </summary>
+        /// <param name="name">The Token of the variable name that is declared</param>
+        /// <param name="expression">The value that is assigned to the variable, null by default</param>
+        public DeclarationStatement(Token name, IExpression? expression = null)
         {
             this.Name = name;
             this.Expression = expression;

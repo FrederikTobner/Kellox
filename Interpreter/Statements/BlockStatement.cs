@@ -12,6 +12,10 @@ namespace Interpreter
         /// </summary>
         public IReadOnlyList<IStatement> Statements { get; init; }
 
+        /// <summary>
+        /// Constructor of the BLockStatement
+        /// </summary>
+        /// <param name="statements">The List of Statements in this BlockStatement</param>
         public BlockStatement(List<IStatement> statements)
         {
             this.Statements = statements;

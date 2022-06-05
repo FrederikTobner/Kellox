@@ -80,7 +80,7 @@ namespace Interpreter.Utils
             Lexer scanner = new(sourceCode);
             List<Token> tokens = scanner.ScanTokens();
             Parser parser = new(tokens);
-            LoxProgram program = new(parser.Parse());
+            LoxProgram program = parser.Parse();
             if (ErrorOccurred)
             {
                 return;

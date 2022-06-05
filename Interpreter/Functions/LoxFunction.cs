@@ -25,12 +25,12 @@ namespace Interpreter.Functions
 
         public object? Call(List<object?> arguments)
         {
-            LoxEnvironment environment = new(Closure);
+            LoxEnvironment oldEnvironment = LoxInterpreter.currentEnvironment;
+            LoxInterpreter.currentEnvironment = new(Closure);
             for (int i = 0; i < Declaration.Parameters.Count; i++)
             {
-                environment.Define(Declaration.Parameters[i].Lexeme, arguments[i]);
+                LoxInterpreter.currentEnvironment.Define(Declaration.Parameters[i].Lexeme, arguments[i]);
             }
-            LoxInterpreter.currentEnvironment = environment;
             //Catches Return and returns value
             try
             {
@@ -38,10 +38,10 @@ namespace Interpreter.Functions
             }
             catch (Return returnValue)
             {
-                LoxInterpreter.currentEnvironment = Closure;
+                LoxInterpreter.currentEnvironment = oldEnvironment;
                 return returnValue.Value;
             }
-            LoxInterpreter.currentEnvironment = Closure;
+            LoxInterpreter.currentEnvironment = oldEnvironment;
             return null;
         }
 

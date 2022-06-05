@@ -1,5 +1,8 @@
 ﻿namespace Interpreter.Utils
 {
+    /// <summary>
+    /// Stores all the keywords of the language lox
+    /// </summary>
     internal static class KeywordsUtils
     {
         /// <summary>

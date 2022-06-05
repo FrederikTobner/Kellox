@@ -2,6 +2,9 @@
 
 namespace Interpreter.Utils
 {
+    /// <summary>
+    /// Contains methods used for testing
+    /// </summary>
     internal static class TestUtils
     {
         /// <summary>

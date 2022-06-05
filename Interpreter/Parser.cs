@@ -20,15 +20,19 @@ namespace Interpreter
         /// </summary>
         private int current;
 
+        /// <summary>
+        /// Constructor of the Parser
+        /// </summary>
+        /// <param name="tokens">flat sequence of Tokens used to build a syntax tree</param>
         public Parser(List<Token> tokens)
         {
             this.tokens = tokens;
         }
 
         /// <summary>
-        /// Builds a List of Statements out of a flat sequence of Tokens
+        /// Builds a LoxProgramm out of a flat sequence of Tokens
         /// </summary>
-        internal List<IStatement> Parse()
+        internal LoxProgram Parse()
         {
             List<IStatement> statements = new();
             while (!IsAtEnd())
@@ -48,7 +52,7 @@ namespace Interpreter
                     Synchronize();
                 }
             }
-            return statements;
+            return new(statements);
         }
 
         /// <summary>
@@ -117,7 +121,7 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Used to handle a new Blockstatement
+        /// Used to handle a new BlockStatement
         /// </summary>
         private List<IStatement> ReadBlock()
         {
@@ -253,10 +257,10 @@ namespace Interpreter
         private IStatement CreateDeclarationStatement()
         {
             Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
-            // No value assigned -> value is null
             if (Check(TokenType.SEMICOLON))
             {
-                return new DeclarationStatement(token, null);
+                // No value assigned -> value is null
+                return new DeclarationStatement(token);
             }
             current++;
             return new DeclarationStatement(token, Expression());

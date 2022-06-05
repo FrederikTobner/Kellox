@@ -33,6 +33,10 @@ namespace Interpreter
         /// </summary>
         public List<Token> Tokens { get; init; }
 
+        /// <summary>
+        /// Constructor of the Lexer
+        /// </summary>
+        /// <param name="source">The flat sequence of tokens that is grouped to a flat sequence of Tokens by the Lexer</param>
         public Lexer(string source)
         {
             this.Source = source;

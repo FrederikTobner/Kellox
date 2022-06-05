@@ -22,6 +22,12 @@ namespace Interpreter.Statements
         /// </summary>
         public List<IStatement> Body { get; init; }
 
+        /// <summary>
+        /// The Constructor if a FunctionStatement
+        /// </summary>
+        /// <param name="Name">The Name of the Function</param>
+        /// <param name="Parameters">The parameters that the function expects</param>
+        /// <param name="Body">The statements in the body of the Function</param>
         public FunctionStatement(Token Name, List<Token> Parameters, List<IStatement> Body)
         {
             this.Name = Name;

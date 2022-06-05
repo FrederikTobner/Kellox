@@ -1,5 +1,5 @@
 ﻿using Interpreter.Utils;
 
 //TestUtils.TestExpression();
-//RunnerUtils.TestInterpreter(args);
+//RunnerUtils.RunInterpreter(args);
 TestUtils.TestSampleProgram();
