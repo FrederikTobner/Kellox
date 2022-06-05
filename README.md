@@ -7,7 +7,7 @@ Clears the console e.g.
 clear();
 ```
 ### clock
-Displays the current time (right now only seconds) e.g.
+Get the current time (right now only seconds) e.g.
 ```
 var time = clock();
 ```
