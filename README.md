@@ -2,11 +2,20 @@
 Interpreter based on the book [Crafting interpreters](https://craftinginterpreters.com/contents.html)
 ## Native functions
 ### clear
-Clears the console
+Clears the console e.g.
+```
+clear();
+```
 ### clock
-Displays the current time (right now only seconds)
+Displays the current time (right now only seconds) e.g.
+```
+var time = clock();
+```
 ### read
-Reads input from the user until he presses enter
+Reads input from the user until he presses enter e.g.
+```
+var input = read();
+```
 ### wait
 Suspends the program for x seconds e.g. 
 ```
@@ -21,7 +30,30 @@ Greet the user after typing in the name
 ```
 print "Please type in your name:";
 var name = read();
-print "Hallo " + name;
+print "Hello " + name;
+```
+Print the current time (seconds)
+```
+for (var i = 0; i < 60; i = i + 1) {
+	print clock();
+	wait(1);
+	clear();
+	print clock();
+}
+```
+Creates a counter
+```
+fun makeCounter() {
+  	var i = 0;
+  	fun count() {
+    		return i = i + 1;
+  	}
+  	return count;
+}
+
+var counter = makeCounter();
+print counter(); // "1".
+print counter(); // "2"
 ```
 Print the first 10 Fibonacci Numbers
 ```
