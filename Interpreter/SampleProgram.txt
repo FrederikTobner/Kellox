@@ -19,6 +19,7 @@ fun makeCounter() {
 
   return count;
 }
+
 var counter = makeCounter();
 print counter(); // "1".
 print counter(); // "2"
@@ -35,6 +36,7 @@ print "Else";
 }
 print clock();
 wait(3);
+clear();
 print clock();
 print o;
 print 7 == 1 + 2 * 3;
@@ -43,8 +45,8 @@ print "hi" or 2;
 print nil or "yes";
 print true and false;
 
-// prints the first 40 fibonacci numbers
+// prints the first 10 fibonacci numbers
 var fibo = fibonacci();
-for (var j = 0; j < 40; j = j + 1) {
+for (var j = 0; j < 10; j = j + 1) {
 	print fibo();
 }

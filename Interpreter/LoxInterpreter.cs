@@ -18,6 +18,7 @@ namespace Interpreter
             LoxEnvironment loxEnvironment = new();
             loxEnvironment.Define("clock", new ClockFunction());
             loxEnvironment.Define("wait", new WaitFunction());
+            loxEnvironment.Define("clear", new ClearFunction());
             return loxEnvironment;
         }
 
@@ -32,7 +33,6 @@ namespace Interpreter
         /// <param name="program">The program that shall be executed</param>
         internal static void Interpret(LoxProgram program)
         {
-
             foreach (IStatement statement in program)
             {
                 try
@@ -42,10 +42,8 @@ namespace Interpreter
                 catch (RunTimeError runTimeError)
                 {
                     ReportRunTimeError(runTimeError);
-
                 }
             }
-
         }
 
         /// <summary>

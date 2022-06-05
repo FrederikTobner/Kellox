@@ -11,7 +11,7 @@
         /// <param name="message"></param>
         private static void Report(int line, string where, string message)
         {
-            Console.WriteLine("[line " + line + "] Error" + where + ": " + message);
+            Console.WriteLine($"[line {line}] Error{where}: {message}");
             RunnerUtils.ErrorOccurred = true;
         }
 
@@ -31,7 +31,7 @@
                     Report(token.Line, " at end", message);
                     break;
                 default:
-                    Report(token.Line, " at '" + token.Lexeme + "'", message);
+                    Report(token.Line, $" at '{token.Lexeme}'", message);
                     break;
             }
         }
