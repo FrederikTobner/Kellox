@@ -136,7 +136,9 @@ namespace Interpreter
                     if (Match('r'))
                     {
                         AddToken(TokenType.OR);
+                        break;
                     }
+                    Identifier();
                     break;
                 case ' ':
                     break;

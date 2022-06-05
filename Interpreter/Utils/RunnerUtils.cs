@@ -6,7 +6,6 @@ namespace Interpreter.Utils
     {
         private const string emptyString = "";
 
-
         /// <summary>
         /// Boolean value indicating wheather an error has ocurred during the interpretation of the program
         /// </summary>

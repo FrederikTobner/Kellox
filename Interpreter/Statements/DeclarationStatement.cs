@@ -13,9 +13,9 @@
         /// <summary>
         /// The expression that evaluated and assigned to the variable
         /// </summary>
-        public IExpression Expression { get; init; }
+        public IExpression? Expression { get; init; }
 
-        public DeclarationStatement(Token name, IExpression expression)
+        public DeclarationStatement(Token name, IExpression? expression)
         {
             this.Name = name;
             this.Expression = expression;

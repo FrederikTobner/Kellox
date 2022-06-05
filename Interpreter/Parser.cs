@@ -45,6 +45,7 @@ namespace Interpreter
                 catch (ParseError error)
                 {
                     ErrorUtils.Error(error.ErrorToken, error.Message);
+                    Synchronize();
                 }
             }
             return statements;
@@ -97,7 +98,7 @@ namespace Interpreter
         /// Determines whether a statement is Consuming a semicolon
         /// </summary>
         /// <param name="statement">The statement that shall be evaluated</param>
-        private static bool StatementConsumesSemicolon(IStatement statement) => statement is not BlockStatement and not IfStatement and not WhileStatement and not FunctionStatement and not ReturnStatement;
+        private static bool StatementConsumesSemicolon(IStatement statement) => statement is DeclarationStatement or ExpressionStatement or PrintStatement;
 
         /// <summary>
         /// Creates a new Return statement
@@ -113,36 +114,6 @@ namespace Interpreter
             }
             Consume(TokenType.SEMICOLON, "Expect \';\' after return value");
             return new ReturnStatement(keyword, value);
-        }
-
-        /// <summary>
-        /// Creates an OrExpressionn
-        /// </summary>
-        private IExpression OrExpression()
-        {
-            IExpression expression = AndExpression();
-            while (Match(TokenType.OR))
-            {
-                Token operatorToken = Previous();
-                IExpression right = AndExpression();
-                expression = new LogicalExpression(expression, right, operatorToken);
-            }
-            return expression;
-        }
-
-        /// <summary>
-        /// Creates an AndExpressionn
-        /// </summary>
-        private IExpression AndExpression()
-        {
-            IExpression expression = Equality();
-            while (Match(TokenType.AND))
-            {
-                Token operatorToken = Previous();
-                IExpression right = Equality();
-                expression = new LogicalExpression(expression, right, operatorToken);
-            }
-            return expression;
         }
 
         /// <summary>
@@ -282,8 +253,43 @@ namespace Interpreter
         private IStatement CreateDeclarationStatement()
         {
             Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
+            // No value assigned -> value is null
+            if (Check(TokenType.SEMICOLON))
+            {
+                return new DeclarationStatement(token, null);
+            }
             current++;
             return new DeclarationStatement(token, Expression());
+        }
+
+        /// <summary>
+        /// Creates an OrExpressionn
+        /// </summary>
+        private IExpression OrExpression()
+        {
+            IExpression expression = AndExpression();
+            while (Match(TokenType.OR))
+            {
+                Token operatorToken = Previous();
+                IExpression right = AndExpression();
+                expression = new LogicalExpression(expression, right, operatorToken);
+            }
+            return expression;
+        }
+
+        /// <summary>
+        /// Creates an AndExpressionn
+        /// </summary>
+        private IExpression AndExpression()
+        {
+            IExpression expression = Equality();
+            while (Match(TokenType.AND))
+            {
+                Token operatorToken = Previous();
+                IExpression right = Equality();
+                expression = new LogicalExpression(expression, right, operatorToken);
+            }
+            return expression;
         }
 
         /// <summary>
@@ -370,12 +376,10 @@ namespace Interpreter
         /// </summary>
         private bool IsAtEnd() => Peek().TokenType == TokenType.EOF;
 
-
         /// <summary>
         /// Returns current Token
         /// </summary>
         private Token Peek() => tokens[current];
-
 
         /// <summary>
         /// Returns the prevoius Token
@@ -443,6 +447,10 @@ namespace Interpreter
             return Call();
         }
 
+        /// <summary>
+        /// Creates a new CallExpression
+        /// </summary>
+        /// <returns></returns>
         private IExpression Call()
         {
             IExpression expression = Primary();
@@ -462,6 +470,11 @@ namespace Interpreter
             return expression;
         }
 
+        /// <summary>
+        /// Adds the parameters to the call expression
+        /// </summary>
+        /// <param name="calle"></param>
+        /// <exception cref="ParseError"></exception>
         private IExpression FinishCall(IExpression calle)
         {
             List<IExpression> arguments = new();
@@ -517,6 +530,42 @@ namespace Interpreter
                 return new GroupingExpression(expr);
             }
             throw new ParseError(Peek(), "Expect expression");
+        }
+
+        /// <summary>
+        /// Can be used to parse statements after a statment that has caused a RunTimeError
+        /// </summary>
+        private void Synchronize()
+        {
+            Advance();
+            while (!IsAtEnd())
+            {
+                if (Previous().TokenType is TokenType.SEMICOLON)
+                {
+                    return;
+                }
+
+                switch (Peek().TokenType)
+                {
+                    case TokenType.CLASS:
+                        break;
+                    case TokenType.FUN:
+                        break;
+                    case TokenType.VAR:
+                        break;
+                    case TokenType.FOR:
+                        break;
+                    case TokenType.IF:
+                        break;
+                    case TokenType.WHILE:
+                        break;
+                    case TokenType.PRINT:
+                        break;
+                    case TokenType.RETURN:
+                        return;
+                }
+                Advance();
+            }
         }
 
         /// <summary>
