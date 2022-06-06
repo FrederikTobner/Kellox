@@ -14,7 +14,9 @@ namespace Interpreter
         /// </summary>
         private static readonly Stack<Dictionary<string, bool>> scopes = new();
 
-        public static FUNCTIONTYPE CurrentFunction { get; private set; }
+        public static FUNCTIONTYPE CurrentFunction { get; private set; } = FUNCTIONTYPE.NONE;
+
+        public static CLASSTYPE CurrentClass { get; private set; } = CLASSTYPE.NONE;
 
         /// <summary>
         /// Resolves a LoxProgram -> walks over the Syntaxtree and resolves all the variables it contains
@@ -96,7 +98,10 @@ namespace Interpreter
                 ResolveExpression(getExpression);
                 return;
             }
-
+            if (expression is ThisExpression thisExpression)
+            {
+                ResolveExpression(thisExpression);
+            }
             if (expression is SetExpression setExpression)
             {
                 ResolveExpression(setExpression);
@@ -175,12 +180,16 @@ namespace Interpreter
         /// <param name="classStatement"></param>
         private static void ResolveStatement(ClassStatement classStatement)
         {
+            CLASSTYPE enclosingClass = CurrentClass;
+            CurrentClass = CLASSTYPE.Class;
             Define(classStatement.Name);
+            BeginScope();
             foreach (FunctionStatement? method in classStatement.Methods)
             {
                 ResolveStatement(method, FUNCTIONTYPE.METHOD);
             }
-            Declare(classStatement.Name);
+            EndScope();
+            CurrentClass = enclosingClass;
         }
 
         /// <summary>
@@ -263,6 +272,20 @@ namespace Interpreter
         {
             ResolveExpression(whileStatement.Condition);
             ResolveStatement(whileStatement.Body);
+        }
+
+        /// <summary>
+        /// Resolves a ThisExpression
+        /// </summary>
+        /// <param name="thisExpression">The ThisExpression that shall be resolved</param>
+        private static void ResolveExpression(ThisExpression thisExpression)
+        {
+            if (CurrentClass is CLASSTYPE.NONE)
+            {
+                LoxErrorLogger.Error(thisExpression.Keyword, "Cant use \'this\' outside of a class");
+                return;
+            }
+            ResolveLocal(thisExpression, thisExpression.Keyword);
         }
 
         /// <summary>

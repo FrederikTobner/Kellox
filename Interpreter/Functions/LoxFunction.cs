@@ -52,6 +52,13 @@ namespace Interpreter.Functions
             return result;
         }
 
+        internal LoxFunction Bind(LoxInstance loxInstance)
+        {
+            LoxEnvironment environment = new(Closure);
+            LoxInterpreter.currentEnvironment.Define("this", loxInstance);
+            return new(Declaration, environment);
+        }
+
         public override string ToString() => "<fn " + Declaration.Name.Lexeme + ">";
     }
 }

@@ -11,17 +11,17 @@ namespace Interpreter
         /// <summary>
         /// The class of this Instance
         /// </summary>
-        public LoxClass LoxClass { get; init; }
+        public LoxClass Class { get; init; }
 
         private readonly Dictionary<string, object?> fields;
 
         public LoxInstance(LoxClass LoxClass)
         {
-            this.LoxClass = LoxClass;
+            this.Class = LoxClass;
             fields = new();
         }
 
-        public override string ToString() => LoxClass.ToString() + " instance";
+        public override string ToString() => Class.ToString() + " instance";
 
         internal object? Get(Token name)
         {
@@ -29,23 +29,21 @@ namespace Interpreter
             {
                 return fields[name.Lexeme];
             }
-            if (LoxClass.Methods.ContainsKey(name.Lexeme))
+            if (Class.Methods.ContainsKey(name.Lexeme))
             {
-                return LoxClass.Methods[name.Lexeme];
+                return Class.Methods[name.Lexeme].Bind(this);
             }
             throw new RunTimeError(name, "Undefiened property \'" + name.Lexeme + "\'.");
         }
 
         internal void Set(Token name, object? value)
         {
-            if (!fields.ContainsKey(name.Lexeme))
-            {
-                fields.Add(name.Lexeme, value);
-            }
-            else
+            if (fields.ContainsKey(name.Lexeme))
             {
                 fields[name.Lexeme] = value;
+                return;
             }
+            throw new RunTimeError(name, "Undefiened property \'" + name.Lexeme + "\'.");
         }
     }
 }

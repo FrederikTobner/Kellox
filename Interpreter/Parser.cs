@@ -74,7 +74,7 @@ namespace Interpreter
             }
             else if (Match(TOKENTYPE.FUN))
             {
-                return CreateFunctionStatement("funnction");
+                return CreateFunctionStatement("function");
             }
             else if (Match(TOKENTYPE.VAR))
             {
@@ -544,12 +544,14 @@ namespace Interpreter
             {
                 return new LiteralExpression(null);
             }
-
             if (Match(TOKENTYPE.NUMBER, TOKENTYPE.STRING))
             {
                 return new LiteralExpression(Previous().Literal);
             }
-
+            if (Match(TOKENTYPE.THIS))
+            {
+                return new ThisExpression(Previous());
+            }
             if (Match(TOKENTYPE.IDENTIFIER))
             {
                 return new VariableExpression(Previous());
