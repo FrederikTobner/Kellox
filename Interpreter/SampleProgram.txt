@@ -25,7 +25,8 @@ fun makeCounter() {
   return count;
 }
 
-print LoxKlasse;
+var loxKlasse = LoxKlasse();
+print loxKlasse;
 
 var counter = makeCounter();
 print counter(); // "1".

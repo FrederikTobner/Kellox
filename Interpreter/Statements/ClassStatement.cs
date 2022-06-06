@@ -1,4 +1,6 @@
-﻿namespace Interpreter.Statements
+﻿using Interpreter.Functions;
+
+namespace Interpreter.Statements
 {
     internal class ClassStatement : IStatement
     {
