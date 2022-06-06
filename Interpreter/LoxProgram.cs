@@ -14,7 +14,7 @@ namespace Interpreter
         /// <summary>
         /// Boolean value that determines whether the program is runnable
         /// </summary>
-        public bool Runnable => Statements is not null && !RunnerUtils.ErrorOccurred;
+        public bool Runnable => Statements is not null && !LoxRunner.ErrorOccurred;
 
         /// <summary>
         /// The constructor of the LoxProgram class

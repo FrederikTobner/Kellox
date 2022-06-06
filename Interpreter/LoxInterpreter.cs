@@ -73,6 +73,7 @@ namespace Interpreter
                 catch (RunTimeError runTimeError)
                 {
                     ReportRunTimeError(runTimeError);
+                    break;
                 }
             }
         }
@@ -83,8 +84,8 @@ namespace Interpreter
         /// <param name="runTimeError">The Error that has occured during runtime</param>
         private static void ReportRunTimeError(RunTimeError runTimeError)
         {
-            RunnerUtils.RunTimeErrorOccurred = true;
-            ErrorUtils.Error(runTimeError.Token.Line, runTimeError.Message);
+            LoxRunner.RunTimeErrorOccurred = true;
+            LoxErrorLogger.Error(runTimeError.Token.Line, runTimeError.Message);
         }
 
         /// <summary>

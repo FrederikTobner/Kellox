@@ -3,7 +3,7 @@
     /// <summary>
     /// Stores all the keywords of the language lox
     /// </summary>
-    internal static class KeywordsUtils
+    internal static class LoxKeywords
     {
         /// <summary>
         /// /The Dictionary containing the keywords

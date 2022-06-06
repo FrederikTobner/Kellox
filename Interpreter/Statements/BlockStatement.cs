@@ -26,13 +26,20 @@ namespace Interpreter
         /// </summary>
         public void ExecuteStatement()
         {
+            // Saves the current environment
             LoxEnvironment environment = LoxInterpreter.currentEnvironment;
+
+            // Creates a new Environment after execution
             LoxInterpreter.currentEnvironment = new LoxEnvironment(environment);
+
             foreach (IStatement statement in Statements)
             {
                 statement.ExecuteStatement();
             }
+
+            // Resets the currentEnvironment
             LoxInterpreter.currentEnvironment = environment;
+
         }
     }
 }

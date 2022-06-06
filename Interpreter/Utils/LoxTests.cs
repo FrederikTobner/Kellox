@@ -5,7 +5,7 @@ namespace Interpreter.Utils
     /// <summary>
     /// Contains methods used for testing
     /// </summary>
-    internal static class TestUtils
+    internal static class LoxTests
     {
         /// <summary>
         /// Path of the SampleProgram
@@ -15,12 +15,12 @@ namespace Interpreter.Utils
         /// <summary>
         /// Tests the interrpreter by running the sample Program
         /// </summary>
-        internal static void TestSampleProgram() => RunnerUtils.RunFile(sampleProgramPath);
+        internal static void SampleProgram() => LoxRunner.RunFile(sampleProgramPath);
 
         /// <summary>
         /// Tests printing of a nested Expression
         /// </summary>
-        internal static void TestExpression()
+        internal static void Expression()
         {
             IExpression expression = new BinaryExpression(
             new UnaryExpression(

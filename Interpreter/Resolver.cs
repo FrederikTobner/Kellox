@@ -231,7 +231,7 @@ namespace Interpreter
         {
             if (scopes.Count is not 0 && scopes.Peek().ContainsKey(variableExpression.Token.Lexeme) && !scopes.Peek()[variableExpression.Token.Lexeme])
             {
-                ErrorUtils.Error(variableExpression.Token, "Can't read local variable in it's own initializer");
+                LoxErrorLogger.Error(variableExpression.Token, "Can't read local variable in it's own initializer");
             }
             ResolveLocal(variableExpression, variableExpression.Token);
         }
@@ -341,7 +341,13 @@ namespace Interpreter
                 return;
             }
             Dictionary<string, bool> scope = scopes.Peek();
+            if (scope.ContainsKey(identifierToken.Lexeme))
+            {
+                //Variable already referenced in this scope
+                return;
+            }
             scope.Add(identifierToken.Lexeme, false);
+
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
 
 namespace Interpreter.Utils
 {
-    public static class RunnerUtils
+    public static class LoxRunner
     {
         private const string emptyString = "";
 
@@ -29,11 +29,11 @@ namespace Interpreter.Utils
             }
             else if (args.Length is 1)
             {
-                RunnerUtils.RunFile(args[0]);
+                LoxRunner.RunFile(args[0]);
             }
             else
             {
-                RunnerUtils.RunPrompt();
+                LoxRunner.RunPrompt();
             }
         }
 

@@ -3,7 +3,7 @@
     /// <summary>
     /// Class contains methods to report an error during the ParingProcess/at runtime/durng the semantic analysis
     /// </summary>
-    internal static class ErrorUtils
+    internal static class LoxErrorLogger
     {
         /// <summary>
         /// Reports an error that occured during the lexical analysis
@@ -14,7 +14,7 @@
         private static void Report(int line, string where, string message)
         {
             Console.WriteLine($"[line {line}] Error{where}: {message}");
-            RunnerUtils.ErrorOccurred = true;
+            LoxRunner.ErrorOccurred = true;
         }
 
         /// <summary>

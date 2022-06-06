@@ -48,7 +48,7 @@ namespace Interpreter
                 }
                 catch (ParseError error)
                 {
-                    ErrorUtils.Error(error.ErrorToken, error.Message);
+                    LoxErrorLogger.Error(error.ErrorToken, error.Message);
                     Synchronize();
                 }
             }

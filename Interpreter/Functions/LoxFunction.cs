@@ -25,24 +25,31 @@ namespace Interpreter.Functions
 
         public object? Call(List<object?> arguments)
         {
+            object? result = null;
+            // Saves the old environment
             LoxEnvironment oldEnvironment = LoxInterpreter.currentEnvironment;
+            // Creates a new Environemt for the scope of the function body
             LoxInterpreter.currentEnvironment = new(Closure);
             for (int i = 0; i < Declaration.Parameters.Count; i++)
             {
                 LoxInterpreter.currentEnvironment.Define(Declaration.Parameters[i].Lexeme, arguments[i]);
             }
-            //Catches Return and returns value
+            //Catches Return exception and returns value
             try
             {
-                new BlockStatement(Declaration.Body).ExecuteStatement();
+                foreach (IStatement? statement in Declaration.Body)
+                {
+                    statement.ExecuteStatement();
+                }
             }
+            // Catches return
             catch (Return returnValue)
             {
-                LoxInterpreter.currentEnvironment = oldEnvironment;
-                return returnValue.Value;
+                result = returnValue.Value;
             }
+            //Resets Environment
             LoxInterpreter.currentEnvironment = oldEnvironment;
-            return null;
+            return result;
         }
 
         public override string ToString() => "<fn " + Declaration.Name.Lexeme + ">";

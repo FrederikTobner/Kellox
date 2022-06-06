@@ -167,7 +167,7 @@ namespace Interpreter
                     }
                     else
                     {
-                        ErrorUtils.Error(line, "Unexpected character.");
+                        LoxErrorLogger.Error(line, "Unexpected character.");
                     }
                     break;
             }
@@ -201,7 +201,7 @@ namespace Interpreter
             }
 
             string text = Source[start..current];
-            if (!KeywordsUtils.GetTokenType(text, out TokenType type))
+            if (!LoxKeywords.GetTokenType(text, out TokenType type))
             {
                 type = TokenType.IDENTIFIER;
             }
@@ -224,7 +224,7 @@ namespace Interpreter
 
             if (IsAtEnd())
             {
-                ErrorUtils.Error(line, "Unterminated string.");
+                LoxErrorLogger.Error(line, "Unterminated string.");
                 return;
             }
             Advance();
