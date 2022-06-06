@@ -308,11 +308,11 @@ namespace Interpreter
         private static void ResolveLocal(IExpression expression, Token token)
         {
             int i = scopes.Count - 1;
-            foreach (Dictionary<string, bool>? scope in scopes.Reverse())
+            foreach (Dictionary<string, bool>? scope in scopes)
             {
                 if (scope.ContainsKey(token.Lexeme))
                 {
-                    LoxInterpreter.Resolve(expression, scopes.Count - i);
+                    LoxInterpreter.Resolve(expression, scopes.Count - 1 - i);
                 }
                 i--;
             }

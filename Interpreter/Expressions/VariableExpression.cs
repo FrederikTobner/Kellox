@@ -12,7 +12,17 @@
             this.Token = token;
         }
 
-        public object? EvaluateExpression() => LoxInterpreter.currentEnvironment.Get(Token);
+        public object? EvaluateExpression()
+        {
+            if (LoxInterpreter.locals.TryGetValue(this, out int distance))
+            {
+                return LoxInterpreter.currentEnvironment.GetAt(distance, Token);
+            }
+            else
+            {
+                return LoxInterpreter.globalEnvironment.Get(Token);
+            }
+        }
 
         /// <summary>
         /// Returns a representation of the Expression as a string

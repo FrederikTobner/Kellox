@@ -29,7 +29,14 @@
         public object? EvaluateExpression()
         {
             object? result = Value.EvaluateExpression();
-            LoxInterpreter.currentEnvironment.Assign(Token, result);
+            if (LoxInterpreter.locals.TryGetValue(this, out int distance))
+            {
+                LoxInterpreter.currentEnvironment.AssignAt(distance, Token, result);
+            }
+            else
+            {
+                LoxInterpreter.globalEnvironment.Assign(Token, result);
+            }
             return result;
         }
     }
