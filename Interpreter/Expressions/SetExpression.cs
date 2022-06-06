@@ -2,6 +2,9 @@
 
 namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a set expression in lox e.g. rect.X = 5.0;
+    /// </summary>
     internal class SetExpression : IExpression
     {
         public IExpression Object { get; init; }
@@ -32,7 +35,7 @@ namespace Interpreter.Expressions
         public override string ToString()
         {
             object? result = Object.EvaluateExpression();
-            return "set -> " + Name.Lexeme + "to " + (result is null ? "nil " : result.ToString());
+            return "set -> " + Name.Lexeme + "to " + (result is null ? "nil" : result.ToString()) + ".";
         }
     }
 }

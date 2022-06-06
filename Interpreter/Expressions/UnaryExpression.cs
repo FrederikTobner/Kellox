@@ -2,6 +2,9 @@
 
 namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a unary expression e.g. -5.0 / !true
+    /// </summary>
     internal class UnaryExpression : IExpression
     {
         /// <summary>

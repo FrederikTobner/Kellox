@@ -2,6 +2,9 @@
 
 namespace Interpreter.Statements
 {
+    /// <summary>
+    /// Models a class statement in lox -> the whole class declaration
+    /// </summary>
     internal class ClassStatement : IStatement
     {
         public Token Name { get; init; }

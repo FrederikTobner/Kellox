@@ -3,6 +3,9 @@ using Interpreter.Functions;
 
 namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a CallExpression in Lox
+    /// </summary>
     internal class CallExpression : IExpression
     {
         public IExpression Calle { get; init; }

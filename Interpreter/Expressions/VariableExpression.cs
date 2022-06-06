@@ -1,5 +1,8 @@
 ﻿namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a Variable expression in lox
+    /// </summary>
     internal class VariableExpression : IExpression
     {
         /// <summary>

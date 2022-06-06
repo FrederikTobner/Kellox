@@ -1,5 +1,8 @@
 ﻿namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a This expressionn in lox
+    /// </summary>
     internal class ThisExpression : IExpression
     {
         public Token Keyword { get; init; }
@@ -21,6 +24,6 @@
             }
         }
 
-        public override string ToString() => "";
+        public override string ToString() => "this -> " + this.EvaluateExpression() + ".";
     }
 }

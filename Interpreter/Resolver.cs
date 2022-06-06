@@ -181,7 +181,7 @@ namespace Interpreter
         private static void ResolveStatement(ClassStatement classStatement)
         {
             CLASSTYPE enclosingClass = CurrentClass;
-            CurrentClass = CLASSTYPE.Class;
+            CurrentClass = CLASSTYPE.CLASS;
             Define(classStatement.Name);
             BeginScope();
             foreach (FunctionStatement? method in classStatement.Methods)

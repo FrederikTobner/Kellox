@@ -2,10 +2,19 @@
 
 namespace Interpreter.Expressions
 {
+    /// <summary>
+    /// Models a get expression in lox e.g. print rect.X -> I guess context is important
+    /// </summary>
     internal class GetExpression : IExpression
     {
+        /// <summary>
+        /// Object of the Expression -> rect
+        /// </summary>
         public IExpression Object { get; init; }
 
+        /// <summary>
+        /// Name of the Property that is accessed -> X
+        /// </summary>
         public Token Name { get; init; }
 
         public GetExpression(IExpression Object, Token Name)
