@@ -1,3 +1,8 @@
+class LoxKlasse{
+MethodOfClass() {
+return "meth";
+}
+}
 
 fun fibonacci(){
 	var x = 0;
@@ -20,7 +25,7 @@ fun makeCounter() {
   return count;
 }
 
-
+print LoxKlasse;
 
 var counter = makeCounter();
 print counter(); // "1".

@@ -45,6 +45,11 @@ namespace Interpreter
                 ResolveStatement(declarationStatement);
                 return;
             }
+            if (statement is ClassStatement classStatement)
+            {
+                ResolveStatement(classStatement);
+                return;
+            }
             if (statement is FunctionStatement functionStatement)
             {
                 ResolveStatement(functionStatement);
@@ -151,7 +156,16 @@ namespace Interpreter
                 ResolveExpression(declarationStatement.Expression);
                 Define(declarationStatement.Name);
             }
+        }
 
+        /// <summary>
+        /// Resolves a classStatement
+        /// </summary>
+        /// <param name="classStatement"></param>
+        private static void ResolveStatement(ClassStatement classStatement)
+        {
+            Define(classStatement.Name);
+            Declare(classStatement.Name);
         }
 
         /// <summary>

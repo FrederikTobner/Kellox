@@ -68,9 +68,13 @@ namespace Interpreter
             {
                 return CreateIfStatement();
             }
+            else if (Match(TOKENTYPE.CLASS))
+            {
+                return CreateClassStatement();
+            }
             else if (Match(TOKENTYPE.FUN))
             {
-                return CreateFunctionStatement("function");
+                return CreateFunctionStatement("funnction");
             }
             else if (Match(TOKENTYPE.VAR))
             {
@@ -138,6 +142,22 @@ namespace Interpreter
             }
             Consume(TOKENTYPE.RIGHT_BRACE, "Expected \'}\' after Block");
             return statements;
+        }
+
+        /// <summary>
+        /// Creates a new Class statement
+        /// </summary>
+        private IStatement CreateClassStatement()
+        {
+            Token name = Consume(TOKENTYPE.IDENTIFIER, "Expect class name.");
+            Consume(TOKENTYPE.LEFT_BRACE, "Expect \'{\' before class body.");
+            List<FunctionStatement> methods = new();
+            while (!Check(TOKENTYPE.RIGHT_BRACE))
+            {
+                methods.Add((FunctionStatement)CreateFunctionStatement("method"));
+            }
+            Consume(TOKENTYPE.RIGHT_BRACE, "Expect \'}\' after class body.");
+            return new ClassStatement(name, methods);
         }
 
         /// <summary>
