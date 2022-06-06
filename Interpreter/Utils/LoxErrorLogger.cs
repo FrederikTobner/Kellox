@@ -29,7 +29,7 @@
         {
             switch (token.TokenType)
             {
-                case TokenType.EOF:
+                case TOKENTYPE.EOF:
                     Report(token.Line, " at end", message);
                     break;
                 default:

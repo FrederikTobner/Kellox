@@ -7,12 +7,14 @@ namespace Interpreter
     /// <summary>
     /// Walks over the Syntaxtree before it is executed and resolves all the variables it contains
     /// </summary>
-    internal static class Resolver
+    internal static partial class Resolver
     {
         /// <summary>
         /// Stack for keeping track of the variables in the current scope and all outer scopes
         /// </summary>
         private static readonly Stack<Dictionary<string, bool>> scopes = new();
+
+        public static FUNCTIONTYPE CurrentFunction { get; private set; }
 
         /// <summary>
         /// Resolves a LoxProgram -> walks over the Syntaxtree and resolves all the variables it contains
@@ -139,6 +141,10 @@ namespace Interpreter
         /// <param name="declarationStatement">The Declaration that is resolved</param>
         private static void ResolveStatement(DeclarationStatement declarationStatement)
         {
+            if (scopes.Count is not 0 && scopes.Peek().ContainsKey(declarationStatement.Name.Lexeme))
+            {
+                LoxErrorLogger.Error(declarationStatement.Name, "Variable with this name already defined in scope");
+            }
             Declare(declarationStatement.Name);
             if (declarationStatement.Expression is not null)
             {
@@ -154,6 +160,8 @@ namespace Interpreter
         /// <param name="functionStatement">The FunctionStatement that shall be resolved</param>
         private static void ResolveStatement(FunctionStatement functionStatement)
         {
+            FUNCTIONTYPE enclosingType = CurrentFunction;
+            CurrentFunction = FUNCTIONTYPE.FUNCTION;
             Declare(functionStatement.Name);
             Define(functionStatement.Name);
             BeginScope();
@@ -167,6 +175,7 @@ namespace Interpreter
             }
             ResolveStatements(functionStatement.Body);
             EndScope();
+            CurrentFunction = enclosingType;
         }
 
         /// <summary>
@@ -207,6 +216,10 @@ namespace Interpreter
         /// <param name="returnStatement">The ReturnStatement that shall be resolved</param>
         private static void ResolveStatement(ReturnStatement returnStatement)
         {
+            if (CurrentFunction is not FUNCTIONTYPE.FUNCTION)
+            {
+                LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from top level code");
+            }
             if (returnStatement.Expression is not null)
             {
                 ResolveExpression(returnStatement.Expression);

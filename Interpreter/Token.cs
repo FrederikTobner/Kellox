@@ -23,9 +23,9 @@
         /// <summary>
         /// The Type of the Token (e.g. Identifier, +-operator, null/nil-value)
         /// </summary>
-        internal TokenType TokenType { get; init; }
+        internal TOKENTYPE TokenType { get; init; }
 
-        public Token(TokenType tokenType, string lexeme, object? literal, int line)
+        public Token(TOKENTYPE tokenType, string lexeme, object? literal, int line)
         {
             this.TokenType = tokenType;
             this.Lexeme = lexeme;

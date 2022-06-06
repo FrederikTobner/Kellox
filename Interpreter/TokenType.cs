@@ -3,7 +3,7 @@
     /// <summary>
     /// The different Types of Tokens in the Lox
     /// </summary>
-    internal enum TokenType
+    internal enum TOKENTYPE
     {
         // Single-character tokens.
         LEFT_PAREN,

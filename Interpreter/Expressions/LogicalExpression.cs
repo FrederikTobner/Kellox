@@ -30,7 +30,7 @@
         public object? EvaluateExpression()
         {
             object? leftResult = Left.EvaluateExpression();
-            if (operatorToken.TokenType is TokenType.OR)
+            if (operatorToken.TokenType is TOKENTYPE.OR)
             {
                 if (IExpression.IsTruthy(leftResult))
                 {

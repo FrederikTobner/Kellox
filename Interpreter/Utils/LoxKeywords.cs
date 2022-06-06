@@ -8,36 +8,36 @@
         /// <summary>
         /// /The Dictionary containing the keywords
         /// </summary>
-        private static readonly Dictionary<string, TokenType> keywords = InitializeKeywords();
+        private static readonly Dictionary<string, TOKENTYPE> keywords = InitializeKeywords();
 
         /// <summary>
         /// Gets the type of a given Token
         /// </summary>
-        internal static bool GetTokenType(string key, out TokenType type) => keywords.TryGetValue(key, out type);
+        internal static bool GetTokenType(string key, out TOKENTYPE type) => keywords.TryGetValue(key, out type);
 
         /// <summary>
         /// Initializes the Dictionary with the Keywords of the language
         /// </summary>
         /// <returns></returns>
-        private static Dictionary<string, TokenType> InitializeKeywords()
+        private static Dictionary<string, TOKENTYPE> InitializeKeywords()
         {
-            Dictionary<string, TokenType> words = new();
-            words.Add("and", TokenType.AND);
-            words.Add("class", TokenType.CLASS);
-            words.Add("else", TokenType.ELSE);
-            words.Add("false", TokenType.FALSE);
-            words.Add("for", TokenType.FOR);
-            words.Add("fun", TokenType.FUN);
-            words.Add("if", TokenType.IF);
-            words.Add("nil", TokenType.NIL);
-            words.Add("or", TokenType.OR);
-            words.Add("print", TokenType.PRINT);
-            words.Add("return", TokenType.RETURN);
-            words.Add("super", TokenType.SUPER);
-            words.Add("this", TokenType.THIS);
-            words.Add("true", TokenType.TRUE);
-            words.Add("var", TokenType.VAR);
-            words.Add("while", TokenType.WHILE);
+            Dictionary<string, TOKENTYPE> words = new();
+            words.Add("and", TOKENTYPE.AND);
+            words.Add("class", TOKENTYPE.CLASS);
+            words.Add("else", TOKENTYPE.ELSE);
+            words.Add("false", TOKENTYPE.FALSE);
+            words.Add("for", TOKENTYPE.FOR);
+            words.Add("fun", TOKENTYPE.FUN);
+            words.Add("if", TOKENTYPE.IF);
+            words.Add("nil", TOKENTYPE.NIL);
+            words.Add("or", TOKENTYPE.OR);
+            words.Add("print", TOKENTYPE.PRINT);
+            words.Add("return", TOKENTYPE.RETURN);
+            words.Add("super", TOKENTYPE.SUPER);
+            words.Add("this", TOKENTYPE.THIS);
+            words.Add("true", TOKENTYPE.TRUE);
+            words.Add("var", TOKENTYPE.VAR);
+            words.Add("while", TOKENTYPE.WHILE);
             return words;
         }
     }

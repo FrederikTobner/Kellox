@@ -24,9 +24,9 @@ namespace Interpreter.Utils
         {
             IExpression expression = new BinaryExpression(
             new UnaryExpression(
-                new Token(TokenType.MINUS, "-", null, 1),
+                new Token(TOKENTYPE.MINUS, "-", null, 1),
                 new LiteralExpression(123)),
-            new Token(TokenType.STAR, "*", null, 1),
+            new Token(TOKENTYPE.STAR, "*", null, 1),
             new GroupingExpression(
                 new LiteralExpression(45.67)));
             Console.WriteLine(expression.ToString());

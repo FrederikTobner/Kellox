@@ -34,9 +34,9 @@ namespace Interpreter.Expressions
             }
             switch (this.OperatorToken.TokenType)
             {
-                case TokenType.BANG:
+                case TOKENTYPE.BANG:
                     return !IExpression.IsTruthy(Right);
-                case TokenType.MINUS:
+                case TOKENTYPE.MINUS:
                     if (result is double resultNumber)
                     {
                         return -resultNumber;
