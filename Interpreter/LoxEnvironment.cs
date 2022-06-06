@@ -47,7 +47,7 @@ namespace Interpreter
             {
                 return values[name.Lexeme];
             }
-            if (enclosing != null)
+            if (enclosing is not null)
             {
                 return enclosing.Get(name);
             }

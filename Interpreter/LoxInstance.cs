@@ -43,7 +43,8 @@ namespace Interpreter
                 fields[name.Lexeme] = value;
                 return;
             }
-            throw new RunTimeError(name, "Undefiened property \'" + name.Lexeme + "\'.");
+            fields.Add(name.Lexeme, value);
+            return;
         }
     }
 }

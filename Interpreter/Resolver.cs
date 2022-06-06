@@ -186,7 +186,15 @@ namespace Interpreter
             BeginScope();
             foreach (FunctionStatement? method in classStatement.Methods)
             {
-                ResolveStatement(method, FUNCTIONTYPE.METHOD);
+                if (method.Name.Lexeme.Equals("init"))
+                {
+                    ResolveStatement(method, FUNCTIONTYPE.INITIALIZER);
+                }
+                else
+                {
+                    ResolveStatement(method, FUNCTIONTYPE.METHOD);
+                }
+
             }
             EndScope();
             CurrentClass = enclosingClass;
@@ -260,6 +268,10 @@ namespace Interpreter
             }
             if (returnStatement.Expression is not null)
             {
+                if (CurrentFunction is FUNCTIONTYPE.INITIALIZER)
+                {
+                    LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from an initializer");
+                }
                 ResolveExpression(returnStatement.Expression);
             }
         }

@@ -1,6 +1,14 @@
 class LoxKlasse{
-Method() {
-return this;
+Method(a) {
+return a;
+}
+}
+
+class Rect{
+init(s){
+this.s = s;}
+Space(eyy){
+return this.s * eyy;
 }
 }
 
@@ -25,7 +33,8 @@ fun makeCounter() {
   return count;
 }
 
-print LoxKlasse().Method();
+var rect = Rect(5);
+print rect.Space(3);
 
 var counter = makeCounter();
 print counter(); // "1".

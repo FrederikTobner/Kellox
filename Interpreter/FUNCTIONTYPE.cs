@@ -6,6 +6,7 @@
     public enum FUNCTIONTYPE
     {
         FUNCTION,
+        INITIALIZER,
         METHOD,
         NONE
     }

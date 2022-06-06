@@ -37,7 +37,7 @@ namespace Interpreter.Statements
 
         public void ExecuteStatement()
         {
-            LoxFunction loxFunction = new(this, LoxInterpreter.currentEnvironment);
+            LoxFunction loxFunction = new(this, LoxInterpreter.currentEnvironment, false);
             LoxInterpreter.currentEnvironment.Define(Name.Lexeme, loxFunction);
         }
     }

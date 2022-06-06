@@ -28,5 +28,11 @@ namespace Interpreter.Expressions
             }
             throw new RunTimeError(Name, "Only instances have fields");
         }
+
+        public override string ToString()
+        {
+            object? result = Object.EvaluateExpression();
+            return "set -> " + Name.Lexeme + "to " + (result is null ? "nil " : result.ToString());
+        }
     }
 }

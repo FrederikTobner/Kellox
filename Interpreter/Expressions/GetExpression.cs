@@ -24,6 +24,6 @@ namespace Interpreter.Expressions
             throw new RunTimeError(Name, "Only Instances have properties");
         }
 
-        public override string ToString() => "get" + Name.Lexeme;
+        public override string ToString() => "get -> " + Name.Lexeme;
     }
 }

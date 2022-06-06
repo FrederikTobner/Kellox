@@ -5,6 +5,8 @@ namespace Interpreter.Functions
 {
     internal class LoxFunction : IFunction
     {
+        private readonly bool isInitializer;
+
         /// <summary>
         /// The function statement where the function is defined
         /// </summary>
@@ -15,10 +17,11 @@ namespace Interpreter.Functions
         /// </summary>
         public LoxEnvironment Closure { get; init; }
 
-        public LoxFunction(FunctionStatement Declaration, LoxEnvironment Closure)
+        public LoxFunction(FunctionStatement Declaration, LoxEnvironment Closure, bool isInitializer)
         {
             this.Declaration = Declaration;
             this.Closure = Closure;
+            this.isInitializer = isInitializer;
         }
 
         public int Arity => this.Declaration.Parameters.Count;
@@ -47,6 +50,10 @@ namespace Interpreter.Functions
             {
                 result = returnValue.Value;
             }
+            if (isInitializer)
+            {
+                result = Closure.GetAt(0, new Token(TOKENTYPE.THIS, "this", null, -10));
+            }
             //Resets Environment
             LoxInterpreter.currentEnvironment = oldEnvironment;
             return result;
@@ -55,8 +62,8 @@ namespace Interpreter.Functions
         internal LoxFunction Bind(LoxInstance loxInstance)
         {
             LoxEnvironment environment = new(Closure);
-            LoxInterpreter.currentEnvironment.Define("this", loxInstance);
-            return new(Declaration, environment);
+            environment.Define("this", loxInstance);
+            return new(Declaration, environment, isInitializer);
         }
 
         public override string ToString() => "<fn " + Declaration.Name.Lexeme + ">";

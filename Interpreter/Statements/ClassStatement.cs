@@ -22,7 +22,7 @@ namespace Interpreter.Statements
             {
                 if (method is not null)
                 {
-                    newMethods.Add(method.Name.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment));
+                    newMethods.Add(method.Name.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment, method.Name.Lexeme.Equals("init")));
                 }
             }
             LoxClass loxClass = new(Name.Lexeme, newMethods);

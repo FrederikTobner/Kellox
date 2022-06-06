@@ -17,7 +17,7 @@
             }
             else
             {
-                return LoxInterpreter.globalEnvironment.Get(Keyword);
+                return LoxInterpreter.currentEnvironment.Get(Keyword);
             }
         }
 
