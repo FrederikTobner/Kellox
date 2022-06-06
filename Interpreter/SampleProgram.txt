@@ -1,5 +1,5 @@
 class LoxKlasse{
-MethodOfClass() {
+Method() {
 return "meth";
 }
 }
@@ -26,7 +26,7 @@ fun makeCounter() {
 }
 
 var loxKlasse = LoxKlasse();
-print loxKlasse;
+print loxKlasse.Method();
 
 var counter = makeCounter();
 print counter(); // "1".

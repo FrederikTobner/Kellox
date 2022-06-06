@@ -17,7 +17,15 @@ namespace Interpreter.Statements
         public void ExecuteStatement()
         {
             LoxInterpreter.currentEnvironment.Define(Name.Lexeme, null);
-            LoxClass loxClass = new(Name.Lexeme);
+            Dictionary<string, LoxFunction> newMethods = new();
+            foreach (FunctionStatement? method in Methods)
+            {
+                if (method is not null)
+                {
+                    newMethods.Add(method.Name.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment));
+                }
+            }
+            LoxClass loxClass = new(Name.Lexeme, newMethods);
             LoxInterpreter.currentEnvironment.Assign(Name, loxClass);
         }
     }

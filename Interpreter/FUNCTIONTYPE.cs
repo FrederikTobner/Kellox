@@ -5,7 +5,8 @@
     /// </summary>
     public enum FUNCTIONTYPE
     {
-        NONE,
-        FUNCTION
+        FUNCTION,
+        METHOD,
+        NONE
     }
 }

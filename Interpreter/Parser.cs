@@ -337,7 +337,10 @@ namespace Interpreter
                     Token name = variableExpression.Token;
                     return new AssignmentExpression(name, value);
                 }
-
+                else if (expression is GetExpression getExpression)
+                {
+                    return new SetExpression(getExpression.Object, getExpression.Name, value);
+                }
                 throw new ParseError(equals, "Invalid assignment target.");
             }
             return expression;
@@ -484,6 +487,11 @@ namespace Interpreter
                 if (Match(TOKENTYPE.LEFT_PAREN))
                 {
                     expression = FinishCall(expression);
+                }
+                else if (Match(TOKENTYPE.DOT))
+                {
+                    Token name = Consume(TOKENTYPE.IDENTIFIER, "Expect property name after \'.\'.");
+                    expression = new GetExpression(expression, name);
                 }
                 else
                 {

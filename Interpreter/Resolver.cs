@@ -52,7 +52,7 @@ namespace Interpreter
             }
             if (statement is FunctionStatement functionStatement)
             {
-                ResolveStatement(functionStatement);
+                ResolveStatement(functionStatement, FUNCTIONTYPE.FUNCTION);
                 return;
             }
             if (statement is ExpressionStatement expressionStatement)
@@ -89,6 +89,17 @@ namespace Interpreter
         {
             if (expression is LiteralExpression)
             {
+                return;
+            }
+            if (expression is GetExpression getExpression)
+            {
+                ResolveExpression(getExpression);
+                return;
+            }
+
+            if (expression is SetExpression setExpression)
+            {
+                ResolveExpression(setExpression);
                 return;
             }
             if (expression is VariableExpression variableExpression)
@@ -165,6 +176,10 @@ namespace Interpreter
         private static void ResolveStatement(ClassStatement classStatement)
         {
             Define(classStatement.Name);
+            foreach (FunctionStatement? method in classStatement.Methods)
+            {
+                ResolveStatement(method, FUNCTIONTYPE.METHOD);
+            }
             Declare(classStatement.Name);
         }
 
@@ -172,10 +187,10 @@ namespace Interpreter
         /// Resolves a FunctionStatement
         /// </summary>
         /// <param name="functionStatement">The FunctionStatement that shall be resolved</param>
-        private static void ResolveStatement(FunctionStatement functionStatement)
+        private static void ResolveStatement(FunctionStatement functionStatement, FUNCTIONTYPE functionType)
         {
             FUNCTIONTYPE enclosingType = CurrentFunction;
-            CurrentFunction = FUNCTIONTYPE.FUNCTION;
+            CurrentFunction = functionType;
             Declare(functionStatement.Name);
             Define(functionStatement.Name);
             BeginScope();
@@ -230,7 +245,7 @@ namespace Interpreter
         /// <param name="returnStatement">The ReturnStatement that shall be resolved</param>
         private static void ResolveStatement(ReturnStatement returnStatement)
         {
-            if (CurrentFunction is not FUNCTIONTYPE.FUNCTION)
+            if (CurrentFunction is FUNCTIONTYPE.NONE)
             {
                 LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from top level code");
             }
@@ -248,6 +263,25 @@ namespace Interpreter
         {
             ResolveExpression(whileStatement.Condition);
             ResolveStatement(whileStatement.Body);
+        }
+
+        /// <summary>
+        /// Resolves a GetExpression
+        /// </summary>
+        /// <param name="getExpression">The GetExpression that shall be resolved</param>
+        private static void ResolveExpression(GetExpression getExpression)
+        {
+            ResolveExpression(getExpression.Object);
+        }
+
+        /// <summary>
+        /// Resolves a SetExpression
+        /// </summary>
+        /// <param name="setExpression">The GetExpression that shall be resolved</param>
+        private static void ResolveExpression(SetExpression setExpression)
+        {
+            ResolveExpression(setExpression.Value);
+            ResolveExpression(setExpression.Object);
         }
 
         /// <summary>
