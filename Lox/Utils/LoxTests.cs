@@ -16,7 +16,7 @@ namespace Lox.Utils
         /// <summary>
         /// Tests the interrpreter by running the sample Program
         /// </summary>
-        internal static void SampleProgram() => LoxRunner.RunFile(sampleProgramPath);
+        internal static void RunSampleProgram() => LoxRunner.RunFile(sampleProgramPath);
 
         /// <summary>
         /// Tests printing of a nested Expression

@@ -32,7 +32,7 @@ internal class AssignmentExpression : IExpression
     public object? EvaluateExpression()
     {
         object? result = Value.EvaluateExpression();
-        if (LoxInterpreter.locals.TryGetValue(this, out int distance))
+        if (LoxInterpreter.TryGetDepthOfLocal(this, out int distance))
         {
             LoxInterpreter.currentEnvironment.AssignAt(distance, Token, result);
         }

@@ -55,15 +55,25 @@ internal class LoxEnvironment
         throw new RunTimeError(name, "Undefiened variable \'" + name.Lexeme + "\'.");
     }
 
+    /// <summary>
+    /// Gets a value from the Environment at a specified distance
+    /// </summary>
+    /// <param name="distance"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public object? GetAt(int distance, Token token)
     {
         return Ancestor(distance).Get(token);
     }
 
-    private LoxEnvironment Ancestor(int depth)
+    /// <summary>
+    /// Iterates through the ancestors/parents/enclosing environments of the current Environment
+    /// </summary>
+    /// <param name="distance"></param>
+    private LoxEnvironment Ancestor(int distance)
     {
         LoxEnvironment environment = this;
-        for (int i = 0; i < depth; i++)
+        for (int i = 0; i < distance; i++)
         {
             if (environment.Enclosing is not null)
             {
@@ -94,8 +104,14 @@ internal class LoxEnvironment
         throw new RunTimeError(name, "Variable not defined yet. Assignment impossible");
     }
 
-    public void AssignAt(int depth, Token name, object? value)
+    /// <summary>
+    /// Assign a value to a variable at the Environemt at a specified distance
+    /// </summary>
+    /// <param name="distance">distance to the specified environment ()from the current Environment</param>
+    /// <param name="token">The Token (var identifierr)</param>
+    /// <param name="value">The value assigned to the variable</param>
+    public void AssignAt(int distance, Token token, object? value)
     {
-        Ancestor(depth).values[name.Lexeme] = value;
+        Ancestor(distance).values[token.Lexeme] = value;
     }
 }

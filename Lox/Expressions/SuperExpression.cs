@@ -26,7 +26,7 @@ internal class SuperExpression : IExpression
 
     public object? EvaluateExpression()
     {
-        int distance = LoxInterpreter.locals[this];
+        LoxInterpreter.TryGetDepthOfLocal(this, out int distance);
         LoxClass? superClass = (LoxClass?)LoxInterpreter.currentEnvironment.GetAt(distance, Token);
         LoxInstance? instance = (LoxInstance?)LoxInterpreter.currentEnvironment.GetAt(distance - 1, new Token(TokenType.THIS, "this", null, 0));
         LoxFunction? function = superClass?.FindMethod(this.Method.Lexeme);

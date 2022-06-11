@@ -2,4 +2,4 @@
 
 //TestUtils.TestExpression();
 //RunnerUtils.RunInterpreter(args);
-LoxTests.SampleProgram();
+LoxTests.RunSampleProgram();

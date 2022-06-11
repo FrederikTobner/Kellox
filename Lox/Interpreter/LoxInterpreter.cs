@@ -20,7 +20,13 @@ internal static class LoxInterpreter
     /// <summary>
     /// Contains the local (not global expression) that reference a variabale from an outer scope
     /// </summary>
-    internal static readonly Dictionary<IExpression, int> locals = new();
+    private static readonly Dictionary<IExpression, int> locals = new();
+
+
+    /// <summary>
+    /// The current Environment where the program is getting executed
+    /// </summary>
+    internal static LoxEnvironment currentEnvironment = globalEnvironment;
 
     /// <summary>
     /// Initializes the global Environment
@@ -32,6 +38,8 @@ internal static class LoxInterpreter
         return globalEnvironment;
     }
 
+    public static bool TryGetDepthOfLocal(IExpression expression, out int distance) => locals.TryGetValue(expression, out distance);
+
     /// <summary>
     /// Defines the native functions of lox
     /// </summary>
@@ -42,11 +50,6 @@ internal static class LoxInterpreter
         loxEnvironment.Define("clear", new ClearFunction());
         loxEnvironment.Define("read", new ReadFunction());
     }
-
-    /// <summary>
-    /// The current Environment where the program is getting executed
-    /// </summary>
-    internal static LoxEnvironment currentEnvironment = globalEnvironment;
 
     /// <summary>
     /// Interprets and executes a LoxProgram

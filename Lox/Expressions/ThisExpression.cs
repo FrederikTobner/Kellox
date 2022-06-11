@@ -20,7 +20,7 @@ internal class ThisExpression : IExpression
 
     public object? EvaluateExpression()
     {
-        if (LoxInterpreter.locals.TryGetValue(this, out int distance))
+        if (LoxInterpreter.TryGetDepthOfLocal(this, out int distance))
         {
             return LoxInterpreter.currentEnvironment.GetAt(distance, Token);
         }

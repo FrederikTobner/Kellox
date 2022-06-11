@@ -15,7 +15,7 @@ internal partial class LoxParser
     /// <summary>
     /// Flat sequence of Tokens
     /// </summary>
-    private readonly List<Token> tokens;
+    private readonly IReadOnlyList<Token> tokens;
 
     /// <summary>
     /// The current Position in the sequence of tokens
@@ -26,7 +26,7 @@ internal partial class LoxParser
     /// Constructor of the Parser
     /// </summary>
     /// <param name="tokens">flat sequence of Tokens used to build a syntax tree</param>
-    public LoxParser(List<Token> tokens)
+    public LoxParser(IReadOnlyList<Token> tokens)
     {
         this.tokens = tokens;
     }
