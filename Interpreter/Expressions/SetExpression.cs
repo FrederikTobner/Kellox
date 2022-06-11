@@ -7,10 +7,19 @@ namespace Interpreter.Expressions
     /// </summary>
     internal class SetExpression : IExpression
     {
+        /// <summary>
+        /// ThisExpression pointing to this object
+        /// </summary>
         public IExpression Object { get; init; }
 
+        /// <summary>
+        /// The Token of the set Expression e.g for this.x = X -> 'x'
+        /// </summary>
         public Token Name { get; init; }
 
+        /// <summary>
+        /// Value assigned e.g. for this.x = 5 -> '5
+        /// </summary>
         public IExpression Value { get; init; }
 
         public SetExpression(IExpression Object, Token Name, IExpression Value)

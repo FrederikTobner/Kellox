@@ -20,6 +20,7 @@ namespace Interpreter.Statements
 
         /// <summary>
         /// The ElseBranch of the if-Statement e.g a Block- or Printstatement
+        /// only optional
         /// </summary>
         public IStatement? ElseBranch { get; init; }
 

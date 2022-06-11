@@ -17,15 +17,15 @@
         {
             get
             {
-                if (!Methods.ContainsKey("init"))
+                if (!methods.ContainsKey("init"))
                 {
                     return 0;
                 }
-                return Methods["init"].Arity;
+                return methods["init"].Arity;
             }
         }
 
-        public Dictionary<string, LoxFunction> Methods { get; init; }
+        private readonly Dictionary<string, LoxFunction> methods;
 
         /// <summary>
         /// Constructor of the LoxClass class
@@ -34,12 +34,21 @@
         public LoxClass(string Name, Dictionary<string, LoxFunction> Methods)
         {
             this.Name = Name;
-            this.Methods = Methods;
+            this.methods = Methods;
         }
 
         public override string ToString()
         {
             return Name;
+        }
+
+        public LoxFunction? FindMethod(string name)
+        {
+            if (methods.ContainsKey(name))
+            {
+                return methods[name];
+            }
+            return null;
         }
 
         /// <summary>
@@ -49,9 +58,9 @@
         public object? Call(List<object?> arguments)
         {
             LoxInstance instance = new(this);
-            if (Methods.ContainsKey("init"))
+            if (methods.ContainsKey("init"))
             {
-                LoxFunction initializer = Methods["init"];
+                LoxFunction initializer = methods["init"];
                 initializer.Bind(instance).Call(arguments);
             }
             return instance;

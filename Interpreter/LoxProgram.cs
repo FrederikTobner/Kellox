@@ -26,7 +26,7 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Implementation of the Enumeration over the specific LoxProgram
+        /// Enumeration over the specific LoxProgram
         /// </summary>
         public IEnumerator<IStatement> GetEnumerator()
         {
@@ -36,9 +36,6 @@ namespace Interpreter
             }
         }
 
-        /// <summary>
-        /// Expoes the Enumerator for CustomProgram
-        /// </summary>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

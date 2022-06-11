@@ -5,7 +5,10 @@ namespace Interpreter.Functions
 {
     internal class LoxFunction : IFunction
     {
-        private readonly bool isInitializer;
+        /// <summary>
+        /// Boolean value that determines whether the function is a constructor/initializer
+        /// </summary>
+        private bool IsInitializer { get; init; }
 
         /// <summary>
         /// The function statement where the function is defined
@@ -21,7 +24,7 @@ namespace Interpreter.Functions
         {
             this.Declaration = Declaration;
             this.Closure = Closure;
-            this.isInitializer = isInitializer;
+            this.IsInitializer = isInitializer;
         }
 
         public int Arity => this.Declaration.Parameters.Count;
@@ -50,9 +53,10 @@ namespace Interpreter.Functions
             {
                 result = returnValue.Value;
             }
-            if (isInitializer)
+            if (IsInitializer)
             {
-                result = Closure.GetAt(0, new Token(TOKENTYPE.THIS, "this", null, -10));
+                //Calls the constructor/initializer
+                result = Closure.GetAt(0, new Token(TokenType.THIS, "this", null, 0));
             }
             //Resets Environment
             LoxInterpreter.currentEnvironment = oldEnvironment;
@@ -63,9 +67,9 @@ namespace Interpreter.Functions
         {
             LoxEnvironment environment = new(Closure);
             environment.Define("this", loxInstance);
-            return new(Declaration, environment, isInitializer);
+            return new(Declaration, environment, IsInitializer);
         }
 
-        public override string ToString() => "<fn " + Declaration.Name.Lexeme + ">";
+        public override string ToString() => "<fun " + Declaration.Name.Lexeme + ">";
     }
 }

@@ -6,6 +6,9 @@ using Interpreter.Utils;
 
 namespace Interpreter
 {
+    /// <summary>
+    /// Contains method to interpret a LoxProgram that was produced by the 
+    /// </summary>
     internal static class LoxInterpreter
     {
         /// <summary>
@@ -89,13 +92,13 @@ namespace Interpreter
         }
 
         /// <summary>
-        /// Adds the result of the re
+        /// Stores the distance beetween the scopes, that local (not gloabl) variables are referenced and declared
         /// </summary>
-        /// <param name="expression"></param>
-        /// <param name="depth"></param>
-        internal static void Resolve(IExpression expression, int depth)
+        /// <param name="expression">The Expression referencing a Variable</param>
+        /// <param name="distance">The distance between the scopes</param>
+        internal static void Resolve(IExpression expression, int distance)
         {
-            locals.Add(expression, depth);
+            locals.Add(expression, distance);
         }
     }
 }

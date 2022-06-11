@@ -10,7 +10,6 @@
         /// </summary>
         public object? Value { get; init; }
 
-
         /// <summary>
         /// Constructor of the Return exception
         /// </summary>

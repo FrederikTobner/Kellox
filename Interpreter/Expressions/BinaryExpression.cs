@@ -13,7 +13,7 @@ namespace Interpreter.Expressions
         public IExpression Left { get; init; }
 
         /// <summary>
-        /// The operator connecting the two expressions
+        /// The operator connecting the two expressions called infix operator, because it is fixed in the middle of the two operands
         /// </summary>
         public Token OperatorToken { get; init; }
 
@@ -42,16 +42,16 @@ namespace Interpreter.Expressions
             {
                 return OperatorToken.TokenType switch
                 {
-                    TOKENTYPE.GREATER => leftNumber > rightNumber,
-                    TOKENTYPE.GREATER_EQUAL => leftNumber >= rightNumber,
-                    TOKENTYPE.LESS => leftNumber < rightNumber,
-                    TOKENTYPE.LESS_EQUAL => leftNumber <= rightNumber,
-                    TOKENTYPE.MINUS => leftNumber - rightNumber,
-                    TOKENTYPE.PLUS => leftNumber + rightNumber,
-                    TOKENTYPE.SLASH => leftNumber / rightNumber,
-                    TOKENTYPE.STAR => leftNumber * rightNumber,
-                    TOKENTYPE.BANG_EQUAL => !IExpression.IsEqual(leftNumber, rightNumber),
-                    TOKENTYPE.EQUAL_EQUAL => IExpression.IsEqual(leftNumber, rightNumber),
+                    TokenType.GREATER => leftNumber > rightNumber,
+                    TokenType.GREATER_EQUAL => leftNumber >= rightNumber,
+                    TokenType.LESS => leftNumber < rightNumber,
+                    TokenType.LESS_EQUAL => leftNumber <= rightNumber,
+                    TokenType.MINUS => leftNumber - rightNumber,
+                    TokenType.PLUS => leftNumber + rightNumber,
+                    TokenType.SLASH => leftNumber / rightNumber,
+                    TokenType.STAR => leftNumber * rightNumber,
+                    TokenType.BANG_EQUAL => !IExpression.IsEqual(leftNumber, rightNumber),
+                    TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftNumber, rightNumber),
                     _ => throw new RunTimeError(OperatorToken, "Operator not supported"),
                 };
             }
@@ -60,14 +60,14 @@ namespace Interpreter.Expressions
             {
                 return OperatorToken.TokenType switch
                 {
-                    TOKENTYPE.PLUS => leftString + rightString,
+                    TokenType.PLUS => leftString + rightString,
                     _ => throw new RunTimeError(OperatorToken, "Operator not supported")
                 };
             }
             return OperatorToken.TokenType switch
             {
-                TOKENTYPE.BANG_EQUAL => !IExpression.IsEqual(leftResult, rightResult),
-                TOKENTYPE.EQUAL_EQUAL => IExpression.IsEqual(leftResult, rightResult),
+                TokenType.BANG_EQUAL => !IExpression.IsEqual(leftResult, rightResult),
+                TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftResult, rightResult),
                 _ => throw new RunTimeError(OperatorToken, "Operator not supported")
             };
         }

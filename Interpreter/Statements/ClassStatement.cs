@@ -7,8 +7,15 @@ namespace Interpreter.Statements
     /// </summary>
     internal class ClassStatement : IStatement
     {
+
+        /// <summary>
+        /// Token that contains the class name
+        /// </summary>
         public Token Name { get; init; }
 
+        /// <summary>
+        /// List of all the methods the class has
+        /// </summary>
         public List<FunctionStatement> Methods { get; init; }
 
         public ClassStatement(Token Name, List<FunctionStatement> Methods)

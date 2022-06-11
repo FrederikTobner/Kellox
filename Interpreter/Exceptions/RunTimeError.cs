@@ -13,7 +13,7 @@
         /// <summary>
         /// Constructor of the RunTimeError exception
         /// </summary>
-        /// <param name="token">the Token that has triggered the runtime error</param>
+        /// <param name="token">The Token that has triggered the runtime error</param>
         /// <param name="message">The message of the Exception</param>
         public RunTimeError(Token token, string message) : base(message)
         {

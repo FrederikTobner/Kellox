@@ -10,8 +10,7 @@
         /// <summary>
         /// Calls the function
         /// </summary>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <param name="arguments">Arguments used when the function was called</param>
         object? Call(List<object?> arguments);
     }
 }

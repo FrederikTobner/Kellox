@@ -8,12 +8,12 @@ namespace Interpreter.Expressions
     internal class GetExpression : IExpression
     {
         /// <summary>
-        /// Object of the Expression -> rect
+        /// Object of the Expression rect.x -> 'rect'
         /// </summary>
         public IExpression Object { get; init; }
 
         /// <summary>
-        /// Name of the Property that is accessed -> X
+        /// Name of the Property that is accessed e.g. rect.x -> 'x'
         /// </summary>
         public Token Name { get; init; }
 

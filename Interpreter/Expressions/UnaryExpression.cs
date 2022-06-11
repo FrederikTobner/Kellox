@@ -3,12 +3,12 @@
 namespace Interpreter.Expressions
 {
     /// <summary>
-    /// Models a unary expression e.g. -5.0 / !true
+    /// Models a unary expression e.g. -5.0 / !true. There is no postfix operator in lox so the operator will always come before the operand
     /// </summary>
     internal class UnaryExpression : IExpression
     {
         /// <summary>
-        /// The operator of the unary Expression
+        /// The operator of the unary Expression -> prefix operator, bexause it commed before the operator
         /// </summary>
         public Token OperatorToken { get; init; }
 
@@ -37,9 +37,9 @@ namespace Interpreter.Expressions
             }
             switch (this.OperatorToken.TokenType)
             {
-                case TOKENTYPE.BANG:
+                case TokenType.BANG:
                     return !IExpression.IsTruthy(Right);
-                case TOKENTYPE.MINUS:
+                case TokenType.MINUS:
                     if (result is double resultNumber)
                     {
                         return -resultNumber;

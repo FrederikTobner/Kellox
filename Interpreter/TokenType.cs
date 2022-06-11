@@ -3,11 +3,11 @@
     /// <summary>
     /// The different Types of Tokens in the Lox
     /// </summary>
-    internal enum TOKENTYPE
+    internal enum TokenType
     {
         // Single-character tokens.
-        LEFT_PAREN,
-        RIGHT_PAREN,
+        LEFT_PARENTHESIS,
+        RIGHT_PARENTHESIS,
         LEFT_BRACE,
         RIGHT_BRACE,
         COMMA,
@@ -34,22 +34,26 @@
         NUMBER,
 
         // Keywords.
-        AND,
-        CLASS,
-        ELSE,
+        TRUE,
         FALSE,
-        FUN,
-        FOR,
-        IF,
-        NIL,
+        AND,
         OR,
+        IF,
+        ELSE,
+        WHILE,
+        FOR,
+        VAR,
+        NIL,
+
+        //Function/method specific
+        FUN,
         PRINT,
         RETURN,
+
+        //Class specific
         SUPER,
+        CLASS,
         THIS,
-        TRUE,
-        VAR,
-        WHILE,
 
         // End of the file
         EOF

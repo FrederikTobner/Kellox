@@ -43,7 +43,7 @@ namespace Interpreter
                     statements.Add(statement);
                     if (StatementConsumesSemicolon(statement))
                     {
-                        Consume(TOKENTYPE.SEMICOLON, "Expect ';' after value");
+                        Consume(TokenType.SEMICOLON, "Expect ';' after value");
                     }
                 }
                 catch (ParseError error)
@@ -60,39 +60,39 @@ namespace Interpreter
         /// </summary>
         private IStatement Statement()
         {
-            if (Match(TOKENTYPE.FOR))
+            if (Match(TokenType.FOR))
             {
                 return CreateForStatement();
             }
-            else if (Match(TOKENTYPE.IF))
+            else if (Match(TokenType.IF))
             {
                 return CreateIfStatement();
             }
-            else if (Match(TOKENTYPE.CLASS))
+            else if (Match(TokenType.CLASS))
             {
                 return CreateClassStatement();
             }
-            else if (Match(TOKENTYPE.FUN))
+            else if (Match(TokenType.FUN))
             {
                 return CreateFunctionStatement("function");
             }
-            else if (Match(TOKENTYPE.VAR))
+            else if (Match(TokenType.VAR))
             {
                 return CreateDeclarationStatement();
             }
-            else if (Match(TOKENTYPE.PRINT))
+            else if (Match(TokenType.PRINT))
             {
                 return new PrintStatement(Expression());
             }
-            else if (Match(TOKENTYPE.RETURN))
+            else if (Match(TokenType.RETURN))
             {
                 return CreateReturnStatement();
             }
-            else if (Match(TOKENTYPE.WHILE))
+            else if (Match(TokenType.WHILE))
             {
                 return CreateWhileStatement();
             }
-            else if (Match(TOKENTYPE.LEFT_BRACE))
+            else if (Match(TokenType.LEFT_BRACE))
             {
                 return new BlockStatement(ReadBlock());
             }
@@ -116,11 +116,11 @@ namespace Interpreter
         {
             Token keyword = Previous();
             IExpression? value = null;
-            if (!Check(TOKENTYPE.SEMICOLON))
+            if (!Check(TokenType.SEMICOLON))
             {
                 value = Expression();
             }
-            Consume(TOKENTYPE.SEMICOLON, "Expect \';\' after return value");
+            Consume(TokenType.SEMICOLON, "Expect \';\' after return value");
             return new ReturnStatement(keyword, value);
         }
 
@@ -131,16 +131,16 @@ namespace Interpreter
         {
             List<IStatement> statements = new();
 
-            while (!Check(TOKENTYPE.RIGHT_BRACE) && !IsAtEnd())
+            while (!Check(TokenType.RIGHT_BRACE) && !IsAtEnd())
             {
                 IStatement statement = Statement();
                 statements.Add(statement);
                 if (StatementConsumesSemicolon(statement))
                 {
-                    Consume(TOKENTYPE.SEMICOLON, "Expect \';\' after value");
+                    Consume(TokenType.SEMICOLON, "Expect \';\' after value");
                 }
             }
-            Consume(TOKENTYPE.RIGHT_BRACE, "Expected \'}\' after Block");
+            Consume(TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
             return statements;
         }
 
@@ -149,14 +149,14 @@ namespace Interpreter
         /// </summary>
         private IStatement CreateClassStatement()
         {
-            Token name = Consume(TOKENTYPE.IDENTIFIER, "Expect class name.");
-            Consume(TOKENTYPE.LEFT_BRACE, "Expect \'{\' before class body.");
+            Token name = Consume(TokenType.IDENTIFIER, "Expect class name.");
+            Consume(TokenType.LEFT_BRACE, "Expect \'{\' before class body.");
             List<FunctionStatement> methods = new();
-            while (!Check(TOKENTYPE.RIGHT_BRACE))
+            while (!Check(TokenType.RIGHT_BRACE))
             {
                 methods.Add((FunctionStatement)CreateFunctionStatement("method"));
             }
-            Consume(TOKENTYPE.RIGHT_BRACE, "Expect \'}\' after class body.");
+            Consume(TokenType.RIGHT_BRACE, "Expect \'}\' after class body.");
             return new ClassStatement(name, methods);
         }
 
@@ -165,11 +165,11 @@ namespace Interpreter
         /// </summary>
         private IStatement CreateFunctionStatement(string kind)
         {
-            Token name = Consume(TOKENTYPE.IDENTIFIER, "Expect " + kind + " name.");
-            Consume(TOKENTYPE.LEFT_PAREN, "Expect \'(\' after " + kind + " name.");
+            Token name = Consume(TokenType.IDENTIFIER, "Expect " + kind + " name.");
+            Consume(TokenType.LEFT_PARENTHESIS, "Expect \'(\' after " + kind + " name.");
             //Handles arguments/parameters
             List<Token> parameters = new();
-            if (!Check(TOKENTYPE.RIGHT_PAREN))
+            if (!Check(TokenType.RIGHT_PARENTHESIS))
             {
                 do
                 {
@@ -177,13 +177,13 @@ namespace Interpreter
                     {
                         throw new ParseError(Peek(), "Can't have more than 255 parameters.");
                     }
-                    parameters.Add(Consume(TOKENTYPE.IDENTIFIER, "Expect parameter name."));
+                    parameters.Add(Consume(TokenType.IDENTIFIER, "Expect parameter name."));
 
-                } while (Match(TOKENTYPE.COMMA));
+                } while (Match(TokenType.COMMA));
             }
-            Consume(TOKENTYPE.RIGHT_PAREN, "Expect \')\' after parameters");
+            Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after parameters");
             //Handles body
-            Consume(TOKENTYPE.LEFT_BRACE, "Expect \'}\' before " + kind + " body");
+            Consume(TokenType.LEFT_BRACE, "Expect \'}\' before " + kind + " body");
             List<IStatement> body = ReadBlock();
             return new FunctionStatement(name, parameters, body);
         }
@@ -193,9 +193,9 @@ namespace Interpreter
         /// </summary>
         private IStatement CreateWhileStatement()
         {
-            Consume(TOKENTYPE.LEFT_PAREN, "Expect \'(\' after while.");
+            Consume(TokenType.LEFT_PARENTHESIS, "Expect \'(\' after while.");
             IExpression condition = Expression();
-            Consume(TOKENTYPE.RIGHT_PAREN, "Expect \')\' after condition.");
+            Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after condition.");
             IStatement body = Statement();
             return new WhileStatement(condition, body);
         }
@@ -205,32 +205,32 @@ namespace Interpreter
         /// </summary>
         private IStatement CreateForStatement()
         {
-            Consume(TOKENTYPE.LEFT_PAREN, "Expect \'(\' after for.");
+            Consume(TokenType.LEFT_PARENTHESIS, "Expect \'(\' after for.");
 
             IStatement? initializerExpression = null;
-            if (Match(TOKENTYPE.VAR))
+            if (Match(TokenType.VAR))
             {
                 initializerExpression = CreateDeclarationStatement();
             }
-            else if (!Match(TOKENTYPE.SEMICOLON))
+            else if (!Match(TokenType.SEMICOLON))
             {
                 initializerExpression = new ExpressionStatement(Expression());
             }
 
             IExpression? conditionalExpression = null;
-            if (Check(TOKENTYPE.SEMICOLON))
+            if (Check(TokenType.SEMICOLON))
             {
                 Advance();
                 conditionalExpression = Expression();
             }
 
             IExpression? incrementExpression = null;
-            if (!Check(TOKENTYPE.RIGHT_PAREN))
+            if (!Check(TokenType.RIGHT_PARENTHESIS))
             {
-                Consume(TOKENTYPE.SEMICOLON, "Expect \';\' after loop condition");
+                Consume(TokenType.SEMICOLON, "Expect \';\' after loop condition");
                 incrementExpression = Expression();
             }
-            Consume(TOKENTYPE.RIGHT_PAREN, "Expect \')\' after for.");
+            Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");
 
             IStatement body = Statement();
 
@@ -259,12 +259,12 @@ namespace Interpreter
         /// </summary>
         private IStatement CreateIfStatement()
         {
-            Consume(TOKENTYPE.LEFT_PAREN, "Expect \'(\' after \'if\'.");
+            Consume(TokenType.LEFT_PARENTHESIS, "Expect \'(\' after \'if\'.");
             IExpression condition = Expression();
-            Consume(TOKENTYPE.RIGHT_PAREN, "Expect \')\' after if condition.");
+            Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after if condition.");
             IStatement thenBranch = Statement();
             IStatement? elseBranch = null;
-            if (Match(TOKENTYPE.ELSE))
+            if (Match(TokenType.ELSE))
             {
                 elseBranch = Statement();
             }
@@ -276,8 +276,8 @@ namespace Interpreter
         /// </summary>
         private IStatement CreateDeclarationStatement()
         {
-            Token token = Consume(TOKENTYPE.IDENTIFIER, "Expect variable name");
-            if (Check(TOKENTYPE.SEMICOLON))
+            Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
+            if (Check(TokenType.SEMICOLON))
             {
                 // No value assigned -> value is null
                 return new DeclarationStatement(token);
@@ -292,7 +292,7 @@ namespace Interpreter
         private IExpression OrExpression()
         {
             IExpression expression = AndExpression();
-            while (Match(TOKENTYPE.OR))
+            while (Match(TokenType.OR))
             {
                 Token operatorToken = Previous();
                 IExpression right = AndExpression();
@@ -307,7 +307,7 @@ namespace Interpreter
         private IExpression AndExpression()
         {
             IExpression expression = Equality();
-            while (Match(TOKENTYPE.AND))
+            while (Match(TokenType.AND))
             {
                 Token operatorToken = Previous();
                 IExpression right = Equality();
@@ -328,7 +328,7 @@ namespace Interpreter
         {
             IExpression expression = OrExpression();
 
-            if (Match(TOKENTYPE.EQUAL))
+            if (Match(TokenType.EQUAL))
             {
                 Token equals = Previous();
                 IExpression value = Assignment();
@@ -353,7 +353,7 @@ namespace Interpreter
         {
             IExpression expression = Comparison();
 
-            while (Match(TOKENTYPE.BANG_EQUAL, TOKENTYPE.EQUAL_EQUAL))
+            while (Match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL))
             {
                 Token operatorToken = Previous();
                 IExpression right = Comparison();
@@ -367,9 +367,9 @@ namespace Interpreter
         /// Determines weather the next Token is from the specified TokenTypes
         /// </summary>
         /// <param name="types">Types of the Tokens</param>
-        private bool Match(params TOKENTYPE[] types)
+        private bool Match(params TokenType[] types)
         {
-            foreach (TOKENTYPE type in types)
+            foreach (TokenType type in types)
             {
                 if (Check(type))
                 {
@@ -384,7 +384,7 @@ namespace Interpreter
         /// Checks if the next Token is of a given type
         /// </summary>
         /// <param name="type">The type that shall be checked</param>
-        private bool Check(TOKENTYPE type) => !IsAtEnd() && Peek().TokenType == type;
+        private bool Check(TokenType type) => !IsAtEnd() && Peek().TokenType == type;
 
         /// <summary>
         /// Advances a position further in the flat sequence of Tokens
@@ -401,7 +401,7 @@ namespace Interpreter
         /// <summary>
         /// Determines whether the ned of the file has been reached
         /// </summary>
-        private bool IsAtEnd() => Peek().TokenType == TOKENTYPE.EOF;
+        private bool IsAtEnd() => Peek().TokenType == TokenType.EOF;
 
         /// <summary>
         /// Returns current Token
@@ -419,7 +419,7 @@ namespace Interpreter
         private IExpression Comparison()
         {
             IExpression expression = Term();
-            while (Match(TOKENTYPE.GREATER, TOKENTYPE.GREATER_EQUAL, TOKENTYPE.LESS, TOKENTYPE.LESS_EQUAL))
+            while (Match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
             {
                 Token operatorToken = Previous();
                 IExpression right = Term();
@@ -434,7 +434,7 @@ namespace Interpreter
         private IExpression Term()
         {
             IExpression expression = Factor();
-            while (Match(TOKENTYPE.MINUS, TOKENTYPE.PLUS))
+            while (Match(TokenType.MINUS, TokenType.PLUS))
             {
                 Token operatorToken = Previous();
                 IExpression right = Factor();
@@ -449,7 +449,7 @@ namespace Interpreter
         private IExpression Factor()
         {
             IExpression expression = Unary();
-            while (Match(TOKENTYPE.SLASH, TOKENTYPE.STAR))
+            while (Match(TokenType.SLASH, TokenType.STAR))
             {
                 Token operatorToken = Previous();
                 IExpression right = Unary();
@@ -464,7 +464,7 @@ namespace Interpreter
         /// </summary>
         private IExpression Unary()
         {
-            if (Match(TOKENTYPE.BANG, TOKENTYPE.MINUS))
+            if (Match(TokenType.BANG, TokenType.MINUS))
             {
                 Token operatorToken = Previous();
                 IExpression right = Unary();
@@ -484,13 +484,13 @@ namespace Interpreter
 
             while (true)
             {
-                if (Match(TOKENTYPE.LEFT_PAREN))
+                if (Match(TokenType.LEFT_PARENTHESIS))
                 {
                     expression = FinishCall(expression);
                 }
-                else if (Match(TOKENTYPE.DOT))
+                else if (Match(TokenType.DOT))
                 {
-                    Token name = Consume(TOKENTYPE.IDENTIFIER, "Expect property name after \'.\'.");
+                    Token name = Consume(TokenType.IDENTIFIER, "Expect property name after \'.\'.");
                     expression = new GetExpression(expression, name);
                 }
                 else
@@ -511,7 +511,7 @@ namespace Interpreter
         {
             List<IExpression> arguments = new();
 
-            if (!Check(TOKENTYPE.RIGHT_PAREN))
+            if (!Check(TokenType.RIGHT_PARENTHESIS))
             {
                 do
                 {
@@ -520,10 +520,10 @@ namespace Interpreter
                         throw new ParseError(Peek(), "Can't have more than 255 argumenst");
                     }
                     arguments.Add(Expression());
-                } while (Match(TOKENTYPE.COMMA));
+                } while (Match(TokenType.COMMA));
             }
 
-            Token paren = Consume(TOKENTYPE.RIGHT_PAREN, "Expect \')\' after arguments.");
+            Token paren = Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after arguments.");
             return new CallExpression(calle, paren, arguments);
         }
 
@@ -532,35 +532,35 @@ namespace Interpreter
         /// </summary>
         private IExpression Primary()
         {
-            if (Match(TOKENTYPE.FALSE))
+            if (Match(TokenType.FALSE))
             {
                 return new LiteralExpression(false);
             }
-            if (Match(TOKENTYPE.TRUE))
+            if (Match(TokenType.TRUE))
             {
                 return new LiteralExpression(true);
             }
-            if (Match(TOKENTYPE.NIL))
+            if (Match(TokenType.NIL))
             {
                 return new LiteralExpression(null);
             }
-            if (Match(TOKENTYPE.NUMBER, TOKENTYPE.STRING))
+            if (Match(TokenType.NUMBER, TokenType.STRING))
             {
                 return new LiteralExpression(Previous().Literal);
             }
-            if (Match(TOKENTYPE.THIS))
+            if (Match(TokenType.THIS))
             {
                 return new ThisExpression(Previous());
             }
-            if (Match(TOKENTYPE.IDENTIFIER))
+            if (Match(TokenType.IDENTIFIER))
             {
                 return new VariableExpression(Previous());
             }
 
-            if (Match(TOKENTYPE.LEFT_PAREN))
+            if (Match(TokenType.LEFT_PARENTHESIS))
             {
                 IExpression expr = Expression();
-                Consume(TOKENTYPE.RIGHT_PAREN, "Expect ')' after expression.");
+                Consume(TokenType.RIGHT_PARENTHESIS, "Expect ')' after expression.");
                 return new GroupingExpression(expr);
             }
             throw new ParseError(Peek(), "Expect expression");
@@ -574,28 +574,28 @@ namespace Interpreter
             Advance();
             while (!IsAtEnd())
             {
-                if (Previous().TokenType is TOKENTYPE.SEMICOLON)
+                if (Previous().TokenType is TokenType.SEMICOLON)
                 {
                     return;
                 }
 
                 switch (Peek().TokenType)
                 {
-                    case TOKENTYPE.CLASS:
+                    case TokenType.CLASS:
                         break;
-                    case TOKENTYPE.FUN:
+                    case TokenType.FUN:
                         break;
-                    case TOKENTYPE.VAR:
+                    case TokenType.VAR:
                         break;
-                    case TOKENTYPE.FOR:
+                    case TokenType.FOR:
                         break;
-                    case TOKENTYPE.IF:
+                    case TokenType.IF:
                         break;
-                    case TOKENTYPE.WHILE:
+                    case TokenType.WHILE:
                         break;
-                    case TOKENTYPE.PRINT:
+                    case TokenType.PRINT:
                         break;
-                    case TOKENTYPE.RETURN:
+                    case TokenType.RETURN:
                         return;
                 }
                 Advance();
@@ -608,7 +608,7 @@ namespace Interpreter
         /// <param name="type"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        private Token Consume(TOKENTYPE type, string message)
+        private Token Consume(TokenType type, string message)
         {
             if (Check(type))
             {

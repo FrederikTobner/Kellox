@@ -5,6 +5,8 @@ namespace Interpreter.Utils
     public static class LoxRunner
     {
         private const string emptyString = "";
+        private const string loxPrompt = "> ";
+        private const string toMuchArgsErrorMessage = "To much args";
 
         /// <summary>
         /// Boolean value indicating wheather an error has ocurred during the interpretation of the program
@@ -24,7 +26,8 @@ namespace Interpreter.Utils
         {
             if (args.Length > 1)
             {
-                Console.WriteLine("To much args");
+                Console.WriteLine(toMuchArgsErrorMessage);
+                //Exit code 64 -> The command was used incorrectly, wrong number of anguments
                 Environment.Exit(64);
             }
             else if (args.Length is 1)
@@ -46,10 +49,12 @@ namespace Interpreter.Utils
             Run(Encoding.UTF8.GetString(file));
             if (RunTimeErrorOccurred)
             {
+                // An internal software error has been detected
                 Environment.Exit(70);
             }
             if (ErrorOccurred)
             {
+                // The input data was incorrect -> Error during the lexical analysis or the parsing process
                 Environment.Exit(65);
             }
 
@@ -60,13 +65,13 @@ namespace Interpreter.Utils
         /// </summary>
         internal static void RunPrompt()
         {
-            Console.WriteLine("> ");
+            Console.WriteLine(loxPrompt);
             string? line = Console.ReadLine();
             while (line is not emptyString && line is not null)
             {
                 Run(line);
                 ErrorOccurred = false;
-                Console.WriteLine("> ");
+                Console.WriteLine(loxPrompt);
                 line = Console.ReadLine();
             }
         }
@@ -77,8 +82,8 @@ namespace Interpreter.Utils
         /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
         private static void Run(string sourceCode)
         {
-            Lexer scanner = new(sourceCode);
-            List<Token> tokens = scanner.ScanTokens();
+            Lexer lexer = new(sourceCode);
+            List<Token> tokens = lexer.ScanTokens();
             Parser parser = new(tokens);
             LoxProgram program = parser.Parse();
             if (ErrorOccurred)

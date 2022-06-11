@@ -8,10 +8,20 @@ namespace Interpreter.Expressions
     /// </summary>
     internal class CallExpression : IExpression
     {
+        /// <summary>
+        /// The Expression that was called e.g. rect(5, 6).area() -> 'rect(5, 6)'
+        /// </summary>
         public IExpression Calle { get; init; }
 
+        /// <summary>
+        /// Contains the Right_Parenthesis -> ')'
+        /// Only used for Error Logging
+        /// </summary>
         public Token Paren { get; init; }
 
+        /// <summary>
+        /// Arguments of the Call e.g. wait(1) -> 1
+        /// </summary>
         public IReadOnlyList<IExpression> Arguments { get; init; }
 
         public CallExpression(IExpression calle, Token paren, List<IExpression> arguments)

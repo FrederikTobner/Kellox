@@ -32,10 +32,8 @@ namespace Interpreter.Expressions
         }
 
         /// <summary>
-        /// Behaviour defining weather something is truthy
+        /// Behaviour defining whether something is truthy
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
         public static bool IsTruthy(object? obj) => obj switch
         {
             null => false,
@@ -44,7 +42,7 @@ namespace Interpreter.Expressions
         };
 
         /// <summary>
-        /// Behaviour defining wheather 2 objects are Equal
+        /// Behaviour defining wheather 2 objects are equal
         /// </summary>
         protected static bool IsEqual(object? obj1, object? obj2)
         {

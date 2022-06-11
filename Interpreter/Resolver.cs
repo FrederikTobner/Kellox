@@ -14,9 +14,9 @@ namespace Interpreter
         /// </summary>
         private static readonly Stack<Dictionary<string, bool>> scopes = new();
 
-        public static FUNCTIONTYPE CurrentFunction { get; private set; } = FUNCTIONTYPE.NONE;
+        public static FunctionType CurrentFunction { get; private set; } = FunctionType.NONE;
 
-        public static CLASSTYPE CurrentClass { get; private set; } = CLASSTYPE.NONE;
+        public static ClassType CurrentClass { get; private set; } = ClassType.NONE;
 
         /// <summary>
         /// Resolves a LoxProgram -> walks over the Syntaxtree and resolves all the variables it contains
@@ -54,7 +54,7 @@ namespace Interpreter
             }
             if (statement is FunctionStatement functionStatement)
             {
-                ResolveStatement(functionStatement, FUNCTIONTYPE.FUNCTION);
+                ResolveStatement(functionStatement, FunctionType.FUNCTION);
                 return;
             }
             if (statement is ExpressionStatement expressionStatement)
@@ -180,19 +180,19 @@ namespace Interpreter
         /// <param name="classStatement"></param>
         private static void ResolveStatement(ClassStatement classStatement)
         {
-            CLASSTYPE enclosingClass = CurrentClass;
-            CurrentClass = CLASSTYPE.CLASS;
+            ClassType enclosingClass = CurrentClass;
+            CurrentClass = ClassType.CLASS;
             Define(classStatement.Name);
             BeginScope();
             foreach (FunctionStatement? method in classStatement.Methods)
             {
                 if (method.Name.Lexeme.Equals("init"))
                 {
-                    ResolveStatement(method, FUNCTIONTYPE.INITIALIZER);
+                    ResolveStatement(method, FunctionType.INITIALIZER);
                 }
                 else
                 {
-                    ResolveStatement(method, FUNCTIONTYPE.METHOD);
+                    ResolveStatement(method, FunctionType.METHOD);
                 }
 
             }
@@ -204,9 +204,9 @@ namespace Interpreter
         /// Resolves a FunctionStatement
         /// </summary>
         /// <param name="functionStatement">The FunctionStatement that shall be resolved</param>
-        private static void ResolveStatement(FunctionStatement functionStatement, FUNCTIONTYPE functionType)
+        private static void ResolveStatement(FunctionStatement functionStatement, FunctionType functionType)
         {
-            FUNCTIONTYPE enclosingType = CurrentFunction;
+            FunctionType enclosingType = CurrentFunction;
             CurrentFunction = functionType;
             Declare(functionStatement.Name);
             Define(functionStatement.Name);
@@ -262,13 +262,13 @@ namespace Interpreter
         /// <param name="returnStatement">The ReturnStatement that shall be resolved</param>
         private static void ResolveStatement(ReturnStatement returnStatement)
         {
-            if (CurrentFunction is FUNCTIONTYPE.NONE)
+            if (CurrentFunction is FunctionType.NONE)
             {
                 LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from top level code");
             }
             if (returnStatement.Expression is not null)
             {
-                if (CurrentFunction is FUNCTIONTYPE.INITIALIZER)
+                if (CurrentFunction is FunctionType.INITIALIZER)
                 {
                     LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from an initializer");
                 }
@@ -292,12 +292,12 @@ namespace Interpreter
         /// <param name="thisExpression">The ThisExpression that shall be resolved</param>
         private static void ResolveExpression(ThisExpression thisExpression)
         {
-            if (CurrentClass is CLASSTYPE.NONE)
+            if (CurrentClass is ClassType.NONE)
             {
-                LoxErrorLogger.Error(thisExpression.Keyword, "Cant use \'this\' outside of a class");
+                LoxErrorLogger.Error(thisExpression.Token, "Cant use \'this\' outside of a class");
                 return;
             }
-            ResolveLocal(thisExpression, thisExpression.Keyword);
+            ResolveLocal(thisExpression, thisExpression.Token);
         }
 
         /// <summary>

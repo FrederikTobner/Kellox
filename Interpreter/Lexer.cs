@@ -54,19 +54,19 @@ namespace Interpreter
                 ScanToken();
             }
             //Adding the end of file Token
-            Tokens.Add(new Token(TOKENTYPE.EOF, "", null, line));
+            Tokens.Add(new Token(TokenType.EOF, "", null, line));
             return Tokens;
         }
 
         /// <summary>
         /// Adds a single Token
         /// </summary>
-        private void AddToken(TOKENTYPE tokenType) => AddToken(tokenType, null);
+        private void AddToken(TokenType tokenType) => AddToken(tokenType, null);
 
         /// <summary>
         /// Adds a single LiteralToken
         /// </summary>       
-        private void AddToken(TOKENTYPE tokenType, object? literal)
+        private void AddToken(TokenType tokenType, object? literal)
         {
             string text = Source[start..current];
             Tokens.Add(new Token(tokenType, text, literal, line));
@@ -81,46 +81,46 @@ namespace Interpreter
             switch (c)
             {
                 case '(':
-                    AddToken(TOKENTYPE.LEFT_PAREN);
+                    AddToken(TokenType.LEFT_PARENTHESIS);
                     break;
                 case ')':
-                    AddToken(TOKENTYPE.RIGHT_PAREN);
+                    AddToken(TokenType.RIGHT_PARENTHESIS);
                     break;
                 case '{':
-                    AddToken(TOKENTYPE.LEFT_BRACE);
+                    AddToken(TokenType.LEFT_BRACE);
                     break;
                 case '}':
-                    AddToken(TOKENTYPE.RIGHT_BRACE);
+                    AddToken(TokenType.RIGHT_BRACE);
                     break;
                 case ',':
-                    AddToken(TOKENTYPE.COMMA);
+                    AddToken(TokenType.COMMA);
                     break;
                 case '.':
-                    AddToken(TOKENTYPE.DOT);
+                    AddToken(TokenType.DOT);
                     break;
                 case '-':
-                    AddToken(TOKENTYPE.MINUS);
+                    AddToken(TokenType.MINUS);
                     break;
                 case '+':
-                    AddToken(TOKENTYPE.PLUS);
+                    AddToken(TokenType.PLUS);
                     break;
                 case ';':
-                    AddToken(TOKENTYPE.SEMICOLON);
+                    AddToken(TokenType.SEMICOLON);
                     break;
                 case '*':
-                    AddToken(TOKENTYPE.STAR);
+                    AddToken(TokenType.STAR);
                     break;
                 case '!':
-                    AddToken(Match('=') ? TOKENTYPE.BANG_EQUAL : TOKENTYPE.BANG);
+                    AddToken(Match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
                     break;
                 case '=':
-                    AddToken(Match('=') ? TOKENTYPE.EQUAL_EQUAL : TOKENTYPE.EQUAL);
+                    AddToken(Match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
                     break;
                 case '<':
-                    AddToken(Match('=') ? TOKENTYPE.LESS_EQUAL : TOKENTYPE.LESS);
+                    AddToken(Match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
                     break;
                 case '>':
-                    AddToken(Match('=') ? TOKENTYPE.GREATER_EQUAL : TOKENTYPE.GREATER);
+                    AddToken(Match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
                     break;
                 case '/':
                     if (Match('/'))
@@ -133,13 +133,13 @@ namespace Interpreter
                     }
                     else
                     {
-                        AddToken(TOKENTYPE.SLASH);
+                        AddToken(TokenType.SLASH);
                     }
                     break;
                 case 'o':
                     if (Match('r'))
                     {
-                        AddToken(TOKENTYPE.OR);
+                        AddToken(TokenType.OR);
                         break;
                     }
                     Identifier();
@@ -201,9 +201,9 @@ namespace Interpreter
             }
 
             string text = Source[start..current];
-            if (!LoxKeywords.GetTokenType(text, out TOKENTYPE type))
+            if (!LoxKeywords.GetTokenType(text, out TokenType type))
             {
-                type = TOKENTYPE.IDENTIFIER;
+                type = TokenType.IDENTIFIER;
             }
             AddToken(type);
         }
@@ -231,7 +231,7 @@ namespace Interpreter
 
             // Trims the surrounding quotes.
             string value = Source.Substring(start + 1, current - start - 2);
-            AddToken(TOKENTYPE.STRING, value);
+            AddToken(TokenType.STRING, value);
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace Interpreter
                 }
             }
             double number = Convert.ToDouble(Source[start..current]) / Math.Pow(10, digitsAfterPoint);
-            AddToken(TOKENTYPE.NUMBER, number);
+            AddToken(TokenType.NUMBER, number);
         }
 
         /// <summary>

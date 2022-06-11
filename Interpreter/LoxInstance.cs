@@ -13,6 +13,9 @@ namespace Interpreter
         /// </summary>
         public LoxClass Class { get; init; }
 
+        /// <summary>
+        /// The fields of this Instance
+        /// </summary>
         private readonly Dictionary<string, object?> fields;
 
         public LoxInstance(LoxClass LoxClass)
@@ -29,9 +32,10 @@ namespace Interpreter
             {
                 return fields[name.Lexeme];
             }
-            if (Class.Methods.ContainsKey(name.Lexeme))
+            LoxFunction? method = Class.FindMethod(name.Lexeme);
+            if (method is not null)
             {
-                return Class.Methods[name.Lexeme].Bind(this);
+                return method.Bind(this);
             }
             throw new RunTimeError(name, "Undefiened property \'" + name.Lexeme + "\'.");
         }

@@ -5,17 +5,21 @@ class LoxKlasse{
 	}
 }
 
+print LoxKlasse().Method();
+
 class Rect{
-	init(rectX, rectY)
+	init(x, y)
 	{
-		this.rectX = rectX;
-		this.rectY = rectY;
+		this.x = x;
+		this.y = y;
 	}
-	Space()
+	area()
 	{
-		return this.rectX * this.rectY * 0.5;
+		return this.x * this.y * 0.5;
 	}
 }
+
+print Rect(6, 5).area();
 
 fun fibonacci()
 {	
@@ -41,9 +45,6 @@ fun makeCounter()
 	}
 	return count;
 }
-print LoxKlasse().Method();
-
-print Rect(6, 5).Space();
 
 var counter = makeCounter();
 print counter(); // "1".
@@ -57,15 +58,16 @@ print test;
 
 // prints the first 25 fibonacci numbers
 var fibo = fibonacci();
-for (var j = 0; j < 25; j = j + 1) 
+for (var i = 0; i < 25; i = i + 1) 
 {
 	print fibo();
 }
 
-fun Add(num1, num2)
+fun Add(x, y)
 {
-	return num1 + num2;
+	return x + y;
 }
 
 print Add(fibo(), fibo());
+
 print test;
