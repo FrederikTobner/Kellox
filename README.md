@@ -1,5 +1,5 @@
-# Interpreter
-Interpreter based on the book [Crafting interpreters](https://craftinginterpreters.com/contents.html)
+# Lox Interpreter
+Interpreter based on the book [Crafting interpreters](https://craftinginterpreters.com/contents.html) for the scripting language lox
 ## Native functions
 ### clear
 Clears the console e.g.
