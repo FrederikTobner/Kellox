@@ -1,4 +1,6 @@
-﻿using Interpreter.Functions;
+﻿using Interpreter.Expressions;
+using Interpreter.Functions;
+using Interpreter.Utils;
 
 namespace Interpreter.Statements
 {
@@ -11,22 +13,37 @@ namespace Interpreter.Statements
         /// <summary>
         /// Token that contains the class name
         /// </summary>
-        public Token Name { get; init; }
+        public Token Token { get; init; }
 
         /// <summary>
         /// List of all the methods the class has
         /// </summary>
         public List<FunctionStatement> Methods { get; init; }
 
-        public ClassStatement(Token Name, List<FunctionStatement> Methods)
+        /// <summary>
+        /// The superClass of this class (nullable)
+        /// </summary>
+        public VariableExpression? SuperClass { get; init; }
+
+        public ClassStatement(Token Name, List<FunctionStatement> Methods, VariableExpression? SuperClass)
         {
-            this.Name = Name;
+            this.Token = Name;
             this.Methods = Methods;
+            this.SuperClass = SuperClass;
         }
 
         public void ExecuteStatement()
         {
-            LoxInterpreter.currentEnvironment.Define(Name.Lexeme, null);
+            object? superClass = null;
+            if (SuperClass is not null)
+            {
+                superClass = SuperClass.EvaluateExpression();
+                if (superClass is not LoxClass)
+                {
+                    LoxErrorLogger.Error(SuperClass.Token, "Superclass must be a class");
+                }
+            }
+            LoxInterpreter.currentEnvironment.Define(Token.Lexeme, null);
             Dictionary<string, LoxFunction> newMethods = new();
             foreach (FunctionStatement? method in Methods)
             {
@@ -35,8 +52,8 @@ namespace Interpreter.Statements
                     newMethods.Add(method.Name.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment, method.Name.Lexeme.Equals("init")));
                 }
             }
-            LoxClass loxClass = new(Name.Lexeme, newMethods);
-            LoxInterpreter.currentEnvironment.Assign(Name, loxClass);
+            LoxClass loxClass = new(Token.Lexeme, newMethods, (LoxClass?)superClass);
+            LoxInterpreter.currentEnvironment.Assign(Token, loxClass);
         }
     }
 }

@@ -25,16 +25,22 @@
             }
         }
 
+        /// <summary>
+        /// The methods of this class
+        /// </summary>
         private readonly Dictionary<string, LoxFunction> methods;
+
+        public LoxClass? SuperClass { get; init; }
 
         /// <summary>
         /// Constructor of the LoxClass class
         /// </summary>
         /// <param name="Name">The Name of the class</param>
-        public LoxClass(string Name, Dictionary<string, LoxFunction> Methods)
+        public LoxClass(string Name, Dictionary<string, LoxFunction> Methods, LoxClass? SuperClass)
         {
             this.Name = Name;
             this.methods = Methods;
+            this.SuperClass = SuperClass;
         }
 
         public override string ToString()
@@ -47,6 +53,10 @@
             if (methods.ContainsKey(name))
             {
                 return methods[name];
+            }
+            if (SuperClass is not null)
+            {
+                return SuperClass.FindMethod(name);
             }
             return null;
         }

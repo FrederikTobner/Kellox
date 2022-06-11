@@ -150,6 +150,12 @@ namespace Interpreter
         private IStatement CreateClassStatement()
         {
             Token name = Consume(TokenType.IDENTIFIER, "Expect class name.");
+            VariableExpression? superClass = null;
+            if (Match(TokenType.LESS))
+            {
+                Consume(TokenType.IDENTIFIER, "Expet superclass name.");
+                superClass = new VariableExpression(Previous());
+            }
             Consume(TokenType.LEFT_BRACE, "Expect \'{\' before class body.");
             List<FunctionStatement> methods = new();
             while (!Check(TokenType.RIGHT_BRACE))
@@ -157,7 +163,7 @@ namespace Interpreter
                 methods.Add((FunctionStatement)CreateFunctionStatement("method"));
             }
             Consume(TokenType.RIGHT_BRACE, "Expect \'}\' after class body.");
-            return new ClassStatement(name, methods);
+            return new ClassStatement(name, methods, superClass);
         }
 
         /// <summary>

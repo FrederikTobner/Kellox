@@ -182,7 +182,18 @@ namespace Interpreter
         {
             ClassType enclosingClass = CurrentClass;
             CurrentClass = ClassType.CLASS;
-            Define(classStatement.Name);
+            Define(classStatement.Token);
+            if (classStatement.SuperClass is not null)
+            {
+                if (classStatement.SuperClass.Token.Lexeme.Equals(classStatement.Token.Lexeme))
+                {
+                    LoxErrorLogger.Error(classStatement.Token, "A class can't inherit from itself");
+                }
+                else
+                {
+                    ResolveExpression(classStatement.SuperClass);
+                }
+            }
             BeginScope();
             foreach (FunctionStatement? method in classStatement.Methods)
             {
