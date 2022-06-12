@@ -1,5 +1,8 @@
 ﻿namespace Lox.Functions;
 
+/// <summary>
+/// Native Function Read implemented in the host language C#
+/// </summary>
 internal class ReadFunction : IFunction
 {
     public int Arity => 0;

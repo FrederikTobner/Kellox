@@ -5,7 +5,7 @@ namespace Lox.LexicalAnalysis;
 /// <summary>
 /// Performs a lexical analysis on a linear stream of characters and groups them together to a flat sequence of Tokens
 /// </summary>
-internal class Lexer
+internal class LoxLexer
 {
     /// <summary>
     /// StartIndex of the token that is currently getting evaluated in the sourcecode
@@ -36,7 +36,7 @@ internal class Lexer
     /// Constructor of the Lexer
     /// </summary>
     /// <param name="source">The flat sequence of tokens that is grouped to a flat sequence of Tokens by the Lexer</param>
-    public Lexer(string source)
+    public LoxLexer(string source)
     {
         Source = source;
         Tokens = new List<Token>();

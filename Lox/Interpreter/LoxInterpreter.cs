@@ -49,6 +49,7 @@ internal static class LoxInterpreter
         loxEnvironment.Define("wait", new WaitFunction());
         loxEnvironment.Define("clear", new ClearFunction());
         loxEnvironment.Define("read", new ReadFunction());
+        loxEnvironment.Define("random", new RandomFunction());
     }
 
     /// <summary>

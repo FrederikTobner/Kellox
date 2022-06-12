@@ -85,7 +85,7 @@ namespace Lox.Utils
         /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
         private static void Run(string sourceCode)
         {
-            Lexer lexer = new(sourceCode);
+            LoxLexer lexer = new(sourceCode);
             List<Token> tokens = lexer.ScanTokens();
             LoxParser parser = new(tokens);
             LoxProgram program = parser.Parse();

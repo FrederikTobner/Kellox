@@ -75,7 +75,7 @@ var counter = makeCounter();
 print counter(); // "1".
 print counter(); // "2"
 
-var o = 5.3;
+var o = random(1, 5);
 var test = "hi";
 print o;
 print test;

@@ -9,6 +9,9 @@ namespace Lox.Interpreter;
 /// </summary>
 internal class LoxProgram : IEnumerable<IStatement>
 {
+    /// <summary>
+    /// A readonly list conatining the parsed statements
+    /// </summary>
     public IReadOnlyList<IStatement> Statements { get; init; }
 
     /// <summary>

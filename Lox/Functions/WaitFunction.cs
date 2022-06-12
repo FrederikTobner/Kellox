@@ -1,7 +1,7 @@
 ﻿namespace Lox.Functions;
 
 /// <summary>
-/// Native wait-command that is used to wait a certain amount of seconds
+/// Native wait-command that is used to wait a certain amount of seconds implemented in the host language C#
 /// </summary>
 internal class WaitFunction : IFunction
 {
@@ -15,6 +15,5 @@ internal class WaitFunction : IFunction
 
         }
         return null;
-
     }
 }

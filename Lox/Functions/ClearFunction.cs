@@ -1,5 +1,8 @@
 ﻿namespace Lox.Functions;
 
+/// <summary>
+/// Native Function Clear implemented in the host language C#
+/// </summary>
 internal class ClearFunction : IFunction
 {
     public int Arity => 0;
