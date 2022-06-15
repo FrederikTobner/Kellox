@@ -21,4 +21,4 @@ Suspends the program for x seconds e.g.
 ```
 wait(5.25);
 ```
-[Native Functions](https://github.com/FrederikTobner/Lox/blob/master/ExamplePrograms.md)
+[Example Programs](https://github.com/FrederikTobner/Lox/blob/master/ExamplePrograms.md)
