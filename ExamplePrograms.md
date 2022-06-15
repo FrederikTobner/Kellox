@@ -1,4 +1,4 @@
-## Example programs
+# Example programs
 Hello World:
 ```
 print "Hello World";
