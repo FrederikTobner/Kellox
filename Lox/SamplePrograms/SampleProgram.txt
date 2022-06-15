@@ -93,6 +93,17 @@ fun Add(x, y)
 	return x + y;
 }
 
+fun Countdown(x)
+{
+	if(x > -1)
+	{
+		print x;
+		Countdown(x = x - 1);
+	}
+}
+
 print Add(fibo(), fibo());
 
 print test;
+
+Countdown(10);
