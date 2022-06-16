@@ -106,3 +106,7 @@ fun Countdown(x)
 }
 
 Countdown(10);
+
+/* Hallo 
+ein Blockkommentar geht über mehrere Zeilen
+*/

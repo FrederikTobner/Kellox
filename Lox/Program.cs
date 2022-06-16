@@ -1,5 +1,6 @@
 ﻿using Lox.Utils;
 
-//TestUtils.TestExpression();
-//RunnerUtils.RunInterpreter(args);
+// Starts Interpreter
+//LoxRunners.RunInterpreter(args);
+// Tests Interpreter with the sample program
 LoxTests.RunSampleProgram();

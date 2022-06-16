@@ -126,10 +126,26 @@ internal class LoxLexer
                 if (Match('/'))
                 {
                     // A comment goes until the end of the line.
-                    while (Peek() != '\n' && !IsAtEnd())
+                    while (Peek() is not '\n' && !IsAtEnd())
                     {
                         Advance();
                     }
+                }
+                else if (Match('*'))
+                {
+                    // A block comment goes until the next closing blockcomment tag
+                    while (!Match('*') && Peek() is not '/')
+                    {
+                        if (IsAtEnd())
+                        {
+                            //Blockcomment was never closed with a "*/"
+                            LoxErrorLogger.Error(line, "Blockcomment was never closed, no \"*/\" found");
+                            break;
+                        }
+                        Advance();
+                    }
+                    if(!IsAtEnd())
+                    Advance();
                 }
                 else
                 {
@@ -296,4 +312,3 @@ internal class LoxLexer
     /// </summary>
     private char Advance() => Source[current++];
 }
-

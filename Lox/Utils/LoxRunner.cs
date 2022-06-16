@@ -26,7 +26,7 @@ namespace Lox.Utils
         /// Starts the interpreter (from file or as command prompt if no file is specified)
         /// </summary>
         /// <param name="args"></param>
-        internal static void RunInterpreter(string[] args)
+        internal static void RunLoxInterpreter(string[] args)
         {
             if (args.Length > 1)
             {
