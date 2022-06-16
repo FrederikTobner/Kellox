@@ -1,5 +1,5 @@
 ﻿using Lox.Interpreter;
-using Lox.LexicalAnalysis;
+using Lox.Tokens;
 
 namespace Lox.Expressions
 {
@@ -33,6 +33,6 @@ namespace Lox.Expressions
         /// <summary>
         /// Returns a representation of the Expression as a string
         /// </summary>
-        public override string ToString() => $"Var ({Token.Lexeme}) ";
+        public override string ToString() => $"Var ({Token.Lexeme})";
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Lox.Interpreter;
-using Lox.LexicalAnalysis;
+using Lox.Tokens;
 
 namespace Lox.Expressions;
 

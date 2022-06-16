@@ -1,4 +1,4 @@
-﻿namespace Lox.LexicalAnalysis;
+﻿namespace Lox.Tokens;
 
 /// <summary>
 /// The different Types of Tokens in the Lox
@@ -17,15 +17,15 @@ internal enum TokenType
     SEMICOLON,
     SLASH,
     STAR,
-
-    // One or two character tokens.
     BANG,
-    BANG_EQUAL,
     EQUAL,
-    EQUAL_EQUAL,
     GREATER,
-    GREATER_EQUAL,
     LESS,
+
+    // two character tokens.
+    BANG_EQUAL,
+    EQUAL_EQUAL,
+    GREATER_EQUAL,
     LESS_EQUAL,
 
     // Literals.

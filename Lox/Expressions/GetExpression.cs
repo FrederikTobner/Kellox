@@ -1,6 +1,6 @@
 ﻿using Lox.Classes;
 using Lox.Interpreter.Exceptions;
-using Lox.LexicalAnalysis;
+using Lox.Tokens;
 
 namespace Lox.Expressions;
 

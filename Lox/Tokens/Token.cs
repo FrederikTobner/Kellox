@@ -1,4 +1,4 @@
-﻿namespace Lox.LexicalAnalysis;
+﻿namespace Lox.Tokens;
 
 /// <summary>
 /// Models a Token (a word in a programming language)

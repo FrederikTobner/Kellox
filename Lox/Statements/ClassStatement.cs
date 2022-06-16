@@ -2,7 +2,7 @@
 using Lox.Expressions;
 using Lox.Functions;
 using Lox.Interpreter;
-using Lox.LexicalAnalysis;
+using Lox.Tokens;
 using Lox.Utils;
 
 namespace Lox.Statements;

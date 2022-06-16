@@ -1,4 +1,4 @@
-﻿using Lox.LexicalAnalysis;
+﻿using Lox.Tokens;
 
 namespace Lox.Utils
 {

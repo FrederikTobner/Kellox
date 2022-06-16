@@ -1,6 +1,6 @@
 ﻿using Lox.Expressions;
 using Lox.Interpreter;
-using Lox.LexicalAnalysis;
+using Lox.Tokens;
 
 namespace Lox.Statements;
 

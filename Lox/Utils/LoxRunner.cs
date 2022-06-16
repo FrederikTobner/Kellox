@@ -1,6 +1,7 @@
 ﻿using Lox.Interpreter;
-using Lox.LexicalAnalysis;
+using Lox.Lexer;
 using Lox.Parser;
+using Lox.Tokens;
 using System.Text;
 
 namespace Lox.Utils

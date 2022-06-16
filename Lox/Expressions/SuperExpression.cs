@@ -2,7 +2,7 @@
 using Lox.Functions;
 using Lox.Interpreter;
 using Lox.Interpreter.Exceptions;
-using Lox.LexicalAnalysis;
+using Lox.Tokens;
 
 namespace Lox.Expressions;
 
@@ -43,6 +43,6 @@ internal class SuperExpression : IExpression
 
     public override string ToString()
     {
-        return Token.Lexeme + "." + Method.Lexeme + "()";
+        return Token.Lexeme + '.' + Method.Lexeme;
     }
 }

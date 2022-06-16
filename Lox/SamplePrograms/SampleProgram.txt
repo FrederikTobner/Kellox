@@ -1,29 +1,33 @@
-class Doughnut {
-  init(color)
+class Doughnut 
+{
+  init(parentColor)
   {
-  this.color = color;
+	this.parentColor = parentColor;
   }
   cook() 
   {
-    print "Fry until " + this.color;
+    print "Fry until " + this.parentColor;
   }
 }
 
-class BostonCream < Doughnut {
-	init(color)
+class BostonCream < Doughnut 
+{
+	init(color, parentColor)
 	{
-	super.init(color);
+		super.init(parentColor);
+		this.color = color;		
 	}
 	cook()
 	{
 		super.cook();
-		print "Pipe full of custard and coat with chocolate.";
+		print "Pipe full of custard and coat with " + this.color + " chocolate.";
 	}
 }
 
-BostonCream("golden brown").cook();
+BostonCream("dark", "golden brown").cook();
 
-class LoxKlasse{
+class LoxKlasse
+{
 	Method()
 	{
 		return this;
@@ -32,7 +36,8 @@ class LoxKlasse{
 
 print LoxKlasse().Method();
 
-class Rect{
+class Rect
+{
 	init(x, y)
 	{
 		this.x = x;
@@ -75,11 +80,7 @@ var counter = makeCounter();
 print counter(); // "1".
 print counter(); // "2"
 
-var o = random(1, 5);
-var test = "hi";
-print o;
-print test;
-
+print random(1, 5);
 
 // prints the first 25 fibonacci numbers
 var fibo = fibonacci();
@@ -93,17 +94,15 @@ fun Add(x, y)
 	return x + y;
 }
 
+print Add(123456, 654321);
+
 fun Countdown(x)
 {
-	if(x > -1)
+	if(x >= 0)
 	{
 		print x;
 		Countdown(x = x - 1);
 	}
 }
-
-print Add(fibo(), fibo());
-
-print test;
 
 Countdown(10);

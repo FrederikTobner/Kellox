@@ -1,5 +1,5 @@
 ﻿using Lox.Interpreter.Exceptions;
-using Lox.LexicalAnalysis;
+using Lox.Tokens;
 
 namespace Lox.Interpreter;
 
@@ -24,63 +24,6 @@ internal class LoxEnvironment
     {
         values = new Dictionary<string, object?>();
         Enclosing = environment;
-    }
-
-    /// <summary>
-    /// Defines a new variable
-    /// </summary>
-    /// <param name="name">The name of the variable</param>
-    /// <param name="value">The value that shall be assigned to the variable</param>
-    public void Define(string name, object? value)
-    {
-        values.Add(name, value);
-    }
-
-    /// <summary>
-    /// Gets the value associated to a specific Variable
-    /// </summary>
-    /// <param name="name">The name of the variable</param>
-    /// <returns>The value associated to the variable</returns>
-    /// <exception cref="RunTimeError">If the Variable is undefiened</exception>
-    public object? Get(Token name)
-    {
-        if (values.ContainsKey(name.Lexeme))
-        {
-            return values[name.Lexeme];
-        }
-        if (Enclosing is not null)
-        {
-            return Enclosing.Get(name);
-        }
-        throw new RunTimeError(name, "Undefiened variable \'" + name.Lexeme + "\'.");
-    }
-
-    /// <summary>
-    /// Gets a value from the Environment at a specified distance
-    /// </summary>
-    /// <param name="distance"></param>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    public object? GetAt(int distance, Token token)
-    {
-        return Ancestor(distance).Get(token);
-    }
-
-    /// <summary>
-    /// Iterates through the ancestors/parents/enclosing environments of the current Environment
-    /// </summary>
-    /// <param name="distance"></param>
-    private LoxEnvironment Ancestor(int distance)
-    {
-        LoxEnvironment environment = this;
-        for (int i = 0; i < distance; i++)
-        {
-            if (environment.Enclosing is not null)
-            {
-                environment = environment.Enclosing;
-            }
-        }
-        return environment;
     }
 
     /// <summary>
@@ -113,5 +56,62 @@ internal class LoxEnvironment
     public void AssignAt(int distance, Token token, object? value)
     {
         Ancestor(distance).values[token.Lexeme] = value;
+    }
+
+    /// <summary>
+    /// Defines a new variable
+    /// </summary>
+    /// <param name="name">The name of the variable</param>
+    /// <param name="value">The value that shall be assigned to the variable</param>
+    public void Define(string name, object? value)
+    {
+        values.Add(name, value);
+    }
+
+    /// <summary>
+    /// Gets the value associated to a specific Variable
+    /// </summary>
+    /// <param name="token">The identifier token</param>
+    /// <returns>The value associated to the variable</returns>
+    /// <exception cref="RunTimeError">If the Variable is undefiened</exception>
+    public object? Get(Token token)
+    {
+        if (values.ContainsKey(token.Lexeme))
+        {
+            return values[token.Lexeme];
+        }
+        if (Enclosing is not null)
+        {
+            return Enclosing.Get(token);
+        }
+        throw new RunTimeError(token, "Undefiened variable \'" + token.Lexeme + "\'.");
+    }
+
+    /// <summary>
+    /// Gets a value from the Environment at a specified distance
+    /// </summary>
+    /// <param name="distance">The specified distance</param>
+    /// <param name="token">The IdentifierToken</param>
+    /// <returns></returns>
+    public object? GetAt(int distance, Token token)
+    {
+        return Ancestor(distance).Get(token);
+    }
+
+    /// <summary>
+    /// Iterates through the ancestors/parents/enclosing environments of the current Environment
+    /// </summary>
+    /// <param name="distance"></param>
+    private LoxEnvironment Ancestor(int distance)
+    {
+        LoxEnvironment environment = this;
+        for (int i = 0; i < distance; i++)
+        {
+            if (environment.Enclosing is not null)
+            {
+                environment = environment.Enclosing;
+            }
+        }
+        return environment;
     }
 }

@@ -59,11 +59,10 @@ internal static class LoxInterpreter
     internal static void Interpret(LoxProgram program)
     {
         LoxResolver.Resolve(program);
-        if (!program.Runnable)
+        if (program.Runnable)
         {
-            return;
+            RunProgram(program);
         }
-        RunProgram(program);
     }
 
     /// <summary>

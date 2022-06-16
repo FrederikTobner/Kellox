@@ -1,7 +1,7 @@
 ﻿using Lox.Expressions;
 using Lox.Interpreter;
-using Lox.LexicalAnalysis;
 using Lox.Statements;
+using Lox.Tokens;
 using Lox.Utils;
 
 namespace Lox.Resolver;
@@ -321,7 +321,7 @@ internal static class LoxResolver
     {
         if (CurrentClass is ClassType.NONE)
         {
-            LoxErrorLogger.Error(superExpression.Token, "Can't use super outside of a class");
+            LoxErrorLogger.Error(superExpression.Token, "Can't use \'super\' outside of a class");
         }
         else if (CurrentClass is not ClassType.SUBCLASS)
         {

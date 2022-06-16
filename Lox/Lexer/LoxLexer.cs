@@ -1,6 +1,7 @@
-﻿using Lox.Utils;
+﻿using Lox.Tokens;
+using Lox.Utils;
 
-namespace Lox.LexicalAnalysis;
+namespace Lox.Lexer;
 
 /// <summary>
 /// Performs a lexical analysis on a linear stream of characters and groups them together to a flat sequence of Tokens
@@ -53,7 +54,7 @@ internal class LoxLexer
             ScanToken();
         }
         //Adding the end of file Token
-        Tokens.Add(new Token(TokenType.EOF, "", null, line));
+        Tokens.Add(new Token(TokenType.EOF, string.Empty, null, line));
         return Tokens;
     }
 
@@ -156,11 +157,11 @@ internal class LoxLexer
                 AString();
                 break;
             default:
-                if (IsDigit(c))
+                if (ScanUtils.IsDigit(c))
                 {
                     Number();
                 }
-                else if (IsAlpha(c))
+                else if (ScanUtils.IsAlpha(c))
                 {
                     Identifier();
                 }
@@ -173,18 +174,6 @@ internal class LoxLexer
     }
 
     /// <summary>
-    /// Determines weather a char is from the Alphabet
-    /// </summary>
-    /// <param name="c">The char that is evaluated</param>
-    private static bool IsAlpha(char c) => c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c is '_';
-
-    /// <summary>
-    /// Determines weather a char is from the Alphabet or a number
-    /// </summary>
-    /// <param name="c">The char that is evaluated</param>
-    private static bool IsAlphaNumeric(char c) => IsAlpha(c) || IsDigit(c);
-
-    /// <summary>
     /// Indicates weather the Lexer has reached the end of the file
     /// </summary>
     private bool IsAtEnd() => current >= Source.Length;
@@ -194,7 +183,7 @@ internal class LoxLexer
     /// </summary>
     private void Identifier()
     {
-        while (IsAlphaNumeric(Peek()))
+        while (ScanUtils.IsAlphaNumeric(Peek()))
         {
             Advance();
         }
@@ -234,29 +223,23 @@ internal class LoxLexer
     }
 
     /// <summary>
-    /// Determines weather a char is a number (0-9)
-    /// </summary>
-    /// <param name="c">The char that is evaluated</param>
-    private static bool IsDigit(char c) => c >= '0' && c <= '9';
-
-    /// <summary>
     /// Used to create a Token with the Tokentype Number (a number literal)
     /// </summary>
     private void Number()
     {
         int digitsAfterPoint = 0;
 
-        while (IsDigit(Peek()))
+        while (ScanUtils.IsDigit(Peek()))
         {
             Advance();
         }
 
         // Look for a fractional part.
-        if (Peek() is '.' && IsDigit(PeekNext()))
+        if (Peek() is '.' && ScanUtils.IsDigit(PeekNext()))
         {
             // Consumes the "."
             Advance();
-            while (IsDigit(Peek()))
+            while (ScanUtils.IsDigit(Peek()))
             {
                 Advance();
                 digitsAfterPoint++;
@@ -309,7 +292,7 @@ internal class LoxLexer
     }
 
     /// <summary>
-    /// Advances a postion further in the sourceCode (one character)
+    /// Advances a postion further in the sourceCode (one character) and returns the character at the previous position
     /// </summary>
     private char Advance() => Source[current++];
 }

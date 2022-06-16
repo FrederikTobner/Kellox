@@ -1,8 +1,8 @@
 ﻿using Lox.Classes;
 using Lox.Functions.Exceptions;
 using Lox.Interpreter;
-using Lox.LexicalAnalysis;
 using Lox.Statements;
+using Lox.Tokens;
 
 namespace Lox.Functions;
 

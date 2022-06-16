@@ -1,8 +1,8 @@
 ﻿using Lox.Expressions;
 using Lox.Interpreter;
-using Lox.LexicalAnalysis;
 using Lox.Parser.Exceptions;
 using Lox.Statements;
+using Lox.Tokens;
 using Lox.Utils;
 
 namespace Lox.Parser;
@@ -294,35 +294,6 @@ internal partial class LoxParser
         return new DeclarationStatement(token, Expression());
     }
 
-    /// <summary>
-    /// Creates an OrExpressionn
-    /// </summary>
-    private IExpression OrExpression()
-    {
-        IExpression expression = AndExpression();
-        while (Match(TokenType.OR))
-        {
-            Token operatorToken = Previous();
-            IExpression right = AndExpression();
-            expression = new LogicalExpression(expression, right, operatorToken);
-        }
-        return expression;
-    }
-
-    /// <summary>
-    /// Creates an AndExpressionn
-    /// </summary>
-    private IExpression AndExpression()
-    {
-        IExpression expression = Equality();
-        while (Match(TokenType.AND))
-        {
-            Token operatorToken = Previous();
-            IExpression right = Equality();
-            expression = new LogicalExpression(expression, right, operatorToken);
-        }
-        return expression;
-    }
 
     /// <summary>
     /// Used to handle a new Expressionstatement
@@ -355,6 +326,37 @@ internal partial class LoxParser
     }
 
     /// <summary>
+    /// Creates an OrExpressionn
+    /// </summary>
+    private IExpression OrExpression()
+    {
+        IExpression expression = AndExpression();
+        while (Match(TokenType.OR))
+        {
+            Token operatorToken = Previous();
+            IExpression right = AndExpression();
+            expression = new LogicalExpression(expression, right, operatorToken);
+        }
+        return expression;
+    }
+
+    /// <summary>
+    /// Creates an AndExpressionn
+    /// </summary>
+    private IExpression AndExpression()
+    {
+        IExpression expression = Equality();
+        while (Match(TokenType.AND))
+        {
+            Token operatorToken = Previous();
+            IExpression right = Equality();
+            expression = new LogicalExpression(expression, right, operatorToken);
+        }
+        return expression;
+    }
+
+
+    /// <summary>
     /// Crates a new EqualityStatement (a != x/ a == x)
     /// </summary>
     private IExpression Equality()
@@ -370,56 +372,6 @@ internal partial class LoxParser
 
         return expression;
     }
-
-    /// <summary>
-    /// Determines weather the next Token is from the specified TokenTypes
-    /// </summary>
-    /// <param name="types">Types of the Tokens</param>
-    private bool Match(params TokenType[] types)
-    {
-        foreach (TokenType type in types)
-        {
-            if (Check(type))
-            {
-                Advance();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Checks if the next Token is of a given type
-    /// </summary>
-    /// <param name="type">The type that shall be checked</param>
-    private bool Check(TokenType type) => !IsAtEnd() && Peek().TokenType == type;
-
-    /// <summary>
-    /// Advances a position further in the flat sequence of Tokens
-    /// </summary>
-    private Token Advance()
-    {
-        if (!IsAtEnd())
-        {
-            current++;
-        }
-        return Previous();
-    }
-
-    /// <summary>
-    /// Determines whether the ned of the file has been reached
-    /// </summary>
-    private bool IsAtEnd() => Peek().TokenType == TokenType.EOF;
-
-    /// <summary>
-    /// Returns current Token
-    /// </summary>
-    private Token Peek() => tokens[current];
-
-    /// <summary>
-    /// Returns the prevoius Token
-    /// </summary>
-    private Token Previous() => tokens[current - 1];
 
     /// <summary>
     ///  Creates a new Comparison Expression E.g. a > x / a >= x / a < x / a <= x
@@ -478,14 +430,12 @@ internal partial class LoxParser
             IExpression right = Unary();
             return new UnaryExpression(operatorToken, right);
         }
-
         return Call();
     }
 
     /// <summary>
     /// Creates a new CallExpression
     /// </summary>
-    /// <returns></returns>
     private IExpression Call()
     {
         IExpression expression = Primary();
@@ -575,7 +525,7 @@ internal partial class LoxParser
         if (Match(TokenType.LEFT_PARENTHESIS))
         {
             IExpression expr = Expression();
-            Consume(TokenType.RIGHT_PARENTHESIS, "Expect ')' after expression.");
+            Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after expression.");
             return new GroupingExpression(expr);
         }
         throw new ParseError(Peek(), "Expect expression");
@@ -618,14 +568,64 @@ internal partial class LoxParser
     }
 
     /// <summary>
+    /// Determines weather the next Token is from the specified TokenTypes
+    /// </summary>
+    /// <param name="tokenTypes">Types of the Tokens</param>
+    private bool Match(params TokenType[] tokenTypes)
+    {
+        foreach (TokenType type in tokenTypes)
+        {
+            if (Check(type))
+            {
+                Advance();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Checks if the next Token is of a given type
+    /// </summary>
+    /// <param name="tokenType">The type that shall be checked</param>
+    private bool Check(TokenType tokenType) => !IsAtEnd() && Peek().TokenType == tokenType;
+
+    /// <summary>
+    /// Advances a position further in the flat sequence of Tokens
+    /// </summary>
+    private Token Advance()
+    {
+        if (!IsAtEnd())
+        {
+            current++;
+        }
+        return Previous();
+    }
+
+    /// <summary>
+    /// Determines whether the ned of the file has been reached
+    /// </summary>
+    private bool IsAtEnd() => Peek().TokenType == TokenType.EOF;
+
+    /// <summary>
+    /// Returns current Token
+    /// </summary>
+    private Token Peek() => tokens[current];
+
+    /// <summary>
+    /// Returns the prevoius Token
+    /// </summary>
+    private Token Previous() => tokens[current - 1];
+
+    /// <summary>
     /// Checks weather the next token is of the given type
     /// </summary>
-    /// <param name="type"></param>
+    /// <param name="tokenType"></param>
     /// <param name="message"></param>
     /// <returns></returns>
-    private Token Consume(TokenType type, string message)
+    private Token Consume(TokenType tokenType, string message)
     {
-        if (Check(type))
+        if (Check(tokenType))
         {
             return Advance();
         }
