@@ -8,7 +8,6 @@ namespace Lox.Utils
 {
     public static class LoxRunner
     {
-        private const string emptyString = "";
         private const string loxPrompt = "> ";
         private const string toMuchArgsErrorMessage = "To much args";
 
@@ -71,7 +70,7 @@ namespace Lox.Utils
         {
             Console.WriteLine(loxPrompt);
             string? line = Console.ReadLine();
-            while (line is not emptyString && line is not null)
+            while (line is not "" && line is not null)
             {
                 Run(line);
                 ErrorOccurred = false;
@@ -86,10 +85,8 @@ namespace Lox.Utils
         /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
         private static void Run(string sourceCode)
         {
-            LoxLexer lexer = new(sourceCode);
-            List<Token> tokens = lexer.ScanTokens();
-            LoxParser parser = new(tokens);
-            LoxProgram program = parser.Parse();
+            List<Token> tokens = LoxLexer.ScanTokens(sourceCode);
+            LoxProgram program = LoxParser.Parse(tokens);
             if (ErrorOccurred)
             {
                 return;

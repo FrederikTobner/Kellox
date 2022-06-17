@@ -10,48 +10,35 @@ namespace Lox.Parser;
 /// <summary>
 /// Takes a flat sequence of tokens and builds a syntax tree based on the tokens
 /// </summary>
-internal partial class LoxParser
+internal static class LoxParser
 {
-    /// <summary>
-    /// Flat sequence of Tokens
-    /// </summary>
-    private readonly IReadOnlyList<Token> tokens;
-
     /// <summary>
     /// The current Position in the sequence of tokens
     /// </summary>
-    private int current;
-
-    /// <summary>
-    /// Constructor of the Parser
-    /// </summary>
-    /// <param name="tokens">flat sequence of Tokens used to build a syntax tree</param>
-    public LoxParser(IReadOnlyList<Token> tokens)
-    {
-        this.tokens = tokens;
-    }
+    private static int current;
 
     /// <summary>
     /// Builds a LoxProgramm out of a flat sequence of Tokens
     /// </summary>
-    internal LoxProgram Parse()
+    internal static LoxProgram Parse(IReadOnlyList<Token> tokens)
     {
+        current = 0;
         List<IStatement> statements = new();
-        while (!IsAtEnd())
+        while (!IsAtEnd(tokens))
         {
             try
             {
-                IStatement statement = Statement();
+                IStatement statement = Statement(tokens);
                 statements.Add(statement);
                 if (StatementConsumesSemicolon(statement))
                 {
-                    Consume(TokenType.SEMICOLON, "Expect ';' after value");
+                    Consume(tokens, TokenType.SEMICOLON, "Expect ';' after value");
                 }
             }
             catch (ParseError error)
             {
                 LoxErrorLogger.Error(error.ErrorToken, error.Message);
-                Synchronize();
+                Synchronize(tokens);
             }
         }
         return new(statements);
@@ -60,47 +47,47 @@ internal partial class LoxParser
     /// <summary>
     /// Determines the next Statement that shall be executed based on the next Token
     /// </summary>
-    private IStatement Statement()
+    private static IStatement Statement(IReadOnlyList<Token> tokens)
     {
-        if (Match(TokenType.FOR))
+        if (Match(tokens, TokenType.FOR))
         {
-            return CreateForStatement();
+            return CreateForStatement(tokens);
         }
-        else if (Match(TokenType.IF))
+        else if (Match(tokens, TokenType.IF))
         {
-            return CreateIfStatement();
+            return CreateIfStatement(tokens);
         }
-        else if (Match(TokenType.CLASS))
+        else if (Match(tokens, TokenType.CLASS))
         {
-            return CreateClassStatement();
+            return CreateClassStatement(tokens);
         }
-        else if (Match(TokenType.FUN))
+        else if (Match(tokens, TokenType.FUN))
         {
-            return CreateFunctionStatement("function");
+            return CreateFunctionStatement(tokens, "function");
         }
-        else if (Match(TokenType.VAR))
+        else if (Match(tokens, TokenType.VAR))
         {
-            return CreateDeclarationStatement();
+            return CreateDeclarationStatement(tokens);
         }
-        else if (Match(TokenType.PRINT))
+        else if (Match(tokens, TokenType.PRINT))
         {
-            return new PrintStatement(Expression());
+            return new PrintStatement(Expression(tokens));
         }
-        else if (Match(TokenType.RETURN))
+        else if (Match(tokens, TokenType.RETURN))
         {
-            return CreateReturnStatement();
+            return CreateReturnStatement(tokens);
         }
-        else if (Match(TokenType.WHILE))
+        else if (Match(tokens, TokenType.WHILE))
         {
-            return CreateWhileStatement();
+            return CreateWhileStatement(tokens);
         }
-        else if (Match(TokenType.LEFT_BRACE))
+        else if (Match(tokens, TokenType.LEFT_BRACE))
         {
-            return new BlockStatement(ReadBlock());
+            return new BlockStatement(ReadBlock(tokens));
         }
         else
         {
-            return new ExpressionStatement(Expression());
+            return new ExpressionStatement(Expression(tokens));
         }
     }
 
@@ -114,133 +101,133 @@ internal partial class LoxParser
     /// Creates a new Return statement
     /// </summary>
     /// <returns></returns>
-    private IStatement CreateReturnStatement()
+    private static IStatement CreateReturnStatement(IReadOnlyList<Token> tokens)
     {
-        Token keyword = Previous();
+        Token keyword = Previous(tokens);
         IExpression? value = null;
-        if (!Check(TokenType.SEMICOLON))
+        if (!Check(tokens, TokenType.SEMICOLON))
         {
-            value = Expression();
+            value = Expression(tokens);
         }
-        Consume(TokenType.SEMICOLON, "Expect \';\' after return value");
+        Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after return value");
         return new ReturnStatement(keyword, value);
     }
 
     /// <summary>
     /// Used to handle a new BlockStatement
     /// </summary>
-    private List<IStatement> ReadBlock()
+    private static List<IStatement> ReadBlock(IReadOnlyList<Token> tokens)
     {
         List<IStatement> statements = new();
 
-        while (!Check(TokenType.RIGHT_BRACE) && !IsAtEnd())
+        while (!Check(tokens, TokenType.RIGHT_BRACE) && !IsAtEnd(tokens))
         {
-            IStatement statement = Statement();
+            IStatement statement = Statement(tokens);
             statements.Add(statement);
             if (StatementConsumesSemicolon(statement))
             {
-                Consume(TokenType.SEMICOLON, "Expect \';\' after value");
+                Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after value");
             }
         }
-        Consume(TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
+        Consume(tokens, TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
         return statements;
     }
 
     /// <summary>
     /// Creates a new Class statement
     /// </summary>
-    private IStatement CreateClassStatement()
+    private static IStatement CreateClassStatement(IReadOnlyList<Token> tokens)
     {
-        Token name = Consume(TokenType.IDENTIFIER, "Expect class name.");
+        Token name = Consume(tokens, TokenType.IDENTIFIER, "Expect class name.");
         VariableExpression? superClass = null;
-        if (Match(TokenType.LESS))
+        if (Match(tokens, TokenType.LESS))
         {
-            Consume(TokenType.IDENTIFIER, "Expet superclass name.");
-            superClass = new VariableExpression(Previous());
+            Consume(tokens, TokenType.IDENTIFIER, "Expet superclass name.");
+            superClass = new VariableExpression(Previous(tokens));
         }
-        Consume(TokenType.LEFT_BRACE, "Expect \'{\' before class body.");
+        Consume(tokens, TokenType.LEFT_BRACE, "Expect \'{\' before class body.");
         List<FunctionStatement> methods = new();
-        while (!Check(TokenType.RIGHT_BRACE))
+        while (!Check(tokens, TokenType.RIGHT_BRACE))
         {
-            methods.Add((FunctionStatement)CreateFunctionStatement("method"));
+            methods.Add((FunctionStatement)CreateFunctionStatement(tokens, "method"));
         }
-        Consume(TokenType.RIGHT_BRACE, "Expect \'}\' after class body.");
+        Consume(tokens, TokenType.RIGHT_BRACE, "Expect \'}\' after class body.");
         return new ClassStatement(name, methods, superClass);
     }
 
     /// <summary>
     /// Creates a new Function statement (declaration  not calle)
     /// </summary>
-    private IStatement CreateFunctionStatement(string kind)
+    private static IStatement CreateFunctionStatement(IReadOnlyList<Token> tokens, string kind)
     {
-        Token name = Consume(TokenType.IDENTIFIER, "Expect " + kind + " name.");
-        Consume(TokenType.LEFT_PARENTHESIS, "Expect \'(\' after " + kind + " name.");
+        Token name = Consume(tokens, TokenType.IDENTIFIER, "Expect " + kind + " name.");
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after " + kind + " name.");
         //Handles arguments/parameters
         List<Token> parameters = new();
-        if (!Check(TokenType.RIGHT_PARENTHESIS))
+        if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
         {
             do
             {
                 if (parameters.Count >= 255)
                 {
-                    throw new ParseError(Peek(), "Can't have more than 255 parameters.");
+                    throw new ParseError(Peek(tokens), "Can't have more than 255 parameters.");
                 }
-                parameters.Add(Consume(TokenType.IDENTIFIER, "Expect parameter name."));
+                parameters.Add(Consume(tokens, TokenType.IDENTIFIER, "Expect parameter name."));
 
-            } while (Match(TokenType.COMMA));
+            } while (Match(tokens, TokenType.COMMA));
         }
-        Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after parameters");
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after parameters");
         //Handles body
-        Consume(TokenType.LEFT_BRACE, "Expect \'}\' before " + kind + " body");
-        List<IStatement> body = ReadBlock();
+        Consume(tokens, TokenType.LEFT_BRACE, "Expect \'}\' before " + kind + " body");
+        List<IStatement> body = ReadBlock(tokens);
         return new FunctionStatement(name, parameters, body);
     }
 
     /// <summary>
     /// Creates a while statement
     /// </summary>
-    private IStatement CreateWhileStatement()
+    private static IStatement CreateWhileStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(TokenType.LEFT_PARENTHESIS, "Expect \'(\' after while.");
-        IExpression condition = Expression();
-        Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after condition.");
-        IStatement body = Statement();
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after while.");
+        IExpression condition = Expression(tokens);
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after condition.");
+        IStatement body = Statement(tokens);
         return new WhileStatement(condition, body);
     }
 
     /// <summary>
     /// Creates a for statement (based on while statement - just syntax sugar)
     /// </summary>
-    private IStatement CreateForStatement()
+    private static IStatement CreateForStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(TokenType.LEFT_PARENTHESIS, "Expect \'(\' after for.");
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after for.");
 
         IStatement? initializerExpression = null;
-        if (Match(TokenType.VAR))
+        if (Match(tokens, TokenType.VAR))
         {
-            initializerExpression = CreateDeclarationStatement();
+            initializerExpression = CreateDeclarationStatement(tokens);
         }
-        else if (!Match(TokenType.SEMICOLON))
+        else if (!Match(tokens, TokenType.SEMICOLON))
         {
-            initializerExpression = new ExpressionStatement(Expression());
+            initializerExpression = new ExpressionStatement(Expression(tokens));
         }
 
         IExpression? conditionalExpression = null;
-        if (Check(TokenType.SEMICOLON))
+        if (Check(tokens, TokenType.SEMICOLON))
         {
-            Advance();
-            conditionalExpression = Expression();
+            Advance(tokens);
+            conditionalExpression = Expression(tokens);
         }
 
         IExpression? incrementExpression = null;
-        if (!Check(TokenType.RIGHT_PARENTHESIS))
+        if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
         {
-            Consume(TokenType.SEMICOLON, "Expect \';\' after loop condition");
-            incrementExpression = Expression();
+            Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after loop condition");
+            incrementExpression = Expression(tokens);
         }
-        Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");
 
-        IStatement body = Statement();
+        IStatement body = Statement(tokens);
 
         if (incrementExpression is not null)
         {
@@ -265,16 +252,16 @@ internal partial class LoxParser
     /// <summary>
     /// Used to handle a new IfStatement
     /// </summary>
-    private IStatement CreateIfStatement()
+    private static IStatement CreateIfStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(TokenType.LEFT_PARENTHESIS, "Expect \'(\' after \'if\'.");
-        IExpression condition = Expression();
-        Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after if condition.");
-        IStatement thenBranch = Statement();
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after \'if\'.");
+        IExpression condition = Expression(tokens);
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after if condition.");
+        IStatement thenBranch = Statement(tokens);
         IStatement? elseBranch = null;
-        if (Match(TokenType.ELSE))
+        if (Match(tokens, TokenType.ELSE))
         {
-            elseBranch = Statement();
+            elseBranch = Statement(tokens);
         }
         return new IfStatement(condition, thenBranch, elseBranch);
     }
@@ -282,35 +269,35 @@ internal partial class LoxParser
     /// <summary>
     /// Used to handle a new Declarationstatement
     /// </summary>
-    private IStatement CreateDeclarationStatement()
+    private static IStatement CreateDeclarationStatement(IReadOnlyList<Token> tokens)
     {
-        Token token = Consume(TokenType.IDENTIFIER, "Expect variable name");
-        if (Check(TokenType.SEMICOLON))
+        Token token = Consume(tokens, TokenType.IDENTIFIER, "Expect variable name");
+        if (Check(tokens, TokenType.SEMICOLON))
         {
             // No value assigned -> value is null
             return new DeclarationStatement(token);
         }
         current++;
-        return new DeclarationStatement(token, Expression());
+        return new DeclarationStatement(token, Expression(tokens));
     }
 
 
     /// <summary>
     /// Used to handle a new Expressionstatement
     /// </summary>
-    private IExpression Expression() => Assignment();
+    private static IExpression Expression(IReadOnlyList<Token> tokens) => Assignment(tokens);
 
     /// <summary>
     /// Used to handle a new AssignmentStatement
     /// </summary>
-    private IExpression Assignment()
+    private static IExpression Assignment(IReadOnlyList<Token> tokens)
     {
-        IExpression expression = OrExpression();
+        IExpression expression = OrExpression(tokens);
 
-        if (Match(TokenType.EQUAL))
+        if (Match(tokens, TokenType.EQUAL))
         {
-            Token equals = Previous();
-            IExpression value = Assignment();
+            Token equals = Previous(tokens);
+            IExpression value = Assignment(tokens);
             if (expression is VariableExpression variableExpression)
             {
                 Token name = variableExpression.Token;
@@ -328,13 +315,13 @@ internal partial class LoxParser
     /// <summary>
     /// Creates an OrExpressionn
     /// </summary>
-    private IExpression OrExpression()
+    private static IExpression OrExpression(IReadOnlyList<Token> tokens)
     {
-        IExpression expression = AndExpression();
-        while (Match(TokenType.OR))
+        IExpression expression = AndExpression(tokens);
+        while (Match(tokens, TokenType.OR))
         {
-            Token operatorToken = Previous();
-            IExpression right = AndExpression();
+            Token operatorToken = Previous(tokens);
+            IExpression right = AndExpression(tokens);
             expression = new LogicalExpression(expression, right, operatorToken);
         }
         return expression;
@@ -343,13 +330,13 @@ internal partial class LoxParser
     /// <summary>
     /// Creates an AndExpressionn
     /// </summary>
-    private IExpression AndExpression()
+    private static IExpression AndExpression(IReadOnlyList<Token> tokens)
     {
-        IExpression expression = Equality();
-        while (Match(TokenType.AND))
+        IExpression expression = Equality(tokens);
+        while (Match(tokens, TokenType.AND))
         {
-            Token operatorToken = Previous();
-            IExpression right = Equality();
+            Token operatorToken = Previous(tokens);
+            IExpression right = Equality(tokens);
             expression = new LogicalExpression(expression, right, operatorToken);
         }
         return expression;
@@ -359,14 +346,14 @@ internal partial class LoxParser
     /// <summary>
     /// Crates a new EqualityStatement (a != x/ a == x)
     /// </summary>
-    private IExpression Equality()
+    private static IExpression Equality(IReadOnlyList<Token> tokens)
     {
-        IExpression expression = Comparison();
+        IExpression expression = Comparison(tokens);
 
-        while (Match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL))
+        while (Match(tokens, TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL))
         {
-            Token operatorToken = Previous();
-            IExpression right = Comparison();
+            Token operatorToken = Previous(tokens);
+            IExpression right = Comparison(tokens);
             expression = new BinaryExpression(expression, operatorToken, right);
         }
 
@@ -376,13 +363,13 @@ internal partial class LoxParser
     /// <summary>
     ///  Creates a new Comparison Expression E.g. a > x / a >= x / a < x / a <= x
     /// </summary>
-    private IExpression Comparison()
+    private static IExpression Comparison(IReadOnlyList<Token> tokens)
     {
-        IExpression expression = Term();
-        while (Match(TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
+        IExpression expression = Term(tokens);
+        while (Match(tokens, TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
         {
-            Token operatorToken = Previous();
-            IExpression right = Term();
+            Token operatorToken = Previous(tokens);
+            IExpression right = Term(tokens);
             expression = new BinaryExpression(expression, operatorToken, right);
         }
         return expression;
@@ -391,13 +378,13 @@ internal partial class LoxParser
     /// <summary>
     /// Creates a new Term expression (a + b / a - b)
     /// </summary>
-    private IExpression Term()
+    private static IExpression Term(IReadOnlyList<Token> tokens)
     {
-        IExpression expression = Factor();
-        while (Match(TokenType.MINUS, TokenType.PLUS))
+        IExpression expression = Factor(tokens);
+        while (Match(tokens, TokenType.MINUS, TokenType.PLUS))
         {
-            Token operatorToken = Previous();
-            IExpression right = Factor();
+            Token operatorToken = Previous(tokens);
+            IExpression right = Factor(tokens);
             expression = new BinaryExpression(expression, operatorToken, right);
         }
         return expression;
@@ -406,13 +393,13 @@ internal partial class LoxParser
     /// <summary>
     /// Creates a new Factor expression (a * b / a / b)
     /// </summary>
-    private IExpression Factor()
+    private static IExpression Factor(IReadOnlyList<Token> tokens)
     {
-        IExpression expression = Unary();
-        while (Match(TokenType.SLASH, TokenType.STAR))
+        IExpression expression = Unary(tokens);
+        while (Match(tokens, TokenType.SLASH, TokenType.STAR))
         {
-            Token operatorToken = Previous();
-            IExpression right = Unary();
+            Token operatorToken = Previous(tokens);
+            IExpression right = Unary(tokens);
             expression = new BinaryExpression(expression, operatorToken, right);
         }
 
@@ -422,33 +409,33 @@ internal partial class LoxParser
     /// <summary>
     /// Creates a new unary expression (!a / -a)
     /// </summary>
-    private IExpression Unary()
+    private static IExpression Unary(IReadOnlyList<Token> tokens)
     {
-        if (Match(TokenType.BANG, TokenType.MINUS))
+        if (Match(tokens, TokenType.BANG, TokenType.MINUS))
         {
-            Token operatorToken = Previous();
-            IExpression right = Unary();
+            Token operatorToken = Previous(tokens);
+            IExpression right = Unary(tokens);
             return new UnaryExpression(operatorToken, right);
         }
-        return Call();
+        return Call(tokens);
     }
 
     /// <summary>
     /// Creates a new CallExpression
     /// </summary>
-    private IExpression Call()
+    private static IExpression Call(IReadOnlyList<Token> tokens)
     {
-        IExpression expression = Primary();
+        IExpression expression = Primary(tokens);
 
         while (true)
         {
-            if (Match(TokenType.LEFT_PARENTHESIS))
+            if (Match(tokens, TokenType.LEFT_PARENTHESIS))
             {
-                expression = FinishCall(expression);
+                expression = FinishCall(tokens, expression);
             }
-            else if (Match(TokenType.DOT))
+            else if (Match(tokens, TokenType.DOT))
             {
-                Token name = Consume(TokenType.IDENTIFIER, "Expect property name after \'.\'.");
+                Token name = Consume(tokens, TokenType.IDENTIFIER, "Expect property name after \'.\'.");
                 expression = new GetExpression(expression, name);
             }
             else
@@ -465,86 +452,86 @@ internal partial class LoxParser
     /// </summary>
     /// <param name="calle"></param>
     /// <exception cref="ParseError"></exception>
-    private IExpression FinishCall(IExpression calle)
+    private static IExpression FinishCall(IReadOnlyList<Token> tokens, IExpression calle)
     {
         List<IExpression> arguments = new();
 
-        if (!Check(TokenType.RIGHT_PARENTHESIS))
+        if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
         {
             do
             {
                 if (arguments.Count >= 255)
                 {
-                    throw new ParseError(Peek(), "Can't have more than 255 argumenst");
+                    throw new ParseError(Peek(tokens), "Can't have more than 255 argumenst");
                 }
-                arguments.Add(Expression());
-            } while (Match(TokenType.COMMA));
+                arguments.Add(Expression(tokens));
+            } while (Match(tokens, TokenType.COMMA));
         }
 
-        Token paren = Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after arguments.");
+        Token paren = Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after arguments.");
         return new CallExpression(calle, paren, arguments);
     }
 
     /// <summary>
     /// Creates the primary types of expressions (literal, variable, group, super & this)
     /// </summary>
-    private IExpression Primary()
+    private static IExpression Primary(IReadOnlyList<Token> tokens)
     {
-        if (Match(TokenType.FALSE))
+        if (Match(tokens, TokenType.FALSE))
         {
             return new LiteralExpression(false);
         }
-        if (Match(TokenType.TRUE))
+        if (Match(tokens, TokenType.TRUE))
         {
             return new LiteralExpression(true);
         }
-        if (Match(TokenType.NIL))
+        if (Match(tokens, TokenType.NIL))
         {
             return new LiteralExpression(null);
         }
-        if (Match(TokenType.NUMBER, TokenType.STRING))
+        if (Match(tokens, TokenType.NUMBER, TokenType.STRING))
         {
-            return new LiteralExpression(Previous().Literal);
+            return new LiteralExpression(Previous(tokens).Literal);
         }
-        if (Match(TokenType.SUPER))
+        if (Match(tokens, TokenType.SUPER))
         {
-            Token keyword = Previous();
-            Consume(TokenType.DOT, "Expect \'.\' after \'super\'");
-            Token method = Consume(TokenType.IDENTIFIER, "Expect superclass method name");
+            Token keyword = Previous(tokens);
+            Consume(tokens, TokenType.DOT, "Expect \'.\' after \'super\'");
+            Token method = Consume(tokens, TokenType.IDENTIFIER, "Expect superclass method name");
             return new SuperExpression(keyword, method);
         }
-        if (Match(TokenType.THIS))
+        if (Match(tokens, TokenType.THIS))
         {
-            return new ThisExpression(Previous());
+            return new ThisExpression(Previous(tokens));
         }
-        if (Match(TokenType.IDENTIFIER))
+        if (Match(tokens, TokenType.IDENTIFIER))
         {
-            return new VariableExpression(Previous());
+            return new VariableExpression(Previous(tokens));
         }
 
-        if (Match(TokenType.LEFT_PARENTHESIS))
+        if (Match(tokens, TokenType.LEFT_PARENTHESIS))
         {
-            IExpression expr = Expression();
-            Consume(TokenType.RIGHT_PARENTHESIS, "Expect \')\' after expression.");
+            IExpression expr = Expression(tokens);
+            Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after expression.");
             return new GroupingExpression(expr);
         }
-        throw new ParseError(Peek(), "Expect expression");
+        throw new ParseError(Peek(tokens), "Expect expression");
     }
 
     /// <summary>
     /// Can be used to parse statements after a statment that has caused a RunTimeError
     /// </summary>
-    private void Synchronize()
+    private static void Synchronize(IReadOnlyList<Token> tokens)
     {
-        Advance();
-        while (!IsAtEnd())
+        Advance(tokens);
+        while (!IsAtEnd(tokens))
         {
-            if (Previous().TokenType is TokenType.SEMICOLON)
+            if (Previous(tokens).TokenType is TokenType.SEMICOLON)
             {
                 return;
             }
 
-            switch (Peek().TokenType)
+            switch (Peek(tokens).TokenType)
             {
                 case TokenType.CLASS:
                     break;
@@ -563,21 +550,21 @@ internal partial class LoxParser
                 case TokenType.RETURN:
                     return;
             }
-            Advance();
+            Advance(tokens);
         }
     }
 
     /// <summary>
-    /// Determines weather the next Token is from the specified TokenTypes
+    /// Determines weather the next Token is from the specified TokenTypes and advances a position further, if that is the case
     /// </summary>
     /// <param name="tokenTypes">Types of the Tokens</param>
-    private bool Match(params TokenType[] tokenTypes)
+    private static bool Match(IReadOnlyList<Token> tokens, params TokenType[] tokenTypes)
     {
         foreach (TokenType type in tokenTypes)
         {
-            if (Check(type))
+            if (Check(tokens, type))
             {
-                Advance();
+                Advance(tokens);
                 return true;
             }
         }
@@ -587,48 +574,47 @@ internal partial class LoxParser
     /// <summary>
     /// Checks if the next Token is of a given type
     /// </summary>
-    /// <param name="tokenType">The type that shall be checked</param>
-    private bool Check(TokenType tokenType) => !IsAtEnd() && Peek().TokenType == tokenType;
+    /// <param name="tokenType">The tokentype that shall be checked</param>
+    private static bool Check(IReadOnlyList<Token> tokens, TokenType tokenType) => !IsAtEnd(tokens) && Peek(tokens).TokenType == tokenType;
 
     /// <summary>
     /// Advances a position further in the flat sequence of Tokens
     /// </summary>
-    private Token Advance()
+    private static Token Advance(IReadOnlyList<Token> tokens)
     {
-        if (!IsAtEnd())
+        if (!IsAtEnd(tokens))
         {
             current++;
         }
-        return Previous();
+        return Previous(tokens);
     }
 
     /// <summary>
     /// Determines whether the ned of the file has been reached
     /// </summary>
-    private bool IsAtEnd() => Peek().TokenType == TokenType.EOF;
+    private static bool IsAtEnd(IReadOnlyList<Token> tokens) => Peek(tokens).TokenType == TokenType.EOF;
 
     /// <summary>
     /// Returns current Token
     /// </summary>
-    private Token Peek() => tokens[current];
+    private static Token Peek(IReadOnlyList<Token> tokens) => tokens[current];
 
     /// <summary>
     /// Returns the prevoius Token
     /// </summary>
-    private Token Previous() => tokens[current - 1];
+    private static Token Previous(IReadOnlyList<Token> tokens) => tokens[current - 1];
 
     /// <summary>
     /// Checks weather the next token is of the given type
     /// </summary>
-    /// <param name="tokenType"></param>
-    /// <param name="message"></param>
-    /// <returns></returns>
-    private Token Consume(TokenType tokenType, string message)
+    /// <param name="tokenType">The tokentype that shall be checked</param>
+    /// <param name="message">The Message of the exception, that is thrown if the next token is not of the given type</param>
+    private static Token Consume(IReadOnlyList<Token> tokens, TokenType tokenType, string message)
     {
-        if (Check(tokenType))
+        if (Check(tokens, tokenType))
         {
-            return Advance();
+            return Advance(tokens);
         }
-        throw new ParseError(Peek(), message);
+        throw new ParseError(Peek(tokens), message);
     }
 }

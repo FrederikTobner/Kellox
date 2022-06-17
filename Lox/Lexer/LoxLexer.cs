@@ -6,159 +6,148 @@ namespace Lox.Lexer;
 /// <summary>
 /// Performs a lexical analysis on a linear stream of characters and groups them together to a flat sequence of Tokens
 /// </summary>
-internal class LoxLexer
+internal static class LoxLexer
 {
     /// <summary>
     /// StartIndex of the token that is currently getting evaluated in the sourcecode
     /// </summary>
-    private int start = 0;
+    private static int start = 0;
 
     /// <summary>
     /// CurrentPosition in the sourcecode
     /// </summary>
-    private int current = 0;
+    private static int current = 0;
 
     /// <summary>
     /// The current line in the sourcecode
     /// </summary>
-    private int line = 1;
-
-    /// <summary>
-    /// The sourceCode
-    /// </summary>
-    public string Source { get; init; }
+    private static int line = 1;
 
     /// <summary>
     /// The Tokens that make up the sourceCode
     /// </summary>
-    public List<Token> Tokens { get; init; }
-
-    /// <summary>
-    /// Constructor of the Lexer
-    /// </summary>
-    /// <param name="source">The flat sequence of tokens that is grouped to a flat sequence of Tokens by the Lexer</param>
-    public LoxLexer(string source)
-    {
-        Source = source;
-        Tokens = new List<Token>();
-    }
+    private static readonly List<Token> tokens = new();
 
     /// <summary>
     /// Scans the Tokens in a file and returns the, as a List
     /// </summary>
-    internal List<Token> ScanTokens()
+    internal static List<Token> ScanTokens(string source)
     {
-        while (!IsAtEnd())
+        start = 0;
+        current = 0;
+        line = 1;
+        tokens.Clear();
+        while (!IsAtEnd(source))
         {
             start = current;
-            ScanToken();
+            ScanToken(source);
         }
         //Adding the end of file Token
-        Tokens.Add(new Token(TokenType.EOF, string.Empty, null, line));
-        return Tokens;
+        tokens.Add(new Token(TokenType.EOF, string.Empty, null, line));
+        return tokens;
     }
 
     /// <summary>
     /// Adds a single Token
     /// </summary>
-    private void AddToken(TokenType tokenType) => AddToken(tokenType, null);
+    private static void AddToken(string source, TokenType tokenType) => AddToken(source, tokenType, null);
 
     /// <summary>
     /// Adds a single LiteralToken
     /// </summary>       
-    private void AddToken(TokenType tokenType, object? literal)
+    private static void AddToken(string source, TokenType tokenType, object? literal)
     {
-        string text = Source[start..current];
-        Tokens.Add(new Token(tokenType, text, literal, line));
+        string text = source[start..current];
+        tokens.Add(new Token(tokenType, text, literal, line));
     }
 
     /// <summary>
     /// Scans the next Token
     /// </summary>
-    private void ScanToken()
+    private static void ScanToken(string source)
     {
-        char c = Advance();
+        char c = Advance(source);
         switch (c)
         {
             case '(':
-                AddToken(TokenType.LEFT_PARENTHESIS);
+                AddToken(source, TokenType.LEFT_PARENTHESIS);
                 break;
             case ')':
-                AddToken(TokenType.RIGHT_PARENTHESIS);
+                AddToken(source, TokenType.RIGHT_PARENTHESIS);
                 break;
             case '{':
-                AddToken(TokenType.LEFT_BRACE);
+                AddToken(source, TokenType.LEFT_BRACE);
                 break;
             case '}':
-                AddToken(TokenType.RIGHT_BRACE);
+                AddToken(source, TokenType.RIGHT_BRACE);
                 break;
             case ',':
-                AddToken(TokenType.COMMA);
+                AddToken(source, TokenType.COMMA);
                 break;
             case '.':
-                AddToken(TokenType.DOT);
+                AddToken(source, TokenType.DOT);
                 break;
             case '-':
-                AddToken(TokenType.MINUS);
+                AddToken(source, TokenType.MINUS);
                 break;
             case '+':
-                AddToken(TokenType.PLUS);
+                AddToken(source, TokenType.PLUS);
                 break;
             case ';':
-                AddToken(TokenType.SEMICOLON);
+                AddToken(source, TokenType.SEMICOLON);
                 break;
             case '*':
-                AddToken(TokenType.STAR);
+                AddToken(source, TokenType.STAR);
                 break;
             case '!':
-                AddToken(Match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+                AddToken(source, Match(source, '=') ? TokenType.BANG_EQUAL : TokenType.BANG);
                 break;
             case '=':
-                AddToken(Match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
+                AddToken(source, Match(source, '=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
                 break;
             case '<':
-                AddToken(Match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
+                AddToken(source, Match(source, '=') ? TokenType.LESS_EQUAL : TokenType.LESS);
                 break;
             case '>':
-                AddToken(Match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
+                AddToken(source, Match(source, '=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
                 break;
             case '/':
-                if (Match('/'))
+                if (Match(source, '/'))
                 {
                     // A comment goes until the end of the line.
-                    while (Peek() is not '\n' && !IsAtEnd())
+                    while (Peek(source) is not '\n' && !IsAtEnd(source))
                     {
-                        Advance();
+                        Advance(source);
                     }
                 }
-                else if (Match('*'))
+                else if (Match(source, '*'))
                 {
                     // A block comment goes until the next closing blockcomment tag
-                    while (!Match('*') && Peek() is not '/')
+                    while (!Match(source, '*') && Peek(source) is not '/')
                     {
-                        if (IsAtEnd())
+                        if (IsAtEnd(source))
                         {
                             //Blockcomment was never closed with a "*/"
                             LoxErrorLogger.Error(line, "Blockcomment was never closed, no \"*/\" found");
                             break;
                         }
-                        Advance();
+                        Advance(source);
                     }
-                    if(!IsAtEnd())
-                    Advance();
+                    if (!IsAtEnd(source))
+                        Advance(source);
                 }
                 else
                 {
-                    AddToken(TokenType.SLASH);
+                    AddToken(source, TokenType.SLASH);
                 }
                 break;
             case 'o':
-                if (Match('r'))
+                if (Match(source, 'r'))
                 {
-                    AddToken(TokenType.OR);
+                    AddToken(source, TokenType.OR);
                     break;
                 }
-                Identifier();
+                Identifier(source);
                 break;
             case ' ':
                 break;
@@ -170,16 +159,16 @@ internal class LoxLexer
                 line++;
                 break;
             case '"':
-                AString();
+                AString(source);
                 break;
             default:
                 if (ScanUtils.IsDigit(c))
                 {
-                    Number();
+                    Number(source);
                 }
                 else if (ScanUtils.IsAlpha(c))
                 {
-                    Identifier();
+                    Identifier(source);
                 }
                 else
                 {
@@ -192,113 +181,113 @@ internal class LoxLexer
     /// <summary>
     /// Indicates weather the Lexer has reached the end of the file
     /// </summary>
-    private bool IsAtEnd() => current >= Source.Length;
+    private static bool IsAtEnd(string source) => current >= source.Length;
 
     /// <summary>
     /// Used to create a Token with the Tokentype identifier (meaning the name of a variable)
     /// </summary>
-    private void Identifier()
+    private static void Identifier(string source)
     {
-        while (ScanUtils.IsAlphaNumeric(Peek()))
+        while (ScanUtils.IsAlphaNumeric(Peek(source)))
         {
-            Advance();
+            Advance(source);
         }
 
-        string text = Source[start..current];
+        string text = source[start..current];
         if (!LoxKeywords.GetTokenType(text, out TokenType type))
         {
             type = TokenType.IDENTIFIER;
         }
-        AddToken(type);
+        AddToken(source, type);
     }
 
     /// <summary>
     /// Used to create a Token with the Tokentype String (a string literal)
     /// </summary>
-    private void AString()
+    private static void AString(string source)
     {
-        while (Peek() is not '\"' && !IsAtEnd())
+        while (Peek(source) is not '\"' && !IsAtEnd(source))
         {
-            if (Peek() is '\n')
+            if (Peek(source) is '\n')
             {
                 line++;
             }
-            Advance();
+            Advance(source);
         }
 
-        if (IsAtEnd())
+        if (IsAtEnd(source))
         {
             LoxErrorLogger.Error(line, "Unterminated string.");
             return;
         }
-        Advance();
+        Advance(source);
 
         // Trims the surrounding quotes.
-        string value = Source.Substring(start + 1, current - start - 2);
-        AddToken(TokenType.STRING, value);
+        string value = source.Substring(start + 1, current - start - 2);
+        AddToken(source, TokenType.STRING, value);
     }
 
     /// <summary>
     /// Used to create a Token with the Tokentype Number (a number literal)
     /// </summary>
-    private void Number()
+    private static void Number(string source)
     {
         int digitsAfterPoint = 0;
 
-        while (ScanUtils.IsDigit(Peek()))
+        while (ScanUtils.IsDigit(Peek(source)))
         {
-            Advance();
+            Advance(source);
         }
 
         // Look for a fractional part.
-        if (Peek() is '.' && ScanUtils.IsDigit(PeekNext()))
+        if (Peek(source) is '.' && ScanUtils.IsDigit(PeekNext(source)))
         {
             // Consumes the "."
-            Advance();
-            while (ScanUtils.IsDigit(Peek()))
+            Advance(source);
+            while (ScanUtils.IsDigit(Peek(source)))
             {
-                Advance();
+                Advance(source);
                 digitsAfterPoint++;
             }
         }
-        double number = Convert.ToDouble(Source[start..current]) / Math.Pow(10, digitsAfterPoint);
-        AddToken(TokenType.NUMBER, number);
+        double number = Convert.ToDouble(source[start..current]) / Math.Pow(10, digitsAfterPoint);
+        AddToken(source, TokenType.NUMBER, number);
     }
 
     /// <summary>
     /// ´Returns the char one position ahead of the current Position
     /// </summary>
-    private char PeekNext()
+    private static char PeekNext(string source)
     {
-        if (current + 1 >= Source.Length)
+        if (current + 1 >= source.Length)
         {
             return '\0';
         }
-        return Source[current + 1];
+        return source[current + 1];
     }
 
     /// <summary>
     /// Returns the char at the current position
     /// </summary>
-    private char Peek()
+    private static char Peek(string source)
     {
-        if (IsAtEnd())
+        if (IsAtEnd(source))
         {
             return '\0';
         }
-        return Source[current];
+        return source[current];
     }
 
     /// <summary>
     /// Matches the char of the current position with the passed char
     /// </summary>
-    private bool Match(char expected)
+    private static bool Match(string source, char expected)
     {
-        if (IsAtEnd())
+        if (IsAtEnd(source))
         {
             return false;
         }
-        if (Source[current] != expected)
+        if (source[current] != expected)
         {
             return false;
         }
@@ -310,5 +299,5 @@ internal class LoxLexer
     /// <summary>
     /// Advances a postion further in the sourceCode (one character) and returns the character at the previous position
     /// </summary>
-    private char Advance() => Source[current++];
+    private static char Advance(string source) => source[current++];
 }

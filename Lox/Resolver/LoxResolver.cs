@@ -12,13 +12,20 @@ namespace Lox.Resolver;
 internal static class LoxResolver
 {
     /// <summary>
-    /// Stack for keeping track of the variables in the current scope and all outer scopes
+    /// Stack for keeping track of the variables in the current scope and all outer scopes.
+    /// Each scope is defined as a dictionary in the stack
     /// </summary>
     private static readonly Stack<Dictionary<string, bool>> scopes = new();
 
-    public static FunctionType CurrentFunction { get; private set; } = FunctionType.NONE;
+    /// <summary>
+    /// The current function type -> used to keep track if the resolver is currently in a function
+    /// </summary>
+    private static FunctionType currentFunction = FunctionType.NONE;
 
-    public static ClassType CurrentClass { get; private set; } = ClassType.NONE;
+    /// <summary>
+    /// The current class type -> used to keep track if the resolver is currently in a class
+    /// </summary>
+    private static ClassType currentClass = ClassType.NONE;
 
     /// <summary>
     /// Resolves a LoxProgram -> walks over the Syntaxtree and resolves all the variables it contains
@@ -93,6 +100,7 @@ internal static class LoxResolver
     {
         if (expression is LiteralExpression)
         {
+            //A Literal can be ignored
             return;
         }
         if (expression is GetExpression getExpression)
@@ -103,10 +111,12 @@ internal static class LoxResolver
         if (expression is SuperExpression superExpression)
         {
             ResolveExpression(superExpression);
+            return;
         }
         if (expression is ThisExpression thisExpression)
         {
             ResolveExpression(thisExpression);
+            return;
         }
         if (expression is SetExpression setExpression)
         {
@@ -186,8 +196,8 @@ internal static class LoxResolver
     /// <param name="classStatement"></param>
     private static void ResolveStatement(ClassStatement classStatement)
     {
-        ClassType enclosingClass = CurrentClass;
-        CurrentClass = ClassType.CLASS;
+        ClassType enclosingClass = currentClass;
+        currentClass = ClassType.CLASS;
         Define(classStatement.Token);
         if (classStatement.SuperClass is not null)
         {
@@ -197,7 +207,7 @@ internal static class LoxResolver
             }
             else
             {
-                CurrentClass = ClassType.SUBCLASS;
+                currentClass = ClassType.SUBCLASS;
                 ResolveExpression(classStatement.SuperClass);
             }
         }
@@ -224,7 +234,7 @@ internal static class LoxResolver
         {
             EndScope();
         }
-        CurrentClass = enclosingClass;
+        currentClass = enclosingClass;
     }
 
     /// <summary>
@@ -233,9 +243,8 @@ internal static class LoxResolver
     /// <param name="functionStatement">The FunctionStatement that shall be resolved</param>
     private static void ResolveStatement(FunctionStatement functionStatement, FunctionType functionType)
     {
-        FunctionType enclosingType = CurrentFunction;
-        CurrentFunction = functionType;
-        Declare(functionStatement.Name);
+        FunctionType enclosingType = currentFunction;
+        currentFunction = functionType;
         Define(functionStatement.Name);
         BeginScope();
         foreach (Token? token in functionStatement.Parameters)
@@ -243,12 +252,11 @@ internal static class LoxResolver
             if (token is not null)
             {
                 Define(token);
-                Declare(token);
             }
         }
         ResolveStatements(functionStatement.Body);
         EndScope();
-        CurrentFunction = enclosingType;
+        currentFunction = enclosingType;
     }
 
     /// <summary>
@@ -289,13 +297,13 @@ internal static class LoxResolver
     /// <param name="returnStatement">The ReturnStatement that shall be resolved</param>
     private static void ResolveStatement(ReturnStatement returnStatement)
     {
-        if (CurrentFunction is FunctionType.NONE)
+        if (currentFunction is FunctionType.NONE)
         {
             LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from top level code");
         }
         if (returnStatement.Expression is not null)
         {
-            if (CurrentFunction is FunctionType.INITIALIZER)
+            if (currentFunction is FunctionType.INITIALIZER)
             {
                 LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from an initializer");
             }
@@ -319,11 +327,11 @@ internal static class LoxResolver
     /// <param name="superExpression"></param>
     private static void ResolveExpression(SuperExpression superExpression)
     {
-        if (CurrentClass is ClassType.NONE)
+        if (currentClass is ClassType.NONE)
         {
             LoxErrorLogger.Error(superExpression.Token, "Can't use \'super\' outside of a class");
         }
-        else if (CurrentClass is not ClassType.SUBCLASS)
+        else if (currentClass is not ClassType.SUBCLASS)
         {
             LoxErrorLogger.Error(superExpression.Token, "Can't use \'super\' with no superclass");
         }
@@ -336,7 +344,7 @@ internal static class LoxResolver
     /// <param name="thisExpression">The ThisExpression that shall be resolved</param>
     private static void ResolveExpression(ThisExpression thisExpression)
     {
-        if (CurrentClass is ClassType.NONE)
+        if (currentClass is ClassType.NONE)
         {
             LoxErrorLogger.Error(thisExpression.Token, "Cant use \'this\' outside of a class");
             return;
@@ -483,7 +491,7 @@ internal static class LoxResolver
         Dictionary<string, bool> scope = scopes.Peek();
         if (scope.ContainsKey(identifierToken.Lexeme))
         {
-            //Variable already referenced in this scope
+            LoxErrorLogger.Error(identifierToken.Line, "A variable with this name (" + identifierToken.Lexeme + ") was already defined in this scope");
             return;
         }
         scope.Add(identifierToken.Lexeme, false);

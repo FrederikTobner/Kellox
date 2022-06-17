@@ -12,7 +12,6 @@ namespace Lox.Statements;
 /// </summary>
 internal class ClassStatement : IStatement
 {
-
     /// <summary>
     /// Token that contains the class name
     /// </summary>
@@ -41,11 +40,13 @@ internal class ClassStatement : IStatement
         if (SuperClass is not null)
         {
             superClass = SuperClass.EvaluateExpression();
+            // superClass has to be a Loxclass
             if (superClass is not LoxClass)
             {
                 LoxErrorLogger.Error(SuperClass.Token, "Superclass must be a class");
             }
         }
+        //Defines the class in the current environment
         LoxInterpreter.currentEnvironment.Define(Token.Lexeme, null);
         if (superClass is not null)
         {
@@ -65,6 +66,7 @@ internal class ClassStatement : IStatement
         {
             LoxInterpreter.currentEnvironment = LoxInterpreter.currentEnvironment.Enclosing;
         }
+
         LoxInterpreter.currentEnvironment.Assign(Token, loxClass);
     }
 }

@@ -26,15 +26,17 @@ class BostonCream < Doughnut
 
 BostonCream("dark", "golden brown").cook();
 
-class LoxKlasse
+class LoxKlasse < Doughnut
 {
-	Method()
+	init(x, y, parentColor)
 	{
-		return this;
+		super.init(parentColor);
+		this.x = x;
+		this.y = y;
 	}
 }
 
-print LoxKlasse().Method();
+print LoxKlasse(4, 3, "green");
 
 class Rect
 {
@@ -108,5 +110,5 @@ fun Countdown(x)
 Countdown(10);
 
 /* Hallo 
-ein Blockkommentar geht über mehrere Zeilen
+ein Blockkommentar geht ï¿½ber mehrere Zeilen
 */

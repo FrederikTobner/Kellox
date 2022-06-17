@@ -66,6 +66,7 @@ internal class LoxFunction : IFunction
         return result;
     }
 
+    // Binds an instance to the enviroment of the function
     internal LoxFunction Bind(LoxInstance loxInstance)
     {
         LoxEnvironment environment = new(Closure);
@@ -73,5 +74,5 @@ internal class LoxFunction : IFunction
         return new(Declaration, environment, IsInitializer);
     }
 
-    public override string ToString() => "<fun " + Declaration.Name.Lexeme + ">";
+    public override string ToString() => "<function " + Declaration.Name.Lexeme + ">";
 }

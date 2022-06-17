@@ -28,8 +28,12 @@ internal class SuperExpression : IExpression
     {
         LoxInterpreter.TryGetDepthOfLocal(this, out int distance);
         LoxClass? superClass = (LoxClass?)LoxInterpreter.currentEnvironment.GetAt(distance, Token);
+        if (superClass is null)
+        {
+            throw new RunTimeError(this.Method, "There is no superclass defined");
+        }
         LoxInstance? instance = (LoxInstance?)LoxInterpreter.currentEnvironment.GetAt(distance - 1, new Token(TokenType.THIS, "this", null, 0));
-        LoxFunction? function = superClass?.FindMethod(this.Method.Lexeme);
+        LoxFunction? function = superClass.FindMethod(this.Method.Lexeme);
         if (instance is null)
         {
             return null;

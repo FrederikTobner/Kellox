@@ -4,6 +4,9 @@ using Lox.Tokens;
 
 namespace Lox.Statements;
 
+/// <summary>
+/// Models a return statement
+/// </summary>
 internal class ReturnStatement : IStatement
 {
     public Token Keyword { get; init; }
