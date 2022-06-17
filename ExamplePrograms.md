@@ -64,6 +64,7 @@ fun Countdown(x)
 	if(x > -1)
 	{
 		print x;
+		wait(1);
 		Countdown(x = x - 1);
 	}
 }
@@ -83,4 +84,48 @@ class Rectangle
 		return this.x * this.y * 0.5;
 	}
 }  
+```
+Tasty oop breakfest
+```
+class Doughnut 
+{
+	init(fryingColor)
+	{
+		this.fryingColor = fryingColor;
+	}
+	cook() 
+	{
+		println "Fry until " + this.fryingColor;
+	}
+}
+
+class FilledDougnut < Doughnut 
+{
+	init(filling, fryingColor)
+	{
+		super.init(fryingColor);
+		this.filling = filling;		
+	}
+	cook()
+	{
+		super.cook();
+		println "With " + this.filling;
+	}
+}
+
+class FilledDougnutWithChocolateCoat < FilledDougnut
+{
+	init(chocolateColor, filling, fryingColor)
+	{
+		super.init(filling, fryingColor);
+		this.chocolateColor = chocolateColor;		
+	}
+	cook()
+	{
+		super.cook();
+		println "And a " + this.chocolateColor + " chocolate coat";
+	}
+}
+
+FilledDougnutWithChocolateCoat("dark", "custard", "golden brown").cook();
 ```
