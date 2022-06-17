@@ -88,10 +88,24 @@ internal static class LoxLexer
                 AddToken(source, TokenType.DOT);
                 break;
             case '-':
-                AddToken(source, TokenType.MINUS);
+                if (Match(source, '-'))
+                {
+                    AddToken(source, TokenType.MINUS_MINUS);
+                }
+                else
+                {
+                    AddToken(source, TokenType.MINUS);
+                }
                 break;
             case '+':
-                AddToken(source, TokenType.PLUS);
+                if (Match(source, '+'))
+                {
+                    AddToken(source, TokenType.PLUS_PLUS);
+                }
+                else
+                {
+                    AddToken(source, TokenType.PLUS);
+                }
                 break;
             case ';':
                 AddToken(source, TokenType.SEMICOLON);

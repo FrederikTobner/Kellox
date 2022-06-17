@@ -73,7 +73,7 @@ fun makeCounter()
 	var i = 0;
 	fun count() 
 	{
-		return i = i + 1;
+		return i++;
 	}
 	return count;
 }
@@ -84,9 +84,18 @@ print counter(); // "2"
 
 print random(1, 5);
 
+var zahl = 7;
+print zahl;
+zahl--;
+print zahl;
+zahl--;
+print zahl;
+zahl--;
+print zahl;
+
 // prints the first 25 fibonacci numbers
 var fibo = fibonacci();
-for (var i = 0; i < 25; i = i + 1) 
+for (var i = 0; i < 25; i++) 
 {
 	print fibo();
 }
@@ -103,7 +112,7 @@ fun Countdown(x)
 	if(x >= 0)
 	{
 		print x;
-		Countdown(x = x - 1);
+		Countdown(x--);
 	}
 }
 

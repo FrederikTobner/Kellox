@@ -27,6 +27,8 @@ internal enum TokenType
     EQUAL_EQUAL,
     GREATER_EQUAL,
     LESS_EQUAL,
+    PLUS_PLUS,
+    MINUS_MINUS,
 
     // Literals.
     IDENTIFIER,

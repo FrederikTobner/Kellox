@@ -309,7 +309,27 @@ internal static class LoxParser
             }
             throw new ParseError(equals, "Invalid assignment target.");
         }
+        else if (Match(tokens, TokenType.PLUS_PLUS, TokenType.MINUS_MINUS))
+        {
+            return CreateIncOrDecExpression(tokens, expression);
+        }
         return expression;
+    }
+
+    private static IExpression CreateIncOrDecExpression(IReadOnlyList<Token> tokens, IExpression expression)
+    {
+        Token token = Previous(tokens);
+        IExpression value = new BinaryExpression(expression, token.TokenType == TokenType.PLUS_PLUS ? new Token(TokenType.PLUS, "+", null, token.Line) : new Token(TokenType.MINUS, "-", null, token.Line), new LiteralExpression(1.0));
+        if (expression is VariableExpression variableExpression)
+        {
+            Token name = variableExpression.Token;
+            return new AssignmentExpression(name, value);
+        }
+        else if (expression is GetExpression getExpression)
+        {
+            return new SetExpression(getExpression.Object, getExpression.Name, value);
+        }
+        throw new ParseError(token, "Invalid assignment target.");
     }
 
     /// <summary>
