@@ -1,4 +1,5 @@
 ﻿using Lox.Interpreter.Exceptions;
+using Lox.Messages;
 using Lox.Tokens;
 
 namespace Lox.Expressions;
@@ -8,6 +9,8 @@ namespace Lox.Expressions;
 /// </summary>
 internal class BinaryExpression : IExpression
 {
+
+
     /// <summary>
     /// The expression left of the operator
     /// </summary>
@@ -53,7 +56,7 @@ internal class BinaryExpression : IExpression
                 TokenType.STAR => leftNumber * rightNumber,
                 TokenType.BANG_EQUAL => !IExpression.IsEqual(leftNumber, rightNumber),
                 TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftNumber, rightNumber),
-                _ => throw new RunTimeError(OperatorToken, "Operator not supported"),
+                _ => throw new RunTimeError(OperatorToken, MessageUtils.OperatorNotSupportedErrorMessage),
             };
         }
 
@@ -62,14 +65,14 @@ internal class BinaryExpression : IExpression
             return OperatorToken.TokenType switch
             {
                 TokenType.PLUS => leftString + rightString,
-                _ => throw new RunTimeError(OperatorToken, "Operator not supported")
+                _ => throw new RunTimeError(OperatorToken, MessageUtils.OperatorNotSupportedErrorMessage)
             };
         }
         return OperatorToken.TokenType switch
         {
             TokenType.BANG_EQUAL => !IExpression.IsEqual(leftResult, rightResult),
             TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftResult, rightResult),
-            _ => throw new RunTimeError(OperatorToken, "Operator not supported")
+            _ => throw new RunTimeError(OperatorToken, MessageUtils.OperatorNotSupportedErrorMessage)
         };
     }
 }

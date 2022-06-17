@@ -2,6 +2,7 @@
 using Lox.Expressions;
 using Lox.Functions;
 using Lox.Interpreter;
+using Lox.Messages;
 using Lox.Tokens;
 using Lox.Utils;
 
@@ -12,6 +13,8 @@ namespace Lox.Statements;
 /// </summary>
 internal class ClassStatement : IStatement
 {
+
+
     /// <summary>
     /// Token that contains the class name
     /// </summary>
@@ -43,7 +46,7 @@ internal class ClassStatement : IStatement
             // superClass has to be a Loxclass
             if (superClass is not LoxClass)
             {
-                LoxErrorLogger.Error(SuperClass.Token, "Superclass must be a class");
+                LoxErrorLogger.Error(SuperClass.Token, MessageUtils.SuperClassMustBeAClassErrorMessage);
             }
         }
         //Defines the class in the current environment
@@ -51,14 +54,14 @@ internal class ClassStatement : IStatement
         if (superClass is not null)
         {
             LoxInterpreter.currentEnvironment = new(LoxInterpreter.currentEnvironment);
-            LoxInterpreter.currentEnvironment.Define("super", superClass);
+            LoxInterpreter.currentEnvironment.Define(MessageUtils.SuperKeyword, superClass);
         }
         Dictionary<string, LoxFunction> newMethods = new();
         foreach (FunctionStatement? method in Methods)
         {
             if (method is not null)
             {
-                newMethods.Add(method.Token.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment, method.Token.Lexeme.Equals("init")));
+                newMethods.Add(method.Token.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment, method.Token.Lexeme.Equals(MessageUtils.InitKeyword)));
             }
         }
         LoxClass loxClass = new(Token.Lexeme, newMethods, (LoxClass?)superClass);
@@ -66,7 +69,6 @@ internal class ClassStatement : IStatement
         {
             LoxInterpreter.currentEnvironment = LoxInterpreter.currentEnvironment.Enclosing;
         }
-
         LoxInterpreter.currentEnvironment.Assign(Token, loxClass);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Lox.Expressions;
 using Lox.Interpreter;
+using Lox.Messages;
 using Lox.Statements;
 using Lox.Tokens;
 using Lox.Utils;
@@ -11,6 +12,7 @@ namespace Lox.Resolver;
 /// </summary>
 internal static class LoxResolver
 {
+
     /// <summary>
     /// Stack for keeping track of the variables in the current scope and all outer scopes.
     /// Each scope is defined as a dictionary in the stack
@@ -193,7 +195,7 @@ internal static class LoxResolver
     {
         if (scopes.Count is not 0 && scopes.Peek().ContainsKey(declarationStatement.Name.Lexeme))
         {
-            LoxErrorLogger.Error(declarationStatement.Name, "Variable with this name already defined in scope");
+            LoxErrorLogger.Error(declarationStatement.Name, MessageUtils.VariableAlreadyDefinedFirstHalfErrorMessage + declarationStatement.Name.Lexeme + MessageUtils.VariableAlreadyDefinedSecondHalfErrorMessage);
         }
         Declare(declarationStatement.Name);
         if (declarationStatement.Expression is not null)
@@ -216,7 +218,7 @@ internal static class LoxResolver
         {
             if (classStatement.SuperClass.Token.Lexeme.Equals(classStatement.Token.Lexeme))
             {
-                LoxErrorLogger.Error(classStatement.Token, "A class can't inherit from itself");
+                LoxErrorLogger.Error(classStatement.Token, MessageUtils.ClassInheritsFromItselfErrorMessage);
             }
             else
             {
@@ -312,13 +314,13 @@ internal static class LoxResolver
     {
         if (currentFunction is FunctionType.NONE)
         {
-            LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from top level code");
+            LoxErrorLogger.Error(returnStatement.Keyword, MessageUtils.ReturnFromTopLevelErrorMessage);
         }
         if (returnStatement.Expression is not null)
         {
             if (currentFunction is FunctionType.INITIALIZER)
             {
-                LoxErrorLogger.Error(returnStatement.Keyword, "Can't return from an initializer");
+                LoxErrorLogger.Error(returnStatement.Keyword, MessageUtils.ReturnInInitializerErrorMessage);
             }
             ResolveExpression(returnStatement.Expression);
         }
@@ -334,9 +336,10 @@ internal static class LoxResolver
         ResolveStatement(whileStatement.Body);
     }
 
-    #endregion
+    #endregion Statements
 
     #region Expressions
+
     /// <summary>
     /// Resolves a super expression
     /// </summary>
@@ -345,11 +348,11 @@ internal static class LoxResolver
     {
         if (currentClass is ClassType.NONE)
         {
-            LoxErrorLogger.Error(superExpression.Token, "Can't use \'super\' outside of a class");
+            LoxErrorLogger.Error(superExpression.Token, MessageUtils.UsingSuperOutsideOfClassErrorMessage);
         }
         else if (currentClass is not ClassType.SUBCLASS)
         {
-            LoxErrorLogger.Error(superExpression.Token, "Can't use \'super\' with no superclass");
+            LoxErrorLogger.Error(superExpression.Token, MessageUtils.UsingSuperWithoutSuperClassErrorMessage);
         }
         ResolveLocal(superExpression, superExpression.Token);
     }
@@ -362,7 +365,7 @@ internal static class LoxResolver
     {
         if (currentClass is ClassType.NONE)
         {
-            LoxErrorLogger.Error(thisExpression.Token, "Cant use \'this\' outside of a class");
+            LoxErrorLogger.Error(thisExpression.Token, MessageUtils.ThisOutsideOfClassErrorMessage);
             return;
         }
         ResolveLocal(thisExpression, thisExpression.Token);
@@ -395,7 +398,7 @@ internal static class LoxResolver
     {
         if (scopes.Count is not 0 && scopes.Peek().ContainsKey(variableExpression.Token.Lexeme) && !scopes.Peek()[variableExpression.Token.Lexeme])
         {
-            LoxErrorLogger.Error(variableExpression.Token, "Can't read local variable in it's own initializer");
+            LoxErrorLogger.Error(variableExpression.Token, MessageUtils.ReadsLocalVariableInInitErrorMessage);
         }
         ResolveLocal(variableExpression, variableExpression.Token);
     }
@@ -482,7 +485,7 @@ internal static class LoxResolver
         }
     }
 
-    #endregion
+    #endregion Expressions
 
     #region DeclaringAndDefining
 
@@ -499,7 +502,7 @@ internal static class LoxResolver
         Dictionary<string, bool> scope = scopes.Peek();
         if (scope.ContainsKey(identifierToken.Lexeme))
         {
-            LoxErrorLogger.Error(identifierToken.Line, "A variable with this name (" + identifierToken.Lexeme + ") was already defined in this scope");
+            LoxErrorLogger.Error(identifierToken.Line, MessageUtils.VariableAlreadyDefinedFirstHalfErrorMessage + identifierToken.Lexeme + MessageUtils.VariableAlreadyDefinedSecondHalfErrorMessage);
             return;
         }
         scope.Add(identifierToken.Lexeme, false);
@@ -523,7 +526,8 @@ internal static class LoxResolver
         }
         scopes.Peek().Add(identifierToken.Lexeme, true);
     }
-    #endregion
+
+    #endregion DeclaringAndDefining
 
     #region ScopeHandling
 
@@ -543,5 +547,5 @@ internal static class LoxResolver
         scopes.Pop();
     }
 
-    #endregion
+    #endregion ScopeHandling
 }

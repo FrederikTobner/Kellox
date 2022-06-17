@@ -1,4 +1,5 @@
 ﻿using Lox.Interpreter.Exceptions;
+using Lox.Messages;
 using Lox.Tokens;
 
 namespace Lox.Interpreter;
@@ -44,7 +45,7 @@ internal class LoxEnvironment
             Enclosing.Assign(name, value);
             return;
         }
-        throw new RunTimeError(name, "Variable not defined yet. Assignment impossible");
+        throw new RunTimeError(name, MessageUtils.VariableNotDefinedAssignmentErrorMessage);
     }
 
     /// <summary>
@@ -84,7 +85,7 @@ internal class LoxEnvironment
         {
             return Enclosing.Get(token);
         }
-        throw new RunTimeError(token, "Undefiened variable \'" + token.Lexeme + "\'.");
+        throw new RunTimeError(token, $"Undefiened variable \'{token.Lexeme}\'.");
     }
 
     /// <summary>

@@ -82,7 +82,7 @@ internal enum TokenType
     /// </summary>
     LESS,
 
-    #endregion
+    #endregion SingleCharacterTokens
 
     #region TwoCharacterTokens
 
@@ -141,7 +141,7 @@ internal enum TokenType
     /// </summary>
     IDENTIFIER,
 
-    #endregion
+    #endregion TwoCharacterTokens
 
     #region Literals
 
@@ -170,7 +170,7 @@ internal enum TokenType
     /// </summary>
     NIL,
 
-    #endregion
+    #endregion Literals
 
     #region Keywords
 
@@ -232,7 +232,7 @@ internal enum TokenType
     /// </summary>
     RETURN,
 
-    #endregion
+    #endregion FunctionSpecific
 
     #region ClassSpecific
 
@@ -251,9 +251,9 @@ internal enum TokenType
     /// </summary>
     THIS,
 
-    #endregion
+    #endregion ClassSpecific
 
-    #endregion
+    #endregion Keywords
 
     #region FileSpecific
     /// <summary>
@@ -261,5 +261,5 @@ internal enum TokenType
     /// </summary>
     EOF
 
-    #endregion
+    #endregion FileSpecific
 }

@@ -32,7 +32,20 @@ internal class PrintStatement : IStatement
             if (obj is string text)
             {
                 StringBuilder stringBuilder = new(text);
+
+                //Alarm bell
+                stringBuilder.Replace("\\a", "\a");
+                //Form Feed
+                stringBuilder.Replace("\\f", "\f");
+                //Line feed
                 stringBuilder.Replace("\\n", "\n");
+                //Carrage return
+                stringBuilder.Replace("\\r", "\r");
+                //Horizontal tab
+                stringBuilder.Replace("\\t", "\t");
+                //Vertical Tab
+                stringBuilder.Replace("\\v", "\v");
+
                 Console.Write(stringBuilder.ToString());
             }
             else

@@ -9,6 +9,8 @@ namespace Lox.Expressions;
 /// </summary>
 internal class GetExpression : IExpression
 {
+    private const string OnlyIstancesHaveProbsErrorMessage = "Only Instances have properties";
+
     /// <summary>
     /// Object of the Expression rect.x -> 'rect'
     /// </summary>
@@ -32,8 +34,8 @@ internal class GetExpression : IExpression
         {
             return loxInstance.Get(Name);
         }
-        throw new RunTimeError(Name, "Only Instances have properties");
+        throw new RunTimeError(Name, OnlyIstancesHaveProbsErrorMessage);
     }
 
-    public override string ToString() => "get -> " + Name.Lexeme;
+    public override string ToString() => Object.ToString() + " get -> " + Name.Lexeme;
 }

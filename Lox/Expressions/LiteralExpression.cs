@@ -1,4 +1,6 @@
-﻿namespace Lox.Expressions;
+﻿using Lox.Messages;
+
+namespace Lox.Expressions;
 
 /// <summary>
 /// Models a literal expression
@@ -28,7 +30,7 @@ internal class LiteralExpression : IExpression
                 return result;
             }
         }
-        return "nil";
+        return MessageUtils.NilKeyword;
     }
 
     public object? EvaluateExpression() => Value;

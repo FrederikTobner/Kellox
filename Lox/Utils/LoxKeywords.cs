@@ -1,4 +1,5 @@
-﻿using Lox.Tokens;
+﻿using Lox.Messages;
+using Lox.Tokens;
 
 namespace Lox.Utils
 {
@@ -24,23 +25,23 @@ namespace Lox.Utils
         private static Dictionary<string, TokenType> InitializeKeywords()
         {
             Dictionary<string, TokenType> words = new();
-            words.Add("and", TokenType.AND);
-            words.Add("class", TokenType.CLASS);
-            words.Add("else", TokenType.ELSE);
-            words.Add("false", TokenType.FALSE);
-            words.Add("for", TokenType.FOR);
-            words.Add("fun", TokenType.FUN);
-            words.Add("if", TokenType.IF);
-            words.Add("nil", TokenType.NIL);
-            words.Add("or", TokenType.OR);
-            words.Add("print", TokenType.PRINT);
-            words.Add("println", TokenType.PRINTLN);
-            words.Add("return", TokenType.RETURN);
-            words.Add("super", TokenType.SUPER);
-            words.Add("this", TokenType.THIS);
-            words.Add("true", TokenType.TRUE);
-            words.Add("var", TokenType.VAR);
-            words.Add("while", TokenType.WHILE);
+            words.Add(MessageUtils.AndKeyword, TokenType.AND);
+            words.Add(MessageUtils.ClassKeyword, TokenType.CLASS);
+            words.Add(MessageUtils.ElseKeyword, TokenType.ELSE);
+            words.Add(MessageUtils.FalseKeyword, TokenType.FALSE);
+            words.Add(MessageUtils.ForKeyWord, TokenType.FOR);
+            words.Add(MessageUtils.FunctionKeyword, TokenType.FUN);
+            words.Add(MessageUtils.IfKeyword, TokenType.IF);
+            words.Add(MessageUtils.NilKeyword, TokenType.NIL);
+            words.Add(MessageUtils.OrKeyword, TokenType.OR);
+            words.Add(MessageUtils.PrintKeyword, TokenType.PRINT);
+            words.Add(MessageUtils.PrintLineKeyword, TokenType.PRINTLN);
+            words.Add(MessageUtils.ReturnKeyword, TokenType.RETURN);
+            words.Add(MessageUtils.SuperKeyword, TokenType.SUPER);
+            words.Add(MessageUtils.ThisKeyword, TokenType.THIS);
+            words.Add(MessageUtils.TrueKeyword, TokenType.TRUE);
+            words.Add(MessageUtils.VarKeyword, TokenType.VAR);
+            words.Add(MessageUtils.WhileKeyword, TokenType.WHILE);
             return words;
         }
     }

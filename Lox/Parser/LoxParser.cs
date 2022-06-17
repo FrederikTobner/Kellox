@@ -1,5 +1,6 @@
 ﻿using Lox.Expressions;
 using Lox.Interpreter;
+using Lox.Messages;
 using Lox.Parser.Exceptions;
 using Lox.Statements;
 using Lox.Tokens;
@@ -32,7 +33,7 @@ internal static class LoxParser
                 statements.Add(statement);
                 if (StatementConsumesSemicolon(statement))
                 {
-                    Consume(tokens, TokenType.SEMICOLON, "Expect ';' after value");
+                    Consume(tokens, TokenType.SEMICOLON, MessageUtils.ExpectSemicolonAfterValueErrorMessage);
                 }
             }
             catch (ParseError error)
@@ -115,7 +116,7 @@ internal static class LoxParser
         {
             value = Expression(tokens);
         }
-        Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after return value");
+        Consume(tokens, TokenType.SEMICOLON, MessageUtils.ExpectSemicolonAfterReturnErrorMessage);
         return new ReturnStatement(keyword, value);
     }
 
@@ -132,10 +133,10 @@ internal static class LoxParser
             statements.Add(statement);
             if (StatementConsumesSemicolon(statement))
             {
-                Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after value");
+                Consume(tokens, TokenType.SEMICOLON, MessageUtils.ExpectSemicolonAfterValueErrorMessage);
             }
         }
-        Consume(tokens, TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
+        Consume(tokens, TokenType.RIGHT_BRACE, MessageUtils.ExpectClosingBraceAfterBlockErrorMessage);
         return statements;
     }
 
@@ -144,20 +145,20 @@ internal static class LoxParser
     /// </summary>
     private static IStatement CreateClassStatement(IReadOnlyList<Token> tokens)
     {
-        Token name = Consume(tokens, TokenType.IDENTIFIER, "Expect class name.");
+        Token name = Consume(tokens, TokenType.IDENTIFIER, MessageUtils.ExpectClassNameErrorMessage);
         VariableExpression? superClass = null;
         if (Match(tokens, TokenType.LESS))
         {
-            Consume(tokens, TokenType.IDENTIFIER, "Expet superclass name.");
+            Consume(tokens, TokenType.IDENTIFIER, MessageUtils.ExpectSuperClassNameErrorMessage);
             superClass = new VariableExpression(Previous(tokens));
         }
-        Consume(tokens, TokenType.LEFT_BRACE, "Expect \'{\' before class body.");
+        Consume(tokens, TokenType.LEFT_BRACE, MessageUtils.ExpectLeftBracketBeforeClassBodyErrorMessage);
         List<FunctionStatement> methods = new();
         while (!Check(tokens, TokenType.RIGHT_BRACE))
         {
             methods.Add((FunctionStatement)CreateFunctionStatement(tokens, "method"));
         }
-        Consume(tokens, TokenType.RIGHT_BRACE, "Expect \'}\' after class body.");
+        Consume(tokens, TokenType.RIGHT_BRACE, MessageUtils.ExpectRightBracketAfterClassBodyErrorMessage);
         return new ClassStatement(name, methods, superClass);
     }
 
@@ -176,13 +177,13 @@ internal static class LoxParser
             {
                 if (parameters.Count >= 255)
                 {
-                    throw new ParseError(Peek(tokens), "Can't have more than 255 parameters.");
+                    throw new ParseError(Peek(tokens), MessageUtils.MaxParametersExcededErrorMessage);
                 }
-                parameters.Add(Consume(tokens, TokenType.IDENTIFIER, "Expect parameter name."));
+                parameters.Add(Consume(tokens, TokenType.IDENTIFIER, MessageUtils.ExpectParameterNameErrorMessage));
 
             } while (Match(tokens, TokenType.COMMA));
         }
-        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after parameters");
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, MessageUtils.ExpectRightParenAfterParamsErrorMessage);
         //Handles body
         Consume(tokens, TokenType.LEFT_BRACE, "Expect \'}\' before " + kind + " body");
         List<IStatement> body = ReadBlock(tokens);
@@ -194,9 +195,9 @@ internal static class LoxParser
     /// </summary>
     private static IStatement CreateWhileStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after while.");
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, MessageUtils.ExpectLeftParenAfterWhileErrorMessage);
         IExpression condition = Expression(tokens);
-        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after condition.");
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, MessageUtils.ExpectRightParenAfterConditionErrorMessage);
         IStatement body = Statement(tokens);
         return new WhileStatement(condition, body);
     }
@@ -206,7 +207,7 @@ internal static class LoxParser
     /// </summary>
     private static IStatement CreateForStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after for.");
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, MessageUtils.ExpectLeftParenAfterForErrorMessage);
 
         IStatement? initializerExpression = null;
         if (Match(tokens, TokenType.VAR))
@@ -228,10 +229,10 @@ internal static class LoxParser
         IExpression? incrementExpression = null;
         if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
         {
-            Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after loop condition");
+            Consume(tokens, TokenType.SEMICOLON, MessageUtils.ExpectSemicolonAfterLoopConditionErrorMessage);
             incrementExpression = Expression(tokens);
         }
-        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, MessageUtils.ExpectRightParenAfterForErrorMessage);
 
         IStatement body = Statement(tokens);
 
@@ -260,9 +261,9 @@ internal static class LoxParser
     /// </summary>
     private static IStatement CreateIfStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after \'if\'.");
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, MessageUtils.ExpectLeftParenAfterIfErrorMessage);
         IExpression condition = Expression(tokens);
-        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after if condition.");
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, MessageUtils.ExpectRightPareAfterrIfErrorMessage);
         IStatement thenBranch = Statement(tokens);
         IStatement? elseBranch = null;
         if (Match(tokens, TokenType.ELSE))
@@ -277,7 +278,7 @@ internal static class LoxParser
     /// </summary>
     private static IStatement CreateDeclarationStatement(IReadOnlyList<Token> tokens)
     {
-        Token token = Consume(tokens, TokenType.IDENTIFIER, "Expect variable name");
+        Token token = Consume(tokens, TokenType.IDENTIFIER, MessageUtils.ExpectVariableNameErrorMessage);
         if (Check(tokens, TokenType.SEMICOLON))
         {
             // No value assigned -> value is null
@@ -287,7 +288,7 @@ internal static class LoxParser
         return new DeclarationStatement(token, Expression(tokens));
     }
 
-    #endregion
+    #endregion Statements
 
     #region Expressions
 
@@ -316,7 +317,7 @@ internal static class LoxParser
             {
                 return new SetExpression(getExpression.Object, getExpression.Name, value);
             }
-            throw new ParseError(token, "Invalid assignment target.");
+            throw new ParseError(token, MessageUtils.InvalidAssignmentTargetErrorMessage);
         }
         return expression;
     }
@@ -341,7 +342,7 @@ internal static class LoxParser
         TokenType.MINUS_EQUAL => CreateMinusEqualExpression(tokens, token, expression),
         TokenType.STAR_EQUAL => CreateStarEqualExpression(tokens, token, expression),
         TokenType.SLASH_EQUAL => CreateSlashEqualExpression(tokens, token, expression),
-        _ => throw new ParseError(token, "Invalid Operator"),
+        _ => throw new ParseError(token, MessageUtils.InvalidOperatorErrorMessage),
     };
 
     private static IExpression CreatePlusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, token.Line), Expression(tokens));
@@ -475,7 +476,7 @@ internal static class LoxParser
             }
             else if (Match(tokens, TokenType.DOT))
             {
-                Token name = Consume(tokens, TokenType.IDENTIFIER, "Expect property name after \'.\'.");
+                Token name = Consume(tokens, TokenType.IDENTIFIER, MessageUtils.ExpectPropertyNameAfterDotErrorMessage);
                 expression = new GetExpression(expression, name);
             }
             else
@@ -502,13 +503,13 @@ internal static class LoxParser
             {
                 if (arguments.Count >= 255)
                 {
-                    throw new ParseError(Peek(tokens), "Can't have more than 255 argumenst");
+                    throw new ParseError(Peek(tokens), MessageUtils.MaxParametersExcededErrorMessage);
                 }
                 arguments.Add(Expression(tokens));
             } while (Match(tokens, TokenType.COMMA));
         }
 
-        Token paren = Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after arguments.");
+        Token paren = Consume(tokens, TokenType.RIGHT_PARENTHESIS, MessageUtils.ExpectRightParenAfterArgsErrorMessage);
         return new CallExpression(calle, paren, arguments);
     }
 
@@ -536,8 +537,8 @@ internal static class LoxParser
         if (Match(tokens, TokenType.SUPER))
         {
             Token keyword = Previous(tokens);
-            Consume(tokens, TokenType.DOT, "Expect \'.\' after \'super\'");
-            Token method = Consume(tokens, TokenType.IDENTIFIER, "Expect superclass method name");
+            Consume(tokens, TokenType.DOT, MessageUtils.ExpectDotAfterSuperErrorMessage);
+            Token method = Consume(tokens, TokenType.IDENTIFIER, MessageUtils.ExpectSuperclassMethodNameErrorMessage);
             return new SuperExpression(keyword, method);
         }
         if (Match(tokens, TokenType.THIS))
@@ -552,13 +553,13 @@ internal static class LoxParser
         if (Match(tokens, TokenType.LEFT_PARENTHESIS))
         {
             IExpression expr = Expression(tokens);
-            Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after expression.");
+            Consume(tokens, TokenType.RIGHT_PARENTHESIS, MessageUtils.ExpectRightParenAfterExpressionErrorMessage);
             return new GroupingExpression(expr);
         }
-        throw new ParseError(Peek(tokens), "Expect expression");
+        throw new ParseError(Peek(tokens), MessageUtils.ExpectExpressionErrorMessage);
     }
 
-    #endregion
+    #endregion Expressions
 
     /// <summary>
     /// Can be used to parse statements after a statment that has caused a RunTimeError

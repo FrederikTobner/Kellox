@@ -1,4 +1,5 @@
-﻿using Lox.Tokens;
+﻿using Lox.Messages;
+using Lox.Tokens;
 using Lox.Utils;
 
 namespace Lox.Lexer;
@@ -136,7 +137,7 @@ internal static class LoxLexer
                         if (IsAtEnd(source))
                         {
                             //Blockcomment was never closed with a "*/"
-                            LoxErrorLogger.Error(line, "Blockcomment was never closed, no \"*/\" found");
+                            LoxErrorLogger.Error(line, MessageUtils.BlockCommentNotClosedErrorMessage);
                             break;
                         }
                         Advance(source);
@@ -184,7 +185,7 @@ internal static class LoxLexer
                 }
                 else
                 {
-                    LoxErrorLogger.Error(line, "Unexpected character.");
+                    LoxErrorLogger.Error(line, MessageUtils.UnexpectedCharErrorMessage);
                 }
                 break;
         }
@@ -245,7 +246,7 @@ internal static class LoxLexer
 
         if (IsAtEnd(source))
         {
-            LoxErrorLogger.Error(line, "Unterminated string.");
+            LoxErrorLogger.Error(line, MessageUtils.UnterminatedStringErrorMessage);
             return;
         }
         Advance(source);

@@ -9,6 +9,8 @@ namespace Lox.Expressions;
 /// </summary>
 internal class CallExpression : IExpression
 {
+    private const string CallOnNNonFunctionOrClassErrorMessage = "Can only call functions and classes";
+
     /// <summary>
     /// The Expression that was called e.g. rect(5, 6).area() -> 'rect(5, 6)'
     /// </summary>
@@ -50,7 +52,7 @@ internal class CallExpression : IExpression
             }
             return function?.Call(arguments);
         }
-        throw new RunTimeError(this.Paren, "Can only call functions and classes");
+        throw new RunTimeError(this.Paren, CallOnNNonFunctionOrClassErrorMessage);
     }
 
     public override string ToString() => IExpression.Parenthesize(this.Calle.ToString(), this.Arguments.ToArray());

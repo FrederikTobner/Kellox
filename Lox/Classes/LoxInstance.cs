@@ -1,6 +1,7 @@
 ﻿using Lox.Functions;
 using Lox.Interpreter.Exceptions;
 using Lox.Tokens;
+using Lox.Utils;
 using System.Text;
 
 namespace Lox.Classes;
@@ -26,31 +27,7 @@ internal class LoxInstance
         fields = new();
     }
 
-    public override string ToString()
-    {
-        StringBuilder stringBuilder = new();
-        stringBuilder.AppendLine("{");
-        foreach (KeyValuePair<string, object?> field in fields)
-        {
-            stringBuilder.Append("\t\"");
-            stringBuilder.Append(field.Key);
-            stringBuilder.Append("\": ");
-            if (field.Value is string)
-            {
-                stringBuilder.Append('"');
-                stringBuilder.Append(field.Value);
-                stringBuilder.Append('"');
-            }
-            else
-            {
-                stringBuilder.Append(field.Value is not null ? field.Value : "nil");
-            }
-
-            stringBuilder.AppendLine(",");
-        }
-        stringBuilder.Append('}');
-        return stringBuilder.ToString();
-    }
+    public override string ToString() => LoxInstanceSerializer.Serialize(this.fields);
 
     /// <summary>
     /// Used to get a method//property associated with the instance

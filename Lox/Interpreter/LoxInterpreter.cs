@@ -2,6 +2,7 @@
 using Lox.Functions;
 using Lox.Interpreter.Exceptions;
 using Lox.Lexer;
+using Lox.Messages;
 using Lox.Parser;
 using Lox.Resolver;
 using Lox.Statements;
@@ -16,9 +17,6 @@ namespace Lox.Interpreter;
 /// </summary>
 internal static class LoxInterpreter
 {
-    private const string loxPrompt = "> ";
-    private const string toMuchArgsErrorMessage = "To much args";
-
     /// <summary>
     /// Boolean value indicating wheather an error has ocurred during the interpretation of the program
     /// </summary>
@@ -59,12 +57,12 @@ internal static class LoxInterpreter
     /// <summary>
     /// Starts the interpreter (from file or as command prompt if no file is specified)
     /// </summary>
-    /// <param name="args"></param>
+    /// <param name="args">The arguments provided by the user when the interpreter was started</param>
     internal static void RunLoxInterpreter(string[] args)
     {
         if (args.Length > 1)
         {
-            Console.WriteLine(toMuchArgsErrorMessage);
+            Console.WriteLine(MessageUtils.toMuchArgsErrorMessage);
             //Exit code 64 -> The command was used incorrectly, wrong number of anguments
             Environment.Exit(64);
         }
@@ -103,13 +101,13 @@ internal static class LoxInterpreter
     /// </summary>
     internal static void RunPrompt()
     {
-        Console.WriteLine(loxPrompt);
+        Console.WriteLine(MessageUtils.loxPromptMessage);
         string? line = Console.ReadLine();
         while (line is not "" && line is not null)
         {
             Run(line);
             ErrorOccurred = false;
-            Console.WriteLine(loxPrompt);
+            Console.WriteLine(MessageUtils.loxPromptMessage);
             line = Console.ReadLine();
         }
     }
@@ -152,11 +150,11 @@ internal static class LoxInterpreter
     /// </summary>
     private static void DefineNativeFunctions(LoxEnvironment loxEnvironment)
     {
-        loxEnvironment.Define("clock", new ClockFunction());
-        loxEnvironment.Define("wait", new WaitFunction());
-        loxEnvironment.Define("clear", new ClearFunction());
-        loxEnvironment.Define("read", new ReadFunction());
-        loxEnvironment.Define("random", new RandomFunction());
+        loxEnvironment.Define(MessageUtils.ClockFunctionMessage, new ClockFunction());
+        loxEnvironment.Define(MessageUtils.WaitFunctionMessage, new WaitFunction());
+        loxEnvironment.Define(MessageUtils.ClearFunctionMessage, new ClearFunction());
+        loxEnvironment.Define(MessageUtils.ReadFunctionMessage, new ReadFunction());
+        loxEnvironment.Define(MessageUtils.RandomFunctionMessage, new RandomFunction());
     }
 
 

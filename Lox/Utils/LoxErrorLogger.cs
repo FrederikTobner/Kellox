@@ -33,7 +33,7 @@ namespace Lox.Utils
             switch (token.TokenType)
             {
                 case TokenType.EOF:
-                    Report(token.Line, " at end", message);
+                    Report(token.Line, " at end of file", message);
                     break;
                 default:
                     Report(token.Line, $" at '{token.Lexeme}'", message);

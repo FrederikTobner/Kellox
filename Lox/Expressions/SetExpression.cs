@@ -1,5 +1,6 @@
 ﻿using Lox.Classes;
 using Lox.Interpreter.Exceptions;
+using Lox.Messages;
 using Lox.Tokens;
 
 namespace Lox.Expressions;
@@ -40,12 +41,12 @@ internal class SetExpression : IExpression
             loxInstance.Set(Name, value);
             return value;
         }
-        throw new RunTimeError(Name, "Only instances have fields");
+        throw new RunTimeError(Name, MessageUtils.OnlyInstancesHaveFieldsErrorMessage);
     }
 
     public override string ToString()
     {
         object? result = Object.EvaluateExpression();
-        return "set -> " + Name.Lexeme + "to " + (result is null ? "nil" : result.ToString()) + ".";
+        return "set -> " + Name.Lexeme + "to " + (result is null ? MessageUtils.NilKeyword : result.ToString()) + ".";
     }
 }

@@ -1,3 +1,4 @@
+print "test\teyy\n";
 class Doughnut 
 {
   init(parentColor)
@@ -36,7 +37,9 @@ class LoxKlasse < Doughnut
 	}
 }
 
-println LoxKlasse(4, 3, "green");
+print LoxKlasse(4, 3, "green");
+
+print LoxKlasse(6, 4, "blue");
 
 class Rect
 {
@@ -105,23 +108,25 @@ fun Add(x, y)
 	return x + y;
 }
 
-
-
-fun Countdown(x)
-{
-	if(x >= 0)
-	{
-		println x;
-		wait(1);
-		Countdown(x--);
-	}
-}
-
-Countdown(10);
-
 /* Hello, 
 a blockcomment can have linebreaks in it!
 🥴
 */
 
 println Add(123456, 654321);
+
+fun Countdown(x)
+{
+	if(x >= 0)
+	{
+		println x;
+		print "\a";
+		if(x >= 1)
+		{
+			wait(1);
+		}
+		Countdown(x--);
+	}
+}
+
+Countdown(10);
