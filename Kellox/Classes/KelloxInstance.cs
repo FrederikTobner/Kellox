@@ -9,25 +9,25 @@ namespace Lox.Classes;
 /// <summary>
 /// Models a specific Instance of a LoxClass
 /// </summary>
-internal class LoxInstance
+internal class KelloxInstance
 {
     /// <summary>
     /// The class of this Instance
     /// </summary>
-    public LoxClass Class { get; init; }
+    public KelloxClass Class { get; init; }
 
     /// <summary>
     /// The fields of this Instance
     /// </summary>
     private readonly Dictionary<string, object?> fields;
 
-    public LoxInstance(LoxClass LoxClass)
+    public KelloxInstance(KelloxClass LoxClass)
     {
         Class = LoxClass;
         fields = new();
     }
 
-    public override string ToString() => LoxInstanceSerializer.Serialize(this.fields);
+    public override string ToString() => KelloxInstanceSerializer.Serialize(this.fields);
 
     /// <summary>
     /// Used to get a method//property associated with the instance
@@ -40,7 +40,7 @@ internal class LoxInstance
         {
             return fields[name.Lexeme];
         }
-        LoxFunction? method = Class.FindMethod(name.Lexeme);
+        KelloxFunction? method = Class.FindMethod(name.Lexeme);
         if (method is not null)
         {
             return method.Bind(this);

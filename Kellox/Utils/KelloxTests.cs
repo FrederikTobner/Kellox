@@ -7,7 +7,7 @@ namespace Lox.Utils
     /// <summary>
     /// Contains methods used for testing
     /// </summary>
-    internal static class LoxTests
+    internal static class KelloxTests
     {
         /// <summary>
         /// Path of the SampleProgram

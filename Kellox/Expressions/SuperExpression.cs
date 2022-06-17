@@ -28,13 +28,13 @@ internal class SuperExpression : IExpression
     public object? EvaluateExpression()
     {
         LoxInterpreter.TryGetDepthOfLocal(this, out int distance);
-        LoxClass? superClass = (LoxClass?)LoxInterpreter.currentEnvironment.GetAt(distance, Token);
+        KelloxClass? superClass = (KelloxClass?)LoxInterpreter.currentEnvironment.GetAt(distance, Token);
         if (superClass is null)
         {
             throw new RunTimeError(this.Method, Messages.ThereIsNoSuperClassDefinedErrorMessage);
         }
-        LoxInstance? instance = (LoxInstance?)LoxInterpreter.currentEnvironment.GetAt(distance - 1, new Token(TokenType.THIS, "this", null, 0));
-        LoxFunction? function = superClass.FindMethod(this.Method.Lexeme);
+        KelloxInstance? instance = (KelloxInstance?)LoxInterpreter.currentEnvironment.GetAt(distance - 1, new Token(TokenType.THIS, "this", null, 0));
+        KelloxFunction? function = superClass.FindMethod(this.Method.Lexeme);
         if (instance is null)
         {
             return null;

@@ -30,7 +30,7 @@ internal class GetExpression : IExpression
     public object? EvaluateExpression()
     {
         object? result = Object.EvaluateExpression();
-        if (result is LoxInstance loxInstance)
+        if (result is KelloxInstance loxInstance)
         {
             return loxInstance.Get(Name);
         }

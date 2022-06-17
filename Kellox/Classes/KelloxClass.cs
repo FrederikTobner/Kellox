@@ -6,7 +6,7 @@ namespace Lox.Classes;
 /// <summary>
 /// Models a class in the programming language lox
 /// </summary>
-internal class LoxClass : IFunction
+internal class KelloxClass : IFunction
 {
     /// <summary>
     /// The Name of the class
@@ -31,15 +31,15 @@ internal class LoxClass : IFunction
     /// <summary>
     /// The methods of this class
     /// </summary>
-    private readonly Dictionary<string, LoxFunction> methods;
+    private readonly Dictionary<string, KelloxFunction> methods;
 
-    public LoxClass? SuperClass { get; init; }
+    public KelloxClass? SuperClass { get; init; }
 
     /// <summary>
     /// Constructor of the LoxClass class
     /// </summary>
     /// <param name="Name">The Name of the class</param>
-    public LoxClass(string Name, Dictionary<string, LoxFunction> Methods, LoxClass? SuperClass)
+    public KelloxClass(string Name, Dictionary<string, KelloxFunction> Methods, KelloxClass? SuperClass)
     {
         this.Name = Name;
         methods = Methods;
@@ -51,7 +51,7 @@ internal class LoxClass : IFunction
         return Name;
     }
 
-    public LoxFunction? FindMethod(string name)
+    public KelloxFunction? FindMethod(string name)
     {
         if (methods.ContainsKey(name))
         {
@@ -70,10 +70,10 @@ internal class LoxClass : IFunction
     /// <param name="arguments">Arguments passed in the constructor -> ignored at the moment</param>
     public object? Call(List<object?> arguments)
     {
-        LoxInstance instance = new(this);
+        KelloxInstance instance = new(this);
         if (methods.ContainsKey(Constants.InitKeyword))
         {
-            LoxFunction initializer = methods[Constants.InitKeyword];
+            KelloxFunction initializer = methods[Constants.InitKeyword];
             initializer.Bind(instance).Call(arguments);
         }
         return instance;

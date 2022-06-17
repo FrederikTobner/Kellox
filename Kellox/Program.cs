@@ -4,4 +4,4 @@ using Lox.Utils;
 // Starts Interpreter
 //LoxInterpreter.RunLoxInterpreter(args);
 // Tests Interpreter with the sample program
-LoxTests.RunSampleProgram();
+KelloxTests.RunSampleProgram();

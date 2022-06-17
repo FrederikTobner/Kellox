@@ -11,8 +11,8 @@ namespace Lox.Parser;
 /// <summary>
 /// Takes a flat sequence of tokens and builds a syntax tree based on the tokens
 /// </summary>
-internal static class LoxParser
-{  
+internal static class KelloxParser
+{
 
     /// <summary>
     /// The current Position in the sequence of tokens
@@ -39,7 +39,7 @@ internal static class LoxParser
             }
             catch (ParseError error)
             {
-                LoxErrorLogger.Error(error.ErrorToken, error.Message);
+                ErrorLogger.Error(error.ErrorToken, error.Message);
                 Synchronize(tokens);
             }
         }

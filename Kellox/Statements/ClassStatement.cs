@@ -42,9 +42,9 @@ internal class ClassStatement : IStatement
         {
             superClass = SuperClass.EvaluateExpression();
             // superClass has to be a Loxclass
-            if (superClass is not LoxClass)
+            if (superClass is not KelloxClass)
             {
-                LoxErrorLogger.Error(SuperClass.Token, Messages.SuperClassMustBeAClassErrorMessage);
+                ErrorLogger.Error(SuperClass.Token, Messages.SuperClassMustBeAClassErrorMessage);
             }
         }
         //Defines the class in the current environment
@@ -54,15 +54,15 @@ internal class ClassStatement : IStatement
             LoxInterpreter.currentEnvironment = new(LoxInterpreter.currentEnvironment);
             LoxInterpreter.currentEnvironment.Define(Constants.SuperKeyword, superClass);
         }
-        Dictionary<string, LoxFunction> newMethods = new();
+        Dictionary<string, KelloxFunction> newMethods = new();
         foreach (FunctionStatement? method in Methods)
         {
             if (method is not null)
             {
-                newMethods.Add(method.Token.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment, method.Token.Lexeme.Equals(Constants.InitKeyword)));
+                newMethods.Add(method.Token.Lexeme, new KelloxFunction(method, LoxInterpreter.currentEnvironment, method.Token.Lexeme.Equals(Constants.InitKeyword)));
             }
         }
-        LoxClass loxClass = new(Token.Lexeme, newMethods, (LoxClass?)superClass);
+        KelloxClass loxClass = new(Token.Lexeme, newMethods, (KelloxClass?)superClass);
         if (superClass is not null && LoxInterpreter.currentEnvironment.Enclosing is not null)
         {
             LoxInterpreter.currentEnvironment = LoxInterpreter.currentEnvironment.Enclosing;

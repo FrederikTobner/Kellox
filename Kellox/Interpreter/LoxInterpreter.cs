@@ -118,8 +118,8 @@ internal static class LoxInterpreter
     /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
     private static void Run(string sourceCode)
     {
-        IReadOnlyList<Token> tokens = LoxLexer.ScanTokens(sourceCode);
-        LoxProgram program = LoxParser.Parse(tokens);
+        IReadOnlyList<Token> tokens = KelloxLexer.ScanTokens(sourceCode);
+        LoxProgram program = KelloxParser.Parse(tokens);
         if (ErrorOccurred)
         {
             return;
@@ -136,7 +136,7 @@ internal static class LoxInterpreter
     /// <param name="program">The program that shall be executed</param>
     internal static void Interpret(LoxProgram program)
     {
-        LoxResolver.Resolve(program);
+        KelloxResolver.Resolve(program);
         if (program.Runnable)
         {
             RunProgram(program);
@@ -186,7 +186,7 @@ internal static class LoxInterpreter
     private static void ReportRunTimeError(RunTimeError runTimeError)
     {
         RunTimeErrorOccurred = true;
-        LoxErrorLogger.Error(runTimeError.Token.Line, runTimeError.Message);
+        ErrorLogger.Error(runTimeError.Token.Line, runTimeError.Message);
     }
 
     /// <summary>

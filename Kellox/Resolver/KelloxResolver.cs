@@ -10,7 +10,7 @@ namespace Lox.Resolver;
 /// <summary>
 /// Walks over the Syntaxtree before it is executed and resolves all the variables it contains
 /// </summary>
-internal static class LoxResolver
+internal static class KelloxResolver
 {
 
     /// <summary>
@@ -195,7 +195,7 @@ internal static class LoxResolver
     {
         if (scopes.Count is not 0 && scopes.Peek().ContainsKey(declarationStatement.Name.Lexeme))
         {
-            LoxErrorLogger.Error(declarationStatement.Name, Messages.VariableAlreadyDefinedFirstHalfErrorMessage + declarationStatement.Name.Lexeme + Messages.VariableAlreadyDefinedSecondHalfErrorMessage);
+            ErrorLogger.Error(declarationStatement.Name, Messages.VariableAlreadyDefinedFirstHalfErrorMessage + declarationStatement.Name.Lexeme + Messages.VariableAlreadyDefinedSecondHalfErrorMessage);
         }
         Declare(declarationStatement.Name);
         if (declarationStatement.Expression is not null)
@@ -218,7 +218,7 @@ internal static class LoxResolver
         {
             if (classStatement.SuperClass.Token.Lexeme.Equals(classStatement.Token.Lexeme))
             {
-                LoxErrorLogger.Error(classStatement.Token, Messages.ClassInheritsFromItselfErrorMessage);
+                ErrorLogger.Error(classStatement.Token, Messages.ClassInheritsFromItselfErrorMessage);
             }
             else
             {
@@ -314,13 +314,13 @@ internal static class LoxResolver
     {
         if (currentFunction is FunctionType.NONE)
         {
-            LoxErrorLogger.Error(returnStatement.Keyword, Messages.ReturnFromTopLevelErrorMessage);
+            ErrorLogger.Error(returnStatement.Keyword, Messages.ReturnFromTopLevelErrorMessage);
         }
         if (returnStatement.Expression is not null)
         {
             if (currentFunction is FunctionType.INITIALIZER)
             {
-                LoxErrorLogger.Error(returnStatement.Keyword, Messages.ReturnInInitializerErrorMessage);
+                ErrorLogger.Error(returnStatement.Keyword, Messages.ReturnInInitializerErrorMessage);
             }
             ResolveExpression(returnStatement.Expression);
         }
@@ -348,11 +348,11 @@ internal static class LoxResolver
     {
         if (currentClass is ClassType.NONE)
         {
-            LoxErrorLogger.Error(superExpression.Token, Messages.UsingSuperOutsideOfClassErrorMessage);
+            ErrorLogger.Error(superExpression.Token, Messages.UsingSuperOutsideOfClassErrorMessage);
         }
         else if (currentClass is not ClassType.SUBCLASS)
         {
-            LoxErrorLogger.Error(superExpression.Token, Messages.UsingSuperWithoutSuperClassErrorMessage);
+            ErrorLogger.Error(superExpression.Token, Messages.UsingSuperWithoutSuperClassErrorMessage);
         }
         ResolveLocal(superExpression, superExpression.Token);
     }
@@ -365,7 +365,7 @@ internal static class LoxResolver
     {
         if (currentClass is ClassType.NONE)
         {
-            LoxErrorLogger.Error(thisExpression.Token, Messages.ThisOutsideOfClassErrorMessage);
+            ErrorLogger.Error(thisExpression.Token, Messages.ThisOutsideOfClassErrorMessage);
             return;
         }
         ResolveLocal(thisExpression, thisExpression.Token);
@@ -398,7 +398,7 @@ internal static class LoxResolver
     {
         if (scopes.Count is not 0 && scopes.Peek().ContainsKey(variableExpression.Token.Lexeme) && !scopes.Peek()[variableExpression.Token.Lexeme])
         {
-            LoxErrorLogger.Error(variableExpression.Token, Messages.ReadsLocalVariableInInitErrorMessage);
+            ErrorLogger.Error(variableExpression.Token, Messages.ReadsLocalVariableInInitErrorMessage);
         }
         ResolveLocal(variableExpression, variableExpression.Token);
     }
@@ -502,7 +502,7 @@ internal static class LoxResolver
         Dictionary<string, bool> scope = scopes.Peek();
         if (scope.ContainsKey(identifierToken.Lexeme))
         {
-            LoxErrorLogger.Error(identifierToken.Line, Messages.VariableAlreadyDefinedFirstHalfErrorMessage + identifierToken.Lexeme + Messages.VariableAlreadyDefinedSecondHalfErrorMessage);
+            ErrorLogger.Error(identifierToken.Line, Messages.VariableAlreadyDefinedFirstHalfErrorMessage + identifierToken.Lexeme + Messages.VariableAlreadyDefinedSecondHalfErrorMessage);
             return;
         }
         scope.Add(identifierToken.Lexeme, false);

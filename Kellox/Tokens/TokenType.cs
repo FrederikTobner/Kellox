@@ -1,7 +1,7 @@
 ﻿namespace Lox.Tokens;
 
 /// <summary>
-/// The different Types of Tokens in the Lox
+/// The different Types of Tokens in the Kellox
 /// </summary>
 internal enum TokenType
 {

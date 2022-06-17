@@ -6,7 +6,7 @@ namespace Lox.Utils
     /// <summary>
     /// Stores all the keywords of the language lox
     /// </summary>
-    internal static class LoxKeywords
+    internal static class KelloxKeywords
     {
         /// <summary>
         /// /The Dictionary containing the keywords

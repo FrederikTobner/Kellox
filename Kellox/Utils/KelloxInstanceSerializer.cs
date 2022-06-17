@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lox.Utils
 {
-    internal static class LoxInstanceSerializer
+    internal static class KelloxInstanceSerializer
     {
         private static readonly StringBuilder stringBuilder = new();
 

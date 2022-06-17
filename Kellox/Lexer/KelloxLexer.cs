@@ -7,7 +7,7 @@ namespace Lox.Lexer;
 /// <summary>
 /// Performs a lexical analysis on a linear stream of characters and groups them together to a flat sequence of Tokens
 /// </summary>
-internal static class LoxLexer
+internal static class KelloxLexer
 {
     /// <summary>
     /// StartIndex of the token that is currently getting evaluated in the sourcecode
@@ -147,7 +147,7 @@ internal static class LoxLexer
                         if (IsAtEnd(source))
                         {
                             //Blockcomment was never closed with a "*/"
-                            LoxErrorLogger.Error(line, Messages.BlockCommentNotClosedErrorMessage);
+                            ErrorLogger.Error(line, Messages.BlockCommentNotClosedErrorMessage);
                             break;
                         }
                         current++;
@@ -197,7 +197,7 @@ internal static class LoxLexer
                 }
                 else
                 {
-                    LoxErrorLogger.Error(line, Messages.UnexpectedCharErrorMessage);
+                    ErrorLogger.Error(line, Messages.UnexpectedCharErrorMessage);
                 }
                 break;
         }
@@ -235,7 +235,7 @@ internal static class LoxLexer
         }
 
         string text = source[start..current];
-        if (!LoxKeywords.GetTokenType(text, out TokenType type))
+        if (!KelloxKeywords.GetTokenType(text, out TokenType type))
         {
             type = TokenType.IDENTIFIER;
         }
@@ -258,7 +258,7 @@ internal static class LoxLexer
 
         if (IsAtEnd(source))
         {
-            LoxErrorLogger.Error(line, Messages.UnterminatedStringErrorMessage);
+            ErrorLogger.Error(line, Messages.UnterminatedStringErrorMessage);
             return;
         }
         current++;

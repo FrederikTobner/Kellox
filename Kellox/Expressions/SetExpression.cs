@@ -35,7 +35,7 @@ internal class SetExpression : IExpression
     public object? EvaluateExpression()
     {
         object? result = Object.EvaluateExpression();
-        if (result is LoxInstance loxInstance)
+        if (result is KelloxInstance loxInstance)
         {
             object? value = Value.EvaluateExpression();
             loxInstance.Set(Name, value);

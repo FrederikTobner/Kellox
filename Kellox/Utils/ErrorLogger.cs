@@ -7,9 +7,9 @@ namespace Lox.Utils
     /// <summary>
     /// Class contains methods to report an error during the ParingProcess/at runtime/durng the semantic analysis
     /// </summary>
-    internal static class LoxErrorLogger
+    internal static class ErrorLogger
     {
-        
+
 
         /// <summary>
         /// Reports an error that occured during the lexical analysis

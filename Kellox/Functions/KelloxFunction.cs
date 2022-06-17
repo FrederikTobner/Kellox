@@ -6,7 +6,7 @@ using Lox.Tokens;
 
 namespace Lox.Functions;
 
-internal class LoxFunction : IFunction
+internal class KelloxFunction : IFunction
 {
     /// <summary>
     /// Boolean value that determines whether the function is a constructor/initializer
@@ -23,7 +23,7 @@ internal class LoxFunction : IFunction
     /// </summary>
     public LoxEnvironment Closure { get; init; }
 
-    public LoxFunction(FunctionStatement Declaration, LoxEnvironment Closure, bool isInitializer)
+    public KelloxFunction(FunctionStatement Declaration, LoxEnvironment Closure, bool isInitializer)
     {
         this.Declaration = Declaration;
         this.Closure = Closure;
@@ -67,7 +67,7 @@ internal class LoxFunction : IFunction
     }
 
     // Binds an instance to the enviroment of the function
-    internal LoxFunction Bind(LoxInstance loxInstance)
+    internal KelloxFunction Bind(KelloxInstance loxInstance)
     {
         LoxEnvironment environment = new(Closure);
         environment.Define("this", loxInstance);
