@@ -11,7 +11,7 @@ print "Hello " + name;
 ```
 Prints the current time:
 ```
-for (var i = 0; i < 60; i = i + 1) 
+for (var i = 0; i < 60; i++) 
 {
 	print clock();
 	wait(1);
@@ -52,7 +52,7 @@ fun fibonacci()
 }
 
 var fibo = fibonacci();
-for (var j = 0; j < 10; j = j + 1) 
+for (var j = 0; j < 10; j++) 
 {
 	print fibo();
 }
@@ -61,11 +61,11 @@ Count down from 10 to zero using recursion
 ```
 fun Countdown(x)
 {
-	if(x > -1)
+	if(x >= 0)
 	{
 		print x;
 		wait(1);
-		Countdown(x = x - 1);
+		Countdown(x--);
 	}
 }
 Countdown(10);
@@ -85,7 +85,7 @@ class Rectangle
 	}
 }  
 ```
-Tasty oop breakfest
+Tasty oop breakfast
 ```
 class Doughnut 
 {
