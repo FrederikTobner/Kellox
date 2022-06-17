@@ -87,31 +87,39 @@ internal static class LoxLexer
             case '.':
                 AddToken(source, TokenType.DOT);
                 break;
-            case '-':
-                if (Match(source, '-'))
-                {
-                    AddToken(source, TokenType.MINUS_MINUS);
-                }
-                else
-                {
-                    AddToken(source, TokenType.MINUS);
-                }
-                break;
             case '+':
                 if (Match(source, '+'))
                 {
                     AddToken(source, TokenType.PLUS_PLUS);
+                }
+                else if (Match(source, '='))
+                {
+                    AddToken(source, TokenType.PLUS_EQUAL);
                 }
                 else
                 {
                     AddToken(source, TokenType.PLUS);
                 }
                 break;
+            case '-':
+                if (Match(source, '-'))
+                {
+                    AddToken(source, TokenType.MINUS_MINUS);
+                }
+                else if (Match(source, '='))
+                {
+                    AddToken(source, TokenType.MINUS_EQUAL);
+                }
+                else
+                {
+                    AddToken(source, TokenType.MINUS);
+                }
+                break;
             case ';':
                 AddToken(source, TokenType.SEMICOLON);
                 break;
             case '*':
-                AddToken(source, TokenType.STAR);
+                AddToken(source, Match(source, '=') ? TokenType.STAR_EQUAL : TokenType.STAR);
                 break;
             case '!':
                 AddToken(source, Match(source, '=') ? TokenType.BANG_EQUAL : TokenType.BANG);
@@ -149,6 +157,10 @@ internal static class LoxLexer
                     }
                     if (!IsAtEnd(source))
                         Advance(source);
+                }
+                else if (Match(source, '='))
+                {
+                    AddToken(source, TokenType.SLASH_EQUAL);
                 }
                 else
                 {

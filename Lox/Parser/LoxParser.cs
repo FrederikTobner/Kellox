@@ -294,10 +294,10 @@ internal static class LoxParser
     {
         IExpression expression = OrExpression(tokens);
 
-        if (Match(tokens, TokenType.EQUAL))
+        if (Match(tokens, TokenType.EQUAL, TokenType.PLUS_PLUS, TokenType.MINUS_MINUS, TokenType.PLUS_EQUAL, TokenType.MINUS_EQUAL, TokenType.STAR_EQUAL, TokenType.SLASH_EQUAL))
         {
-            Token equals = Previous(tokens);
-            IExpression value = Assignment(tokens);
+            Token token = Previous(tokens);
+            IExpression value = token.TokenType is TokenType.EQUAL or TokenType.PLUS_PLUS or TokenType.MINUS_MINUS ? token.TokenType is TokenType.EQUAL ? Assignment(tokens) : CreateIncOrDecExpression(token, expression) : CreateXEqualExpression(tokens, token, expression);
             if (expression is VariableExpression variableExpression)
             {
                 Token name = variableExpression.Token;
@@ -307,30 +307,41 @@ internal static class LoxParser
             {
                 return new SetExpression(getExpression.Object, getExpression.Name, value);
             }
-            throw new ParseError(equals, "Invalid assignment target.");
-        }
-        else if (Match(tokens, TokenType.PLUS_PLUS, TokenType.MINUS_MINUS))
-        {
-            return CreateIncOrDecExpression(tokens, expression);
+            throw new ParseError(token, "Invalid assignment target.");
         }
         return expression;
     }
 
-    private static IExpression CreateIncOrDecExpression(IReadOnlyList<Token> tokens, IExpression expression)
+    /// <summary>
+    /// Creates a Binaryexpression e.g. for x++ -> x + 1, that will be assigned to the variable
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="expression"></param>
+    /// <returns></returns>
+    private static IExpression CreateIncOrDecExpression(Token token, IExpression expression)
     {
-        Token token = Previous(tokens);
-        IExpression value = new BinaryExpression(expression, token.TokenType == TokenType.PLUS_PLUS ? new Token(TokenType.PLUS, "+", null, token.Line) : new Token(TokenType.MINUS, "-", null, token.Line), new LiteralExpression(1.0));
-        if (expression is VariableExpression variableExpression)
-        {
-            Token name = variableExpression.Token;
-            return new AssignmentExpression(name, value);
-        }
-        else if (expression is GetExpression getExpression)
-        {
-            return new SetExpression(getExpression.Object, getExpression.Name, value);
-        }
-        throw new ParseError(token, "Invalid assignment target.");
+        return new BinaryExpression(expression, token.TokenType is TokenType.PLUS_PLUS ?
+                new Token(TokenType.PLUS, "+", null, token.Line) :
+                new Token(TokenType.MINUS, "-", null, token.Line),
+                new LiteralExpression(1.0));
     }
+
+    private static IExpression CreateXEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => token.TokenType switch
+    {
+        TokenType.PLUS_EQUAL => CreatePlusEqualExpression(tokens, token, expression),
+        TokenType.MINUS_EQUAL => CreateMinusEqualExpression(tokens, token, expression),
+        TokenType.STAR_EQUAL => CreateStarEqualExpression(tokens, token, expression),
+        TokenType.SLASH_EQUAL => CreateSlashEqualExpression(tokens, token, expression),
+        _ => throw new ParseError(token, "Invalid Operator"),
+    };
+
+    private static IExpression CreatePlusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, token.Line), Primary(tokens));
+
+    private static IExpression CreateMinusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, token.Line), Primary(tokens));
+
+    private static IExpression CreateStarEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.STAR, "*", null, token.Line), Primary(tokens));
+
+    private static IExpression CreateSlashEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.SLASH, "/", null, token.Line), Primary(tokens));
 
     /// <summary>
     /// Creates an OrExpressionn

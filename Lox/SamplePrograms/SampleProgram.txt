@@ -86,11 +86,11 @@ print random(1, 5);
 
 var zahl = 7;
 print zahl;
-zahl--;
+zahl += 5;
 print zahl;
-zahl--;
+zahl += 5;
 print zahl;
-zahl--;
+zahl += 5;
 print zahl;
 
 // prints the first 25 fibonacci numbers
