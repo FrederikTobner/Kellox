@@ -1,6 +1,6 @@
-﻿using Lox.Tokens;
+﻿using Kellox.Tokens;
 
-namespace Lox.Interpreter.Exceptions;
+namespace Kellox.Interpreter.Exceptions;
 
 /// <summary>
 /// Models an Error that occured during runtime

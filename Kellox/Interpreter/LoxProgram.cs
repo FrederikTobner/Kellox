@@ -1,8 +1,8 @@
-﻿using Lox.Statements;
-using Lox.Utils;
+﻿using Kellox.Statements;
+using Kellox.Utils;
 using System.Collections;
 
-namespace Lox.Interpreter;
+namespace Kellox.Interpreter;
 
 /// <summary>
 /// Model of a program written in Lox

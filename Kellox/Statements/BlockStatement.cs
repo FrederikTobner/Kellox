@@ -1,6 +1,6 @@
-﻿using Lox.Interpreter;
+﻿using Kellox.Interpreter;
 
-namespace Lox.Statements
+namespace Kellox.Statements
 {
     /// <summary>
     /// Models a block statement

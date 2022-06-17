@@ -1,8 +1,8 @@
-﻿using Lox.Expressions;
-using Lox.Interpreter;
-using Lox.Tokens;
+﻿using Kellox.Expressions;
+using Kellox.Interpreter;
+using Kellox.Tokens;
 
-namespace Lox.Statements;
+namespace Kellox.Statements;
 
 /// <summary>
 /// Models a declaration statement

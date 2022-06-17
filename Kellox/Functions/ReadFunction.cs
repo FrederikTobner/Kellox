@@ -1,4 +1,4 @@
-﻿namespace Lox.Functions;
+﻿namespace Kellox.Functions;
 
 /// <summary>
 /// Native Function Read implemented in the host language C#

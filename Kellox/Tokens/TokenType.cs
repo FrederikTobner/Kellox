@@ -1,4 +1,4 @@
-﻿namespace Lox.Tokens;
+﻿namespace Kellox.Tokens;
 
 /// <summary>
 /// The different Types of Tokens in the Kellox

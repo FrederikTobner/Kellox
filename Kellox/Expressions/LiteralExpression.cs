@@ -1,6 +1,6 @@
-﻿using Lox.i18n;
+﻿using Kellox.i18n;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Models a literal expression

@@ -1,10 +1,10 @@
-﻿using Lox.Functions;
-using Lox.Interpreter.Exceptions;
-using Lox.Tokens;
-using Lox.Utils;
+﻿using Kellox.Functions;
+using Kellox.Interpreter.Exceptions;
+using Kellox.Tokens;
+using Kellox.Utils;
 using System.Text;
 
-namespace Lox.Classes;
+namespace Kellox.Classes;
 
 /// <summary>
 /// Models a specific Instance of a LoxClass

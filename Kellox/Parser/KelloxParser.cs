@@ -1,12 +1,12 @@
-﻿using Lox.Expressions;
-using Lox.i18n;
-using Lox.Interpreter;
-using Lox.Parser.Exceptions;
-using Lox.Statements;
-using Lox.Tokens;
-using Lox.Utils;
+﻿using Kellox.Expressions;
+using Kellox.i18n;
+using Kellox.Interpreter;
+using Kellox.Parser.Exceptions;
+using Kellox.Statements;
+using Kellox.Tokens;
+using Kellox.Utils;
 
-namespace Lox.Parser;
+namespace Kellox.Parser;
 
 /// <summary>
 /// Takes a flat sequence of tokens and builds a syntax tree based on the tokens

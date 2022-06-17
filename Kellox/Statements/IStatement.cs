@@ -1,4 +1,4 @@
-﻿namespace Lox.Statements;
+﻿namespace Kellox.Statements;
 
 internal interface IStatement
 {

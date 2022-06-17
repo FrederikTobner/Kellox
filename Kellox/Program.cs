@@ -1,5 +1,5 @@
-﻿using Lox.Interpreter;
-using Lox.Utils;
+﻿using Kellox.Interpreter;
+using Kellox.Utils;
 
 // Starts Interpreter
 //LoxInterpreter.RunLoxInterpreter(args);

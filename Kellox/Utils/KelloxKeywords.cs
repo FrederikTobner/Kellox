@@ -1,7 +1,7 @@
-﻿using Lox.i18n;
-using Lox.Tokens;
+﻿using Kellox.i18n;
+using Kellox.Tokens;
 
-namespace Lox.Utils
+namespace Kellox.Utils
 {
     /// <summary>
     /// Stores all the keywords of the language lox

@@ -1,4 +1,4 @@
-﻿namespace Lox.Tokens;
+﻿namespace Kellox.Tokens;
 
 /// <summary>
 /// Models a Token (a word in a programming language)

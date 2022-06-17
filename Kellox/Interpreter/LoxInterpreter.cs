@@ -1,16 +1,16 @@
-﻿using Lox.Expressions;
-using Lox.Functions;
-using Lox.i18n;
-using Lox.Interpreter.Exceptions;
-using Lox.Lexer;
-using Lox.Parser;
-using Lox.Resolver;
-using Lox.Statements;
-using Lox.Tokens;
-using Lox.Utils;
+﻿using Kellox.Expressions;
+using Kellox.Functions;
+using Kellox.i18n;
+using Kellox.Interpreter.Exceptions;
+using Kellox.Lexer;
+using Kellox.Parser;
+using Kellox.Resolver;
+using Kellox.Statements;
+using Kellox.Tokens;
+using Kellox.Utils;
 using System.Text;
 
-namespace Lox.Interpreter;
+namespace Kellox.Interpreter;
 
 /// <summary>
 /// Contains method to interpret a LoxProgram that was produced by the 

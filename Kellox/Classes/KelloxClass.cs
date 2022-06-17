@@ -1,7 +1,7 @@
-﻿using Lox.Functions;
-using Lox.i18n;
+﻿using Kellox.Functions;
+using Kellox.i18n;
 
-namespace Lox.Classes;
+namespace Kellox.Classes;
 
 /// <summary>
 /// Models a class in the programming language lox

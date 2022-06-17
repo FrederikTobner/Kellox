@@ -1,11 +1,11 @@
-﻿using Lox.Expressions;
-using Lox.i18n;
-using Lox.Interpreter;
-using Lox.Statements;
-using Lox.Tokens;
-using Lox.Utils;
+﻿using Kellox.Expressions;
+using Kellox.i18n;
+using Kellox.Interpreter;
+using Kellox.Statements;
+using Kellox.Tokens;
+using Kellox.Utils;
 
-namespace Lox.Resolver;
+namespace Kellox.Resolver;
 
 /// <summary>
 /// Walks over the Syntaxtree before it is executed and resolves all the variables it contains

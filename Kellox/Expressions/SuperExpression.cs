@@ -1,11 +1,11 @@
-﻿using Lox.Classes;
-using Lox.Functions;
-using Lox.i18n;
-using Lox.Interpreter;
-using Lox.Interpreter.Exceptions;
-using Lox.Tokens;
+﻿using Kellox.Classes;
+using Kellox.Functions;
+using Kellox.i18n;
+using Kellox.Interpreter;
+using Kellox.Interpreter.Exceptions;
+using Kellox.Tokens;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 internal class SuperExpression : IExpression
 {

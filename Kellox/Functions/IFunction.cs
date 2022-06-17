@@ -1,4 +1,4 @@
-﻿namespace Lox.Functions;
+﻿namespace Kellox.Functions;
 
 internal interface IFunction
 {

@@ -1,8 +1,8 @@
-﻿using Lox.Functions;
-using Lox.Interpreter.Exceptions;
-using Lox.Tokens;
+﻿using Kellox.Functions;
+using Kellox.Interpreter.Exceptions;
+using Kellox.Tokens;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Models a CallExpression in Lox

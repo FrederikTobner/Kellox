@@ -1,7 +1,7 @@
-﻿using Lox.Expressions;
+﻿using Kellox.Expressions;
 using System.Text;
 
-namespace Lox.Statements;
+namespace Kellox.Statements;
 
 /// <summary>
 /// Models a print statement

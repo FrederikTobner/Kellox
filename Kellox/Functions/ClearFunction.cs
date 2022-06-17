@@ -1,4 +1,4 @@
-﻿namespace Lox.Functions;
+﻿namespace Kellox.Functions;
 
 /// <summary>
 /// Native Function Clear implemented in the host language C#

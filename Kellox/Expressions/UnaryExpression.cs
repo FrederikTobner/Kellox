@@ -1,7 +1,7 @@
-﻿using Lox.Interpreter.Exceptions;
-using Lox.Tokens;
+﻿using Kellox.Interpreter.Exceptions;
+using Kellox.Tokens;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Models a unary expression e.g. -5.0 / !true. There is no postfix operator in lox so the operator will always come before the operand

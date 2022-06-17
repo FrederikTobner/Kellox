@@ -1,10 +1,10 @@
-﻿using Lox.Classes;
-using Lox.Functions.Exceptions;
-using Lox.Interpreter;
-using Lox.Statements;
-using Lox.Tokens;
+﻿using Kellox.Classes;
+using Kellox.Functions.Exceptions;
+using Kellox.Interpreter;
+using Kellox.Statements;
+using Kellox.Tokens;
 
-namespace Lox.Functions;
+namespace Kellox.Functions;
 
 internal class KelloxFunction : IFunction
 {

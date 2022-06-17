@@ -1,4 +1,4 @@
-﻿namespace Lox.Functions;
+﻿namespace Kellox.Functions;
 
 /// <summary>
 /// Native Function Clock implemented in the host language C#

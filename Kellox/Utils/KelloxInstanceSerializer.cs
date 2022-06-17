@@ -1,8 +1,8 @@
-﻿using Lox.Classes;
-using Lox.i18n;
+﻿using Kellox.Classes;
+using Kellox.i18n;
 using System.Text;
 
-namespace Lox.Utils
+namespace Kellox.Utils
 {
     internal static class KelloxInstanceSerializer
     {

@@ -1,8 +1,8 @@
-﻿using Lox.Expressions;
-using Lox.Functions.Exceptions;
-using Lox.Tokens;
+﻿using Kellox.Expressions;
+using Kellox.Functions.Exceptions;
+using Kellox.Tokens;
 
-namespace Lox.Statements;
+namespace Kellox.Statements;
 
 /// <summary>
 /// Models a return statement

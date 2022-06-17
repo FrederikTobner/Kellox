@@ -1,4 +1,4 @@
-﻿namespace Lox.Expressions;
+﻿namespace Kellox.Expressions;
 
 /// <summary>
 /// Models a grouping expression

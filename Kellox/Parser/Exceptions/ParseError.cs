@@ -1,6 +1,6 @@
-﻿using Lox.Tokens;
+﻿using Kellox.Tokens;
 
-namespace Lox.Parser.Exceptions;
+namespace Kellox.Parser.Exceptions;
 
 /// <summary>
 /// Represents an Error that has occured during the parsing process

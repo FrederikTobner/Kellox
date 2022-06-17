@@ -1,8 +1,8 @@
-﻿using Lox.Classes;
-using Lox.Interpreter.Exceptions;
-using Lox.Tokens;
+﻿using Kellox.Classes;
+using Kellox.Interpreter.Exceptions;
+using Kellox.Tokens;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Models a get expression in lox e.g. print rect.X -> I guess context is important

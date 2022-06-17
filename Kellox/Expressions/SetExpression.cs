@@ -1,9 +1,9 @@
-﻿using Lox.Classes;
-using Lox.i18n;
-using Lox.Interpreter.Exceptions;
-using Lox.Tokens;
+﻿using Kellox.Classes;
+using Kellox.i18n;
+using Kellox.Interpreter.Exceptions;
+using Kellox.Tokens;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Models a set expression in lox e.g. rect.X = 5.0;

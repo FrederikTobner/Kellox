@@ -1,7 +1,7 @@
-﻿using Lox.Interpreter;
-using Lox.Tokens;
+﻿using Kellox.Interpreter;
+using Kellox.Tokens;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Models an assignment expression

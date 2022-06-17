@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Interface for a Expression that can be evaluated and converted to a string

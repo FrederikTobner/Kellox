@@ -1,6 +1,6 @@
-﻿using Lox.Tokens;
+﻿using Kellox.Tokens;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Models a logical expression (a and b/a or b)

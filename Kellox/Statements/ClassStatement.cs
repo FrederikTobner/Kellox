@@ -1,12 +1,12 @@
-﻿using Lox.Classes;
-using Lox.Expressions;
-using Lox.Functions;
-using Lox.i18n;
-using Lox.Interpreter;
-using Lox.Tokens;
-using Lox.Utils;
+﻿using Kellox.Classes;
+using Kellox.Expressions;
+using Kellox.Functions;
+using Kellox.i18n;
+using Kellox.Interpreter;
+using Kellox.Tokens;
+using Kellox.Utils;
 
-namespace Lox.Statements;
+namespace Kellox.Statements;
 
 /// <summary>
 /// Models a class statement in lox -> the whole class declaration

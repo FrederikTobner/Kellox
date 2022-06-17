@@ -1,6 +1,6 @@
-﻿using Lox.Expressions;
+﻿using Kellox.Expressions;
 
-namespace Lox.Statements;
+namespace Kellox.Statements;
 
 /// <summary>
 /// Models a if statement in lox

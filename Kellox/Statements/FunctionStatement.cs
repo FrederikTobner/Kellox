@@ -1,8 +1,8 @@
-﻿using Lox.Functions;
-using Lox.Interpreter;
-using Lox.Tokens;
+﻿using Kellox.Functions;
+using Kellox.Interpreter;
+using Kellox.Tokens;
 
-namespace Lox.Statements;
+namespace Kellox.Statements;
 
 /// <summary>
 /// Models a function Statemant (Function Declaration)

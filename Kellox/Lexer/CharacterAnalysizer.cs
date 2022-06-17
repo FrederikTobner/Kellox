@@ -1,4 +1,4 @@
-﻿namespace Lox.Lexer;
+﻿namespace Kellox.Lexer;
 
 /// <summary>
 /// Anaylizes a single character

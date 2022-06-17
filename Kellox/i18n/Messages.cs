@@ -1,4 +1,4 @@
-﻿namespace Lox.i18n;
+﻿namespace Kellox.i18n;
 
 internal static class Messages
 {

@@ -1,8 +1,8 @@
-﻿using Lox.i18n;
-using Lox.Tokens;
-using Lox.Utils;
+﻿using Kellox.i18n;
+using Kellox.Tokens;
+using Kellox.Utils;
 
-namespace Lox.Lexer;
+namespace Kellox.Lexer;
 
 /// <summary>
 /// Performs a lexical analysis on a linear stream of characters and groups them together to a flat sequence of Tokens

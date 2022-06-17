@@ -1,8 +1,8 @@
-﻿using Lox.i18n;
-using Lox.Interpreter.Exceptions;
-using Lox.Tokens;
+﻿using Kellox.i18n;
+using Kellox.Interpreter.Exceptions;
+using Kellox.Tokens;
 
-namespace Lox.Expressions;
+namespace Kellox.Expressions;
 
 /// <summary>
 /// Models a binary expression e.g. a+b, a!=b

@@ -1,8 +1,8 @@
-﻿using Lox.Expressions;
-using Lox.Interpreter;
-using Lox.Tokens;
+﻿using Kellox.Expressions;
+using Kellox.Interpreter;
+using Kellox.Tokens;
 
-namespace Lox.Utils
+namespace Kellox.Utils
 {
     /// <summary>
     /// Contains methods used for testing

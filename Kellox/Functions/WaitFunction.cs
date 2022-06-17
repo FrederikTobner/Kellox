@@ -1,6 +1,6 @@
-﻿using Lox.Interpreter.Exceptions;
+﻿using Kellox.Interpreter.Exceptions;
 
-namespace Lox.Functions;
+namespace Kellox.Functions;
 
 /// <summary>
 /// Native wait-command that is used to wait a certain amount of seconds implemented in the host language C#

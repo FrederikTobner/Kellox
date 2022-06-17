@@ -1,8 +1,8 @@
-﻿using Lox.i18n;
-using Lox.Interpreter.Exceptions;
-using Lox.Tokens;
+﻿using Kellox.i18n;
+using Kellox.Interpreter.Exceptions;
+using Kellox.Tokens;
 
-namespace Lox.Interpreter;
+namespace Kellox.Interpreter;
 
 /// <summary>
 /// Environment for the Programming Language
