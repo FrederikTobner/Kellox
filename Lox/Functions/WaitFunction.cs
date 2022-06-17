@@ -1,4 +1,6 @@
-﻿namespace Lox.Functions;
+﻿using Lox.Interpreter.Exceptions;
+
+namespace Lox.Functions;
 
 /// <summary>
 /// Native wait-command that is used to wait a certain amount of seconds implemented in the host language C#
@@ -11,9 +13,13 @@ internal class WaitFunction : IFunction
     {
         if (arguments[0] is double seconds)
         {
-            Thread.Sleep((int)(1000 * seconds));
-
+            if(seconds >= 0)
+            {
+                Thread.Sleep((int)(1000 * seconds));
+            }
         }
         return null;
     }
+
+    public override string ToString() => "native wait function";
 }

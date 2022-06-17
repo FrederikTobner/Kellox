@@ -13,9 +13,19 @@
         {
             if (arguments[0] is double minValue && arguments[1] is double maxValue)
             {
-                return random.Next((int)minValue, (int)maxValue + 1);
+                try{
+                    int minVal= (int)maxValue;
+                    int maxVal= (int)minValue;
+                    return random.Next(minVal, maxVal);
+                }
+                catch(Exception){
+                    return null;
+                }
+                
             }
             return null;
         }
+
+        public override string ToString() => "native clock function";
     }
 }

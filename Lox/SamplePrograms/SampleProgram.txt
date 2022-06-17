@@ -120,7 +120,6 @@ fun Countdown(x)
 	if(x >= 0)
 	{
 		println x;
-		print "\a";
 		if(x >= 1)
 		{
 			wait(1);

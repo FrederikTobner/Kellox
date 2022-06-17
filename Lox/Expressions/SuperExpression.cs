@@ -1,8 +1,8 @@
 ﻿using Lox.Classes;
 using Lox.Functions;
+using Lox.i18n;
 using Lox.Interpreter;
 using Lox.Interpreter.Exceptions;
-using Lox.Messages;
 using Lox.Tokens;
 
 namespace Lox.Expressions;
@@ -31,7 +31,7 @@ internal class SuperExpression : IExpression
         LoxClass? superClass = (LoxClass?)LoxInterpreter.currentEnvironment.GetAt(distance, Token);
         if (superClass is null)
         {
-            throw new RunTimeError(this.Method, MessageUtils.ThereIsNoSuperClassDefinedErrorMessage);
+            throw new RunTimeError(this.Method, Messages.ThereIsNoSuperClassDefinedErrorMessage);
         }
         LoxInstance? instance = (LoxInstance?)LoxInterpreter.currentEnvironment.GetAt(distance - 1, new Token(TokenType.THIS, "this", null, 0));
         LoxFunction? function = superClass.FindMethod(this.Method.Lexeme);

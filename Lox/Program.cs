@@ -1,6 +1,7 @@
-﻿using Lox.Utils;
+﻿using Lox.Interpreter;
+using Lox.Utils;
 
 // Starts Interpreter
-//LoxRunners.RunInterpreter(args);
+//LoxInterpreter.RunLoxInterpreter(args);
 // Tests Interpreter with the sample program
 LoxTests.RunSampleProgram();

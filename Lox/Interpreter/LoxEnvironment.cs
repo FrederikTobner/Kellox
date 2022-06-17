@@ -1,5 +1,5 @@
-﻿using Lox.Interpreter.Exceptions;
-using Lox.Messages;
+﻿using Lox.i18n;
+using Lox.Interpreter.Exceptions;
 using Lox.Tokens;
 
 namespace Lox.Interpreter;
@@ -45,7 +45,7 @@ internal class LoxEnvironment
             Enclosing.Assign(name, value);
             return;
         }
-        throw new RunTimeError(name, MessageUtils.VariableNotDefinedAssignmentErrorMessage);
+        throw new RunTimeError(name, Messages.VariableNotDefinedAssignmentErrorMessage);
     }
 
     /// <summary>

@@ -1,5 +1,5 @@
 ﻿using Lox.Functions;
-using Lox.Messages;
+using Lox.i18n;
 
 namespace Lox.Classes;
 
@@ -20,11 +20,11 @@ internal class LoxClass : IFunction
     {
         get
         {
-            if (!methods.ContainsKey(MessageUtils.InitKeyword))
+            if (!methods.ContainsKey(Constants.InitKeyword))
             {
                 return 0;
             }
-            return methods[MessageUtils.InitKeyword].Arity;
+            return methods[Constants.InitKeyword].Arity;
         }
     }
 
@@ -71,9 +71,9 @@ internal class LoxClass : IFunction
     public object? Call(List<object?> arguments)
     {
         LoxInstance instance = new(this);
-        if (methods.ContainsKey(MessageUtils.InitKeyword))
+        if (methods.ContainsKey(Constants.InitKeyword))
         {
-            LoxFunction initializer = methods[MessageUtils.InitKeyword];
+            LoxFunction initializer = methods[Constants.InitKeyword];
             initializer.Bind(instance).Call(arguments);
         }
         return instance;

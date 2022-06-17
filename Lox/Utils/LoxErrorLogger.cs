@@ -1,4 +1,5 @@
-﻿using Lox.Interpreter;
+﻿using Lox.i18n;
+using Lox.Interpreter;
 using Lox.Tokens;
 
 namespace Lox.Utils
@@ -8,6 +9,8 @@ namespace Lox.Utils
     /// </summary>
     internal static class LoxErrorLogger
     {
+        
+
         /// <summary>
         /// Reports an error that occured during the lexical analysis
         /// </summary>
@@ -33,7 +36,7 @@ namespace Lox.Utils
             switch (token.TokenType)
             {
                 case TokenType.EOF:
-                    Report(token.Line, " at end of file", message);
+                    Report(token.Line, Messages.AtEndOfFileErrorMessage, message);
                     break;
                 default:
                     Report(token.Line, $" at '{token.Lexeme}'", message);

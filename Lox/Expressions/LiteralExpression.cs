@@ -1,4 +1,4 @@
-﻿using Lox.Messages;
+﻿using Lox.i18n;
 
 namespace Lox.Expressions;
 
@@ -30,7 +30,7 @@ internal class LiteralExpression : IExpression
                 return result;
             }
         }
-        return MessageUtils.NilKeyword;
+        return Constants.NilKeyword;
     }
 
     public object? EvaluateExpression() => Value;

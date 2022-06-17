@@ -1,4 +1,4 @@
-﻿using Lox.Messages;
+﻿using Lox.i18n;
 using Lox.Tokens;
 using Lox.Utils;
 
@@ -105,18 +105,23 @@ internal static class LoxLexer
             case ';':
                 AddToken(source, TokenType.SEMICOLON);
                 break;
+            // Star Equal "*=" or only Star "*" ?
             case '*':
                 AddToken(source, Match(source, '=') ? TokenType.STAR_EQUAL : TokenType.STAR);
                 break;
+            // Bang Equal "!=" or only Bang "!" ?
             case '!':
                 AddToken(source, Match(source, '=') ? TokenType.BANG_EQUAL : TokenType.BANG);
                 break;
+            // Equal Equal "==" or only Equal "=" ?
             case '=':
                 AddToken(source, Match(source, '=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
                 break;
+            // Less Equal "<=" or only Less "<" ?
             case '<':
                 AddToken(source, Match(source, '=') ? TokenType.LESS_EQUAL : TokenType.LESS);
                 break;
+            // Greater Equal ">=" or only Greater ">" ?
             case '>':
                 AddToken(source, Match(source, '=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
                 break;
@@ -126,8 +131,13 @@ internal static class LoxLexer
                     // A comment goes until the end of the line.
                     while (Peek(source) is not '\n' && !IsAtEnd(source))
                     {
-                        Advance(source);
+                        current++;
                     }
+                }
+                // Slash Equal "/="
+                else if (Match(source, '='))
+                {
+                    AddToken(source, TokenType.SLASH_EQUAL);
                 }
                 else if (Match(source, '*'))
                 {
@@ -137,17 +147,15 @@ internal static class LoxLexer
                         if (IsAtEnd(source))
                         {
                             //Blockcomment was never closed with a "*/"
-                            LoxErrorLogger.Error(line, MessageUtils.BlockCommentNotClosedErrorMessage);
+                            LoxErrorLogger.Error(line, Messages.BlockCommentNotClosedErrorMessage);
                             break;
                         }
-                        Advance(source);
+                        current++;
                     }
                     if (!IsAtEnd(source))
-                        Advance(source);
-                }
-                else if (Match(source, '='))
-                {
-                    AddToken(source, TokenType.SLASH_EQUAL);
+                    {
+                        current++;
+                    }
                 }
                 else
                 {
@@ -162,30 +170,34 @@ internal static class LoxLexer
                 }
                 Identifier(source);
                 break;
+            // Ignores Whitespaces
             case ' ':
                 break;
-            case '\r':
-                break;
-            case '\t':
-                break;
+            // A new line in Unix, DOS and Windows
             case '\n':
                 line++;
+                break;
+            // Ignores Tabstops in the sourcecode
+            case '\t':
+                break;
+            // Ignores Carriage returns (DOS-/Windows-Format)
+            case '\r':
                 break;
             case '"':
                 AString(source);
                 break;
             default:
-                if (ScanUtils.IsDigit(c))
+                if (CharacterAnalysizer.IsDigit(c))
                 {
                     Number(source);
                 }
-                else if (ScanUtils.IsAlpha(c))
+                else if (CharacterAnalysizer.IsAlpha(c))
                 {
                     Identifier(source);
                 }
                 else
                 {
-                    LoxErrorLogger.Error(line, MessageUtils.UnexpectedCharErrorMessage);
+                    LoxErrorLogger.Error(line, Messages.UnexpectedCharErrorMessage);
                 }
                 break;
         }
@@ -217,9 +229,9 @@ internal static class LoxLexer
     /// </summary>
     private static void Identifier(string source)
     {
-        while (ScanUtils.IsAlphaNumeric(Peek(source)))
+        while (CharacterAnalysizer.IsAlphaNumeric(Peek(source)))
         {
-            Advance(source);
+            current++;
         }
 
         string text = source[start..current];
@@ -241,15 +253,15 @@ internal static class LoxLexer
             {
                 line++;
             }
-            Advance(source);
+            current++;
         }
 
         if (IsAtEnd(source))
         {
-            LoxErrorLogger.Error(line, MessageUtils.UnterminatedStringErrorMessage);
+            LoxErrorLogger.Error(line, Messages.UnterminatedStringErrorMessage);
             return;
         }
-        Advance(source);
+        current++;
 
         // Trims the surrounding quotes.
         string value = source.Substring(start + 1, current - start - 2);
@@ -263,19 +275,19 @@ internal static class LoxLexer
     {
         int digitsAfterPoint = 0;
 
-        while (ScanUtils.IsDigit(Peek(source)))
+        while (CharacterAnalysizer.IsDigit(Peek(source)))
         {
-            Advance(source);
+            current++;
         }
 
         // Look for a fractional part.
-        if (Peek(source) is '.' && ScanUtils.IsDigit(PeekNext(source)))
+        if (Peek(source) is '.' && CharacterAnalysizer.IsDigit(PeekNext(source)))
         {
             // Consumes the "."
-            Advance(source);
-            while (ScanUtils.IsDigit(Peek(source)))
+            current++;
+            while (CharacterAnalysizer.IsDigit(Peek(source)))
             {
-                Advance(source);
+                current++;
                 digitsAfterPoint++;
             }
         }

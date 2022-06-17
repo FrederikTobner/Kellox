@@ -1,8 +1,8 @@
 ﻿using Lox.Expressions;
 using Lox.Functions;
+using Lox.i18n;
 using Lox.Interpreter.Exceptions;
 using Lox.Lexer;
-using Lox.Messages;
 using Lox.Parser;
 using Lox.Resolver;
 using Lox.Statements;
@@ -62,7 +62,7 @@ internal static class LoxInterpreter
     {
         if (args.Length > 1)
         {
-            Console.WriteLine(MessageUtils.toMuchArgsErrorMessage);
+            Console.WriteLine(Messages.toMuchArgsErrorMessage);
             //Exit code 64 -> The command was used incorrectly, wrong number of anguments
             Environment.Exit(64);
         }
@@ -101,13 +101,13 @@ internal static class LoxInterpreter
     /// </summary>
     internal static void RunPrompt()
     {
-        Console.WriteLine(MessageUtils.loxPromptMessage);
+        Console.WriteLine(Constants.loxPromptMessage);
         string? line = Console.ReadLine();
         while (line is not "" && line is not null)
         {
             Run(line);
             ErrorOccurred = false;
-            Console.WriteLine(MessageUtils.loxPromptMessage);
+            Console.WriteLine(Constants.loxPromptMessage);
             line = Console.ReadLine();
         }
     }
@@ -150,11 +150,11 @@ internal static class LoxInterpreter
     /// </summary>
     private static void DefineNativeFunctions(LoxEnvironment loxEnvironment)
     {
-        loxEnvironment.Define(MessageUtils.ClockFunctionMessage, new ClockFunction());
-        loxEnvironment.Define(MessageUtils.WaitFunctionMessage, new WaitFunction());
-        loxEnvironment.Define(MessageUtils.ClearFunctionMessage, new ClearFunction());
-        loxEnvironment.Define(MessageUtils.ReadFunctionMessage, new ReadFunction());
-        loxEnvironment.Define(MessageUtils.RandomFunctionMessage, new RandomFunction());
+        loxEnvironment.Define(Constants.ClockFunction, new ClockFunction());
+        loxEnvironment.Define(Constants.WaitFunction, new WaitFunction());
+        loxEnvironment.Define(Constants.ClearFunction, new ClearFunction());
+        loxEnvironment.Define(Constants.ReadFunction, new ReadFunction());
+        loxEnvironment.Define(Constants.RandomFunction, new RandomFunction());
     }
 
 

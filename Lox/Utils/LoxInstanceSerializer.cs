@@ -1,5 +1,5 @@
 ﻿using Lox.Classes;
-using Lox.Messages;
+using Lox.i18n;
 using System.Text;
 
 namespace Lox.Utils
@@ -31,7 +31,7 @@ namespace Lox.Utils
                         break;
                     //Numbers, boolean's and null
                     default:
-                        stringBuilder.Append(field.Value is not null ? field.Value : MessageUtils.NilKeyword);
+                        stringBuilder.Append(field.Value is not null ? field.Value : Constants.NilKeyword);
                         break;
                 }
                 stringBuilder.AppendLine(",");

@@ -1,4 +1,4 @@
-﻿using Lox.Messages;
+﻿using Lox.i18n;
 using Lox.Tokens;
 
 namespace Lox.Utils
@@ -25,23 +25,23 @@ namespace Lox.Utils
         private static Dictionary<string, TokenType> InitializeKeywords()
         {
             Dictionary<string, TokenType> words = new();
-            words.Add(MessageUtils.AndKeyword, TokenType.AND);
-            words.Add(MessageUtils.ClassKeyword, TokenType.CLASS);
-            words.Add(MessageUtils.ElseKeyword, TokenType.ELSE);
-            words.Add(MessageUtils.FalseKeyword, TokenType.FALSE);
-            words.Add(MessageUtils.ForKeyWord, TokenType.FOR);
-            words.Add(MessageUtils.FunctionKeyword, TokenType.FUN);
-            words.Add(MessageUtils.IfKeyword, TokenType.IF);
-            words.Add(MessageUtils.NilKeyword, TokenType.NIL);
-            words.Add(MessageUtils.OrKeyword, TokenType.OR);
-            words.Add(MessageUtils.PrintKeyword, TokenType.PRINT);
-            words.Add(MessageUtils.PrintLineKeyword, TokenType.PRINTLN);
-            words.Add(MessageUtils.ReturnKeyword, TokenType.RETURN);
-            words.Add(MessageUtils.SuperKeyword, TokenType.SUPER);
-            words.Add(MessageUtils.ThisKeyword, TokenType.THIS);
-            words.Add(MessageUtils.TrueKeyword, TokenType.TRUE);
-            words.Add(MessageUtils.VarKeyword, TokenType.VAR);
-            words.Add(MessageUtils.WhileKeyword, TokenType.WHILE);
+            words.Add(Constants.AndKeyword, TokenType.AND);
+            words.Add(Constants.ClassKeyword, TokenType.CLASS);
+            words.Add(Constants.ElseKeyword, TokenType.ELSE);
+            words.Add(Constants.FalseKeyword, TokenType.FALSE);
+            words.Add(Constants.ForKeyWord, TokenType.FOR);
+            words.Add(Constants.FunctionKeyword, TokenType.FUN);
+            words.Add(Constants.IfKeyword, TokenType.IF);
+            words.Add(Constants.NilKeyword, TokenType.NIL);
+            words.Add(Constants.OrKeyword, TokenType.OR);
+            words.Add(Constants.PrintKeyword, TokenType.PRINT);
+            words.Add(Constants.PrintLineKeyword, TokenType.PRINTLN);
+            words.Add(Constants.ReturnKeyword, TokenType.RETURN);
+            words.Add(Constants.SuperKeyword, TokenType.SUPER);
+            words.Add(Constants.ThisKeyword, TokenType.THIS);
+            words.Add(Constants.TrueKeyword, TokenType.TRUE);
+            words.Add(Constants.VarKeyword, TokenType.VAR);
+            words.Add(Constants.WhileKeyword, TokenType.WHILE);
             return words;
         }
     }

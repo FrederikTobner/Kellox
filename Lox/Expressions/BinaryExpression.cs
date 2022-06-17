@@ -1,5 +1,5 @@
-﻿using Lox.Interpreter.Exceptions;
-using Lox.Messages;
+﻿using Lox.i18n;
+using Lox.Interpreter.Exceptions;
 using Lox.Tokens;
 
 namespace Lox.Expressions;
@@ -56,7 +56,7 @@ internal class BinaryExpression : IExpression
                 TokenType.STAR => leftNumber * rightNumber,
                 TokenType.BANG_EQUAL => !IExpression.IsEqual(leftNumber, rightNumber),
                 TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftNumber, rightNumber),
-                _ => throw new RunTimeError(OperatorToken, MessageUtils.OperatorNotSupportedErrorMessage),
+                _ => throw new RunTimeError(OperatorToken, Messages.OperatorNotSupportedErrorMessage),
             };
         }
 
@@ -65,14 +65,14 @@ internal class BinaryExpression : IExpression
             return OperatorToken.TokenType switch
             {
                 TokenType.PLUS => leftString + rightString,
-                _ => throw new RunTimeError(OperatorToken, MessageUtils.OperatorNotSupportedErrorMessage)
+                _ => throw new RunTimeError(OperatorToken, Messages.OperatorNotSupportedErrorMessage)
             };
         }
         return OperatorToken.TokenType switch
         {
             TokenType.BANG_EQUAL => !IExpression.IsEqual(leftResult, rightResult),
             TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftResult, rightResult),
-            _ => throw new RunTimeError(OperatorToken, MessageUtils.OperatorNotSupportedErrorMessage)
+            _ => throw new RunTimeError(OperatorToken, Messages.OperatorNotSupportedErrorMessage)
         };
     }
 }
