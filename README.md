@@ -1,7 +1,11 @@
 # Kellox
 Interpreter based on the book [Crafting interpreters](https://craftinginterpreters.com/contents.html) for the programming language kellox.
-Kellox is a dynamically typed, object oriented scripting language based on the programming language lox from Robert Nystrom.
-Both languages belong to the lisp family
+<br/>
+Kellox is a dynamically typed, object oriented, high-level scripting language with automatic memory management using the Garbage Collector of the .Net Framework.
+<br/>
+The language is based on the programming language [lox](https://craftinginterpreters.com/the-lox-language.html) from Robert Nystrom.
+<br/>
+Both languages have a C-like syntax where functions and variables occupy the same namespace (Lisp-1).
 
 [Native Functions](https://github.com/FrederikTobner/Lox/blob/master/NativeFunctions.md)
 <br/>
