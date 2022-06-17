@@ -74,5 +74,5 @@ internal class LoxFunction : IFunction
         return new(Declaration, environment, IsInitializer);
     }
 
-    public override string ToString() => "<function " + Declaration.Name.Lexeme + ">";
+    public override string ToString() => "<function " + Declaration.Token.Lexeme + ">";
 }

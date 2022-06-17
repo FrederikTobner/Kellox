@@ -1,4 +1,5 @@
 ﻿using Lox.Expressions;
+using Lox.Interpreter;
 using Lox.Tokens;
 
 namespace Lox.Utils
@@ -16,7 +17,7 @@ namespace Lox.Utils
         /// <summary>
         /// Tests the interrpreter by running the sample Program
         /// </summary>
-        internal static void RunSampleProgram() => LoxRunner.RunFile(sampleProgramPath);
+        internal static void RunSampleProgram() => LoxInterpreter.RunFile(sampleProgramPath);
 
         /// <summary>
         /// Tests printing of a nested Expression

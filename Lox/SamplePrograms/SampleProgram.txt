@@ -6,7 +6,7 @@ class Doughnut
   }
   cook() 
   {
-    print "Fry until " + this.parentColor;
+    print "Fry until " + this.parentColor + "\n";
   }
 }
 
@@ -20,7 +20,7 @@ class BostonCream < Doughnut
 	cook()
 	{
 		super.cook();
-		print "Pipe full of custard and coat with " + this.color + " chocolate.";
+		print "Pipe full of custard and coat with " + this.color + " chocolate.\n";
 	}
 }
 
@@ -36,7 +36,7 @@ class LoxKlasse < Doughnut
 	}
 }
 
-print LoxKlasse(4, 3, "green");
+println LoxKlasse(4, 3, "green");
 
 class Rect
 {
@@ -51,7 +51,7 @@ class Rect
 	}
 }
 
-print Rect(6, 5).area();
+println Rect(6, 5).area();
 
 fun fibonacci()
 {	
@@ -79,25 +79,25 @@ fun makeCounter()
 }
 
 var counter = makeCounter();
-print counter(); // "1".
-print counter(); // "2"
+println counter(); // "1".
+println counter(); // "2"
 
-print random(1, 5);
+println random(1, 5);
 
 var zahl = 7;
-print zahl;
+println zahl;
 zahl += 5;
-print zahl;
+println zahl;
 zahl += 5;
-print zahl;
+println zahl;
 zahl += 5;
-print zahl;
+println zahl;
 
 // prints the first 25 fibonacci numbers
 var fibo = fibonacci();
 for (var i = 0; i < 25; i++) 
 {
-	print fibo();
+	println fibo();
 }
 
 fun Add(x, y)
@@ -105,19 +105,23 @@ fun Add(x, y)
 	return x + y;
 }
 
-print Add(123456, 654321);
+
 
 fun Countdown(x)
 {
 	if(x >= 0)
 	{
-		print x;
+		println x;
+		wait(1);
 		Countdown(x--);
 	}
 }
 
 Countdown(10);
 
-/* Hallo 
-ein Blockkommentar geht �ber mehrere Zeilen
+/* Hello, 
+a blockcomment can have linebreaks in it!
+🥴
 */
+
+println Add(123456, 654321);

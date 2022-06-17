@@ -1,4 +1,5 @@
 ﻿using Lox.Expressions;
+using System.Text;
 
 namespace Lox.Statements;
 
@@ -12,8 +13,14 @@ internal class PrintStatement : IStatement
     /// </summary>
     public IExpression Expression { get; init; }
 
-    public PrintStatement(IExpression expression)
+    /// <summary>
+    /// Boolean value that determines weather a line break will be added after the printing the Expression
+    /// </summary>
+    private readonly bool addLineBreak;
+
+    public PrintStatement(IExpression expression, bool addLineBreak = false)
     {
+        this.addLineBreak = addLineBreak;
         this.Expression = expression;
     }
 
@@ -22,11 +29,26 @@ internal class PrintStatement : IStatement
         object? obj = Expression.EvaluateExpression();
         if (obj is not null)
         {
-            Console.WriteLine(obj);
+            if (obj is string text)
+            {
+                StringBuilder stringBuilder = new(text);
+                stringBuilder.Replace("\\n", "\n");
+                Console.Write(stringBuilder.ToString());
+            }
+            else
+            {
+                Console.Write(obj);
+            }
+
+
         }
         else
         {
-            Console.WriteLine("nil");
+            Console.Write("nil");
+        }
+        if (addLineBreak)
+        {
+            Console.Write(Environment.NewLine);
         }
     }
 }

@@ -58,7 +58,7 @@ internal class ClassStatement : IStatement
         {
             if (method is not null)
             {
-                newMethods.Add(method.Name.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment, method.Name.Lexeme.Equals("init")));
+                newMethods.Add(method.Token.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment, method.Token.Lexeme.Equals("init")));
             }
         }
         LoxClass loxClass = new(Token.Lexeme, newMethods, (LoxClass?)superClass);

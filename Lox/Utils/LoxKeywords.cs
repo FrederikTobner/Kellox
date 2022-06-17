@@ -34,6 +34,7 @@ namespace Lox.Utils
             words.Add("nil", TokenType.NIL);
             words.Add("or", TokenType.OR);
             words.Add("print", TokenType.PRINT);
+            words.Add("println", TokenType.PRINTLN);
             words.Add("return", TokenType.RETURN);
             words.Add("super", TokenType.SUPER);
             words.Add("this", TokenType.THIS);

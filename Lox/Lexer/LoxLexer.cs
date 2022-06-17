@@ -29,9 +29,9 @@ internal static class LoxLexer
     private static readonly List<Token> tokens = new();
 
     /// <summary>
-    /// Scans the Tokens in a file and returns the, as a List
+    /// Scans the Tokens in a file and returns them, as a List
     /// </summary>
-    internal static List<Token> ScanTokens(string source)
+    internal static IReadOnlyList<Token> ScanTokens(string source)
     {
         start = 0;
         current = 0;
@@ -48,21 +48,7 @@ internal static class LoxLexer
     }
 
     /// <summary>
-    /// Adds a single Token
-    /// </summary>
-    private static void AddToken(string source, TokenType tokenType) => AddToken(source, tokenType, null);
-
-    /// <summary>
-    /// Adds a single LiteralToken
-    /// </summary>       
-    private static void AddToken(string source, TokenType tokenType, object? literal)
-    {
-        string text = source[start..current];
-        tokens.Add(new Token(tokenType, text, literal, line));
-    }
-
-    /// <summary>
-    /// Scans the next Token
+    /// Scans the next Token 🔍
     /// </summary>
     private static void ScanToken(string source)
     {
@@ -203,6 +189,22 @@ internal static class LoxLexer
                 break;
         }
     }
+
+    /// <summary>
+    /// Adds a single Token
+    /// </summary>
+    private static void AddToken(string source, TokenType tokenType) => AddToken(source, tokenType, null);
+
+    /// <summary>
+    /// Adds a single LiteralToken
+    /// </summary>       
+    private static void AddToken(string source, TokenType tokenType, object? literal)
+    {
+        string text = source[start..current];
+        tokens.Add(new Token(tokenType, text, literal, line));
+    }
+
+
 
     /// <summary>
     /// Indicates weather the Lexer has reached the end of the file

@@ -44,6 +44,8 @@ internal static class LoxParser
         return new(statements);
     }
 
+    #region Statements
+
     /// <summary>
     /// Determines the next Statement that shall be executed based on the next Token
     /// </summary>
@@ -72,6 +74,10 @@ internal static class LoxParser
         else if (Match(tokens, TokenType.PRINT))
         {
             return new PrintStatement(Expression(tokens));
+        }
+        else if (Match(tokens, TokenType.PRINTLN))
+        {
+            return new PrintStatement(Expression(tokens), true);
         }
         else if (Match(tokens, TokenType.RETURN))
         {
@@ -281,6 +287,9 @@ internal static class LoxParser
         return new DeclarationStatement(token, Expression(tokens));
     }
 
+    #endregion
+
+    #region Expressions
 
     /// <summary>
     /// Used to handle a new Expressionstatement
@@ -335,13 +344,13 @@ internal static class LoxParser
         _ => throw new ParseError(token, "Invalid Operator"),
     };
 
-    private static IExpression CreatePlusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, token.Line), Primary(tokens));
+    private static IExpression CreatePlusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, token.Line), Expression(tokens));
 
-    private static IExpression CreateMinusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, token.Line), Primary(tokens));
+    private static IExpression CreateMinusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, token.Line), Expression(tokens));
 
-    private static IExpression CreateStarEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.STAR, "*", null, token.Line), Primary(tokens));
+    private static IExpression CreateStarEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.STAR, "*", null, token.Line), Expression(tokens));
 
-    private static IExpression CreateSlashEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.SLASH, "/", null, token.Line), Primary(tokens));
+    private static IExpression CreateSlashEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.SLASH, "/", null, token.Line), Expression(tokens));
 
     /// <summary>
     /// Creates an OrExpressionn
@@ -548,6 +557,8 @@ internal static class LoxParser
         }
         throw new ParseError(Peek(tokens), "Expect expression");
     }
+
+    #endregion
 
     /// <summary>
     /// Can be used to parse statements after a statment that has caused a RunTimeError

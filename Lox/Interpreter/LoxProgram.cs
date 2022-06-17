@@ -17,7 +17,7 @@ internal class LoxProgram : IEnumerable<IStatement>
     /// <summary>
     /// Boolean value that determines whether the program is runnable
     /// </summary>
-    public bool Runnable => Statements is not null && !LoxRunner.ErrorOccurred;
+    public bool Runnable => Statements is not null && !LoxInterpreter.ErrorOccurred;
 
     /// <summary>
     /// The constructor of the LoxProgram class
@@ -39,5 +39,8 @@ internal class LoxProgram : IEnumerable<IStatement>
         }
     }
 
+    /// <summary>
+    /// Exposes Enumerator
+    /// </summary>
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

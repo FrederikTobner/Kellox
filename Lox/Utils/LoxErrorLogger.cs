@@ -1,4 +1,5 @@
-﻿using Lox.Tokens;
+﻿using Lox.Interpreter;
+using Lox.Tokens;
 
 namespace Lox.Utils
 {
@@ -16,7 +17,7 @@ namespace Lox.Utils
         private static void Report(int line, string where, string message)
         {
             Console.WriteLine($"[line {line}] Error{where}: {message}");
-            LoxRunner.ErrorOccurred = true;
+            LoxInterpreter.ErrorOccurred = true;
         }
 
         /// <summary>

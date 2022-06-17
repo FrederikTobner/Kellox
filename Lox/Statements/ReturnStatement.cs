@@ -9,8 +9,14 @@ namespace Lox.Statements;
 /// </summary>
 internal class ReturnStatement : IStatement
 {
+    /// <summary>
+    /// The Keyword of the Return statement -> always return
+    /// </summary>
     public Token Keyword { get; init; }
 
+    /// <summary>
+    /// The Expression that shall be returned
+    /// </summary>
     public IExpression? Expression { get; init; }
 
     public ReturnStatement(Token keyword, IExpression? expression)
@@ -26,6 +32,7 @@ internal class ReturnStatement : IStatement
         {
             value = Expression.EvaluateExpression();
         }
+        // Throws an return exception to get to the beginning of the call stack
         throw new Return(value);
     }
 }

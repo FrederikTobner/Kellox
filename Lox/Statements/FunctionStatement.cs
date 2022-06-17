@@ -12,7 +12,7 @@ internal class FunctionStatement : IStatement
     /// <summary>
     /// The Token of the Name of the function
     /// </summary>
-    public Token Name { get; init; }
+    public Token Token { get; init; }
 
     /// <summary>
     /// The parameters of the function
@@ -27,12 +27,12 @@ internal class FunctionStatement : IStatement
     /// <summary>
     /// The Constructor if a FunctionStatement
     /// </summary>
-    /// <param name="Name">The Name of the Function</param>
+    /// <param name="token">The Name of the Function</param>
     /// <param name="Parameters">The parameters that the function expects</param>
     /// <param name="Body">The statements in the body of the Function</param>
-    public FunctionStatement(Token Name, List<Token> Parameters, List<IStatement> Body)
+    public FunctionStatement(Token token, List<Token> Parameters, List<IStatement> Body)
     {
-        this.Name = Name;
+        this.Token = token;
         this.Parameters = Parameters;
         this.Body = Body;
     }
@@ -40,6 +40,6 @@ internal class FunctionStatement : IStatement
     public void ExecuteStatement()
     {
         LoxFunction loxFunction = new(this, LoxInterpreter.currentEnvironment, false);
-        LoxInterpreter.currentEnvironment.Define(Name.Lexeme, loxFunction);
+        LoxInterpreter.currentEnvironment.Define(Token.Lexeme, loxFunction);
     }
 }

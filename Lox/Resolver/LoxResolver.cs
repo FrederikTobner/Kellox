@@ -40,6 +40,19 @@ internal static class LoxResolver
         ResolveStatements(program.Statements);
     }
 
+    /// <summary>
+    /// Resolves a read-only List of Statements
+    /// </summary>
+    /// <param name="statements">The list that shall be resolved</param>
+    private static void ResolveStatements(IReadOnlyList<IStatement> statements)
+    {
+        foreach (IStatement statement in statements)
+        {
+            ResolveStatement(statement);
+        }
+    }
+
+    #region Statements
 
     /// <summary>
     ///  Casts the Statement to it's respective type and handles further resolving
@@ -219,7 +232,7 @@ internal static class LoxResolver
         BeginScope();
         foreach (FunctionStatement? method in classStatement.Methods)
         {
-            if (method.Name.Lexeme.Equals("init"))
+            if (method.Token.Lexeme.Equals("init"))
             {
                 ResolveStatement(method, FunctionType.INITIALIZER);
             }
@@ -245,7 +258,7 @@ internal static class LoxResolver
     {
         FunctionType enclosingType = currentFunction;
         currentFunction = functionType;
-        Define(functionStatement.Name);
+        Define(functionStatement.Token);
         BeginScope();
         foreach (Token? token in functionStatement.Parameters)
         {
@@ -321,6 +334,9 @@ internal static class LoxResolver
         ResolveStatement(whileStatement.Body);
     }
 
+    #endregion
+
+    #region Expressions
     /// <summary>
     /// Resolves a super expression
     /// </summary>
@@ -466,17 +482,9 @@ internal static class LoxResolver
         }
     }
 
-    /// <summary>
-    /// Resolves a read-only List of Statements
-    /// </summary>
-    /// <param name="statements">The list that shall be resolved</param>
-    private static void ResolveStatements(IReadOnlyList<IStatement> statements)
-    {
-        foreach (IStatement statement in statements)
-        {
-            ResolveStatement(statement);
-        }
-    }
+    #endregion
+
+    #region DeclaringAndDefining
 
     /// <summary>
     /// Declares a Token
@@ -515,6 +523,9 @@ internal static class LoxResolver
         }
         scopes.Peek().Add(identifierToken.Lexeme, true);
     }
+    #endregion
+
+    #region ScopeHandling
 
     /// <summary>
     /// Begins a new scope
@@ -531,4 +542,6 @@ internal static class LoxResolver
     {
         scopes.Pop();
     }
+
+    #endregion
 }
