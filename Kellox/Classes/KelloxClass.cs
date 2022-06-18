@@ -1,5 +1,5 @@
 ﻿using Kellox.Functions;
-using Kellox.i18n;
+using Kellox.Keywords;
 using Kellox.Tokens;
 
 namespace Kellox.Classes;
@@ -21,11 +21,11 @@ internal class KelloxClass : IFunction
     {
         get
         {
-            if (!methods.ContainsKey(Constants.InitKeyword))
+            if (!methods.ContainsKey(KeywordConstants.InitKeyword))
             {
                 return 0;
             }
-            return methods[Constants.InitKeyword].Arity;
+            return methods[KeywordConstants.InitKeyword].Arity;
         }
     }
 
@@ -81,9 +81,9 @@ internal class KelloxClass : IFunction
     public object? Call(List<object?> arguments, Token paren)
     {
         KelloxInstance instance = new(this);
-        if (methods.ContainsKey(Constants.InitKeyword))
+        if (methods.ContainsKey(KeywordConstants.InitKeyword))
         {
-            KelloxFunction initializer = methods[Constants.InitKeyword];
+            KelloxFunction initializer = methods[KeywordConstants.InitKeyword];
             initializer.Bind(instance).Call(arguments, paren);
         }
         return instance;

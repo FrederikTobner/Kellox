@@ -1,4 +1,4 @@
-﻿using Kellox.i18n;
+﻿using Kellox.Keywords;
 using Kellox.Tokens;
 using Kellox.Utils;
 
@@ -147,7 +147,7 @@ internal static class KelloxLexer
                         if (IsAtEnd(source))
                         {
                             //Blockcomment was never closed with a "*/"
-                            ErrorLogger.Error(line, Messages.BlockCommentNotClosedErrorMessage);
+                            ErrorLogger.Error(line, "Blockcomment was never closed, no \"*/\" found");
                             break;
                         }
                         Advance(source);
@@ -197,7 +197,7 @@ internal static class KelloxLexer
                 }
                 else
                 {
-                    ErrorLogger.Error(line, Messages.UnexpectedCharErrorMessage);
+                    ErrorLogger.Error(line, "Unexpected character.");
                 }
                 break;
         }
@@ -248,8 +248,14 @@ internal static class KelloxLexer
     /// </summary>
     private static void AString(string source)
     {
-        while (Peek(source) is not '\"' && !IsAtEnd(source))
+        while (!IsAtEnd(source))
         {
+            //Is the quote not escaped?
+            if (PeekNext(source) is '\"' && Peek(source) is not '\\')
+            {
+                Advance(source);
+                break;
+            }
             if (Peek(source) is '\n')
             {
                 line++;
@@ -259,7 +265,7 @@ internal static class KelloxLexer
 
         if (IsAtEnd(source))
         {
-            ErrorLogger.Error(line, Messages.UnterminatedStringErrorMessage);
+            ErrorLogger.Error(line, "Unterminated string.");
             return;
         }
         Advance(source);

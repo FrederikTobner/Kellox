@@ -1,7 +1,5 @@
 ﻿using Kellox.Exceptions;
 using Kellox.Expressions;
-using Kellox.Functions;
-using Kellox.i18n;
 using Kellox.Lexer;
 using Kellox.Parser;
 using Kellox.Resolver;
@@ -30,7 +28,7 @@ internal static class KelloxInterpreter
     /// <summary>
     /// The current Environment where the program is getting executed
     /// </summary>
-    internal readonly static KelloxEnvironment globalEnvironment = InitializeGlobal();
+    internal readonly static KelloxEnvironment globalEnvironment = KelloxEnvironmentInitializer.InitializeGlobal();
 
 
     /// <summary>
@@ -52,7 +50,7 @@ internal static class KelloxInterpreter
     {
         if (args.Length > 1)
         {
-            Console.WriteLine(Messages.toMuchArgsErrorMessage);
+            Console.WriteLine("To much arguments");
             //Exit code 64 -> The command was used incorrectly, wrong number of anguments
             Environment.Exit(64);
         }
@@ -91,7 +89,7 @@ internal static class KelloxInterpreter
     /// </summary>
     private static void RunPrompt()
     {
-        Console.WriteLine(Constants.kelloxPromptMessage);
+        Console.WriteLine("> ");
         string? line = Console.ReadLine();
         // If the user hasn't given any input the console will close
         while (line is not "" && line is not null)
@@ -103,7 +101,7 @@ internal static class KelloxInterpreter
             {
                 Console.Write(Environment.NewLine);
             }
-            Console.WriteLine(Constants.kelloxPromptMessage);
+            Console.WriteLine("> ");
             line = Console.ReadLine();
         }
     }
@@ -167,27 +165,6 @@ internal static class KelloxInterpreter
 
     internal static bool TryGetDepthOfLocal(IExpression expression, out int distance) => locals.TryGetValue(expression, out distance);
 
-    /// <summary>
-    /// Initializes the global Environment
-    /// </summary>
-    private static KelloxEnvironment InitializeGlobal()
-    {
-        KelloxEnvironment globalEnvironment = new();
-        DefineNativeFunctions(globalEnvironment);
-        return globalEnvironment;
-    }
-
-    /// <summary>
-    /// Defines the native functions of lox
-    /// </summary>
-    private static void DefineNativeFunctions(KelloxEnvironment loxEnvironment)
-    {
-        loxEnvironment.Define(Constants.ClockFunction, new ClockFunction());
-        loxEnvironment.Define(Constants.WaitFunction, new WaitFunction());
-        loxEnvironment.Define(Constants.ClearFunction, new ClearFunction());
-        loxEnvironment.Define(Constants.ReadFunction, new ReadFunction());
-        loxEnvironment.Define(Constants.RandomFunction, new RandomFunction());
-    }
 
     /// <summary>
     /// Reports a error that has orrured during runtime

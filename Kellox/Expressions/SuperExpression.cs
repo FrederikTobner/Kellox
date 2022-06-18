@@ -1,7 +1,6 @@
 ﻿using Kellox.Classes;
 using Kellox.Exceptions;
 using Kellox.Functions;
-using Kellox.i18n;
 using Kellox.Interpreter;
 using Kellox.Tokens;
 
@@ -31,7 +30,7 @@ internal class SuperExpression : IExpression
         KelloxClass? superClass = (KelloxClass?)KelloxInterpreter.currentEnvironment.GetAt(distance, Token);
         if (superClass is null)
         {
-            throw new RunTimeError(this.method, Messages.ThereIsNoSuperClassDefinedErrorMessage);
+            throw new RunTimeError(this.method, "There is no superclass defined");
         }
         KelloxInstance? instance = (KelloxInstance?)KelloxInterpreter.currentEnvironment.GetAt(distance - 1, new Token(TokenType.THIS, "this", null, 0));
         if (instance is null)

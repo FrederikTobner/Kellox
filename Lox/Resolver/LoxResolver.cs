@@ -1,16 +1,16 @@
-﻿using Kellox.Expressions;
-using Kellox.Interpreter;
-using Kellox.Keywords;
-using Kellox.Statements;
-using Kellox.Tokens;
-using Kellox.Utils;
+﻿using Lox.Expressions;
+using Lox.i18n;
+using Lox.Interpreter;
+using Lox.Statements;
+using Lox.Tokens;
+using Lox.Utils;
 
-namespace Kellox.Resolver;
+namespace Lox.Resolver;
 
 /// <summary>
 /// Walks over the Syntaxtree before it is executed and resolves all the variables it contains
 /// </summary>
-internal static class KelloxResolver
+internal static class LoxResolver
 {
 
     /// <summary>
@@ -33,7 +33,7 @@ internal static class KelloxResolver
     /// Resolves a LoxProgram -> walks over the Syntaxtree and resolves all the variables it contains
     /// </summary>
     /// <param name="program">The LoxProgram that is getting resolved</param>
-    public static void Resolve(KelloxProgram program)
+    public static void Resolve(LoxProgram program)
     {
         if (!program.Runnable)
         {
@@ -195,7 +195,7 @@ internal static class KelloxResolver
     {
         if (scopes.Count is not 0 && scopes.Peek().ContainsKey(declarationStatement.Name.Lexeme))
         {
-            ErrorLogger.Error(declarationStatement.Name, "A variable with this name (" + declarationStatement.Name.Lexeme + ") was already defined in this scope");
+            LoxErrorLogger.Error(declarationStatement.Name, Messages.VariableAlreadyDefinedFirstHalfErrorMessage + declarationStatement.Name.Lexeme + Messages.VariableAlreadyDefinedSecondHalfErrorMessage);
         }
         Declare(declarationStatement.Name);
         if (declarationStatement.Expression is not null)
@@ -218,7 +218,7 @@ internal static class KelloxResolver
         {
             if (classStatement.SuperClass.Token.Lexeme.Equals(classStatement.Token.Lexeme))
             {
-                ErrorLogger.Error(classStatement.Token, "A class can't inherit from itself");
+                LoxErrorLogger.Error(classStatement.Token, Messages.ClassInheritsFromItselfErrorMessage);
             }
             else
             {
@@ -229,12 +229,12 @@ internal static class KelloxResolver
         if (classStatement.SuperClass is not null)
         {
             BeginScope();
-            scopes.Peek().Add(KeywordConstants.SuperKeyword, true);
+            scopes.Peek().Add(Constants.SuperKeyword, true);
         }
         BeginScope();
         foreach (FunctionStatement? method in classStatement.Methods)
         {
-            if (method.Token.Lexeme.Equals(KeywordConstants.InitKeyword))
+            if (method.Token.Lexeme.Equals(Constants.InitKeyword))
             {
                 ResolveStatement(method, FunctionType.INITIALIZER);
             }
@@ -314,13 +314,13 @@ internal static class KelloxResolver
     {
         if (currentFunction is FunctionType.NONE)
         {
-            ErrorLogger.Error(returnStatement.Keyword, "Can't return from top level code");
+            LoxErrorLogger.Error(returnStatement.Keyword, Messages.ReturnFromTopLevelErrorMessage);
         }
         if (returnStatement.Expression is not null)
         {
             if (currentFunction is FunctionType.INITIALIZER)
             {
-                ErrorLogger.Error(returnStatement.Keyword, "Can't return from an initializer");
+                LoxErrorLogger.Error(returnStatement.Keyword, Messages.ReturnInInitializerErrorMessage);
             }
             ResolveExpression(returnStatement.Expression);
         }
@@ -348,11 +348,11 @@ internal static class KelloxResolver
     {
         if (currentClass is ClassType.NONE)
         {
-            ErrorLogger.Error(superExpression.Token, "Can't use \'super\' outside of a class");
+            LoxErrorLogger.Error(superExpression.Token, Messages.UsingSuperOutsideOfClassErrorMessage);
         }
         else if (currentClass is not ClassType.SUBCLASS)
         {
-            ErrorLogger.Error(superExpression.Token, "Can't use \'super\' with no superclass");
+            LoxErrorLogger.Error(superExpression.Token, Messages.UsingSuperWithoutSuperClassErrorMessage);
         }
         ResolveLocal(superExpression, superExpression.Token);
     }
@@ -365,7 +365,7 @@ internal static class KelloxResolver
     {
         if (currentClass is ClassType.NONE)
         {
-            ErrorLogger.Error(thisExpression.Token, "Cant use \'this\' outside of a class");
+            LoxErrorLogger.Error(thisExpression.Token, Messages.ThisOutsideOfClassErrorMessage);
             return;
         }
         ResolveLocal(thisExpression, thisExpression.Token);
@@ -398,7 +398,7 @@ internal static class KelloxResolver
     {
         if (scopes.Count is not 0 && scopes.Peek().ContainsKey(variableExpression.Token.Lexeme) && !scopes.Peek()[variableExpression.Token.Lexeme])
         {
-            ErrorLogger.Error(variableExpression.Token, "Can't read local variable in it's own initializer");
+            LoxErrorLogger.Error(variableExpression.Token, Messages.ReadsLocalVariableInInitErrorMessage);
         }
         ResolveLocal(variableExpression, variableExpression.Token);
     }
@@ -479,7 +479,7 @@ internal static class KelloxResolver
         {
             if (scope.ContainsKey(token.Lexeme))
             {
-                KelloxInterpreter.Resolve(expression, scopes.Count - 1 - i);
+                LoxInterpreter.Resolve(expression, scopes.Count - 1 - i);
             }
             i--;
         }
@@ -502,7 +502,7 @@ internal static class KelloxResolver
         Dictionary<string, bool> scope = scopes.Peek();
         if (scope.ContainsKey(identifierToken.Lexeme))
         {
-            ErrorLogger.Error(identifierToken.Line, "A variable with this name (" + identifierToken.Lexeme + ") was already defined in this scope");
+            LoxErrorLogger.Error(identifierToken.Line, Messages.VariableAlreadyDefinedFirstHalfErrorMessage + identifierToken.Lexeme + Messages.VariableAlreadyDefinedSecondHalfErrorMessage);
             return;
         }
         scope.Add(identifierToken.Lexeme, false);

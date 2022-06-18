@@ -1,11 +1,10 @@
 ﻿using Kellox.Statements;
-using Kellox.Utils;
 using System.Collections;
 
 namespace Kellox.Interpreter;
 
 /// <summary>
-/// Model of a program written in Lox
+/// Model of a program written in Kellox
 /// </summary>
 internal class KelloxProgram : IEnumerable<IStatement>
 {

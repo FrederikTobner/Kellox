@@ -1,12 +1,12 @@
-﻿using Kellox.Classes;
-using Kellox.Keywords;
+﻿using Lox.Classes;
+using Lox.i18n;
 using System.Text;
 
-namespace Kellox.Utils
+namespace Lox.Utils
 {
-    internal static class KelloxInstanceSerializer
+    internal static class LoxInstanceSerializer
     {
-        private static int depth = 1;
+        private static readonly StringBuilder stringBuilder = new();
 
         /// <summary>
         /// Serializes a loxInstance to JSON
@@ -14,15 +14,11 @@ namespace Kellox.Utils
         /// <param name="loxInstance">The LoxInstance that is serialized</param>
         internal static string Serialize(IReadOnlyDictionary<string, object?> fields)
         {
-            StringBuilder stringBuilder = new();
+            stringBuilder.Clear();
             stringBuilder.AppendLine("{");
             foreach (KeyValuePair<string, object?> field in fields)
             {
-                for (int i = 0; i < depth; i++)
-                {
-                    stringBuilder.Append('\t');
-                }
-                stringBuilder.Append('"');
+                stringBuilder.Append("\t\"");
                 stringBuilder.Append(field.Key);
                 stringBuilder.Append("\": ");
                 switch (field.Value)
@@ -33,28 +29,14 @@ namespace Kellox.Utils
                         stringBuilder.Append(field.Value);
                         stringBuilder.Append('"');
                         break;
-                    case KelloxInstance:
-                        depth++;
-                        stringBuilder.Append(' ');
-                        stringBuilder.Append(field.Value is not null ? field.Value : KeywordConstants.NilKeyword);
-                        depth--;
-                        break;
                     //Numbers, boolean's and null
                     default:
-                        stringBuilder.Append(field.Value is not null ? field.Value : KeywordConstants.NilKeyword);
+                        stringBuilder.Append(field.Value is not null ? field.Value : Constants.NilKeyword);
                         break;
                 }
                 stringBuilder.AppendLine(",");
             }
-            for (int i = 0; i < depth - 1; i++)
-            {
-                stringBuilder.Append('\t');
-            }
-            stringBuilder.Append('}');
-            if (depth is 1)
-            {
-                stringBuilder.Append('\n');
-            }
+            stringBuilder.AppendLine("}");
             return stringBuilder.ToString();
         }
     }

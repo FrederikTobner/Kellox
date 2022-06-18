@@ -1,9 +1,9 @@
-﻿using Kellox.Classes;
-using Kellox.Exceptions;
-using Kellox.Keywords;
-using Kellox.Tokens;
+﻿using Lox.Classes;
+using Lox.i18n;
+using Lox.Interpreter.Exceptions;
+using Lox.Tokens;
 
-namespace Kellox.Expressions;
+namespace Lox.Expressions;
 
 /// <summary>
 /// Models a set expression in lox e.g. rect.X = 5.0;
@@ -35,18 +35,18 @@ internal class SetExpression : IExpression
     public object? EvaluateExpression()
     {
         object? result = Object.EvaluateExpression();
-        if (result is KelloxInstance loxInstance)
+        if (result is LoxInstance loxInstance)
         {
             object? value = Value.EvaluateExpression();
             loxInstance.Set(Name, value);
             return value;
         }
-        throw new RunTimeError(Name, "Only instances have fields");
+        throw new RunTimeError(Name, Messages.OnlyInstancesHaveFieldsErrorMessage);
     }
 
     public override string ToString()
     {
         object? result = Object.EvaluateExpression();
-        return "set -> " + Name.Lexeme + "to " + (result is null ? KeywordConstants.NilKeyword : result.ToString()) + ".";
+        return "set -> " + Name.Lexeme + "to " + (result is null ? Constants.NilKeyword : result.ToString()) + ".";
     }
 }

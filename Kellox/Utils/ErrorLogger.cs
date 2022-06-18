@@ -1,5 +1,4 @@
-﻿using Kellox.i18n;
-using Kellox.Interpreter;
+﻿using Kellox.Interpreter;
 using Kellox.Tokens;
 
 namespace Kellox.Utils
@@ -22,7 +21,7 @@ namespace Kellox.Utils
             switch (token.TokenType)
             {
                 case TokenType.EOF:
-                    Report(token.Line, Messages.AtEndOfFileErrorMessage, message);
+                    Report(token.Line, " at end of file", message);
                     break;
                 default:
                     Report(token.Line, $" at '{token.Lexeme}'", message);

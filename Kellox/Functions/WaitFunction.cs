@@ -8,6 +8,8 @@ namespace Kellox.Functions;
 /// </summary>
 internal class WaitFunction : IFunction
 {
+
+
     public int Arity => 1;
 
     public object? Call(List<object?> arguments, Token paren)

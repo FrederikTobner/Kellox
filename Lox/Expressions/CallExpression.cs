@@ -1,14 +1,17 @@
-﻿using Kellox.Exceptions;
-using Kellox.Functions;
-using Kellox.Tokens;
+﻿using Lox.Functions;
+using Lox.i18n;
+using Lox.Interpreter.Exceptions;
+using Lox.Tokens;
 
-namespace Kellox.Expressions;
+namespace Lox.Expressions;
 
 /// <summary>
 /// Models a CallExpression in Lox
 /// </summary>
 internal class CallExpression : IExpression
 {
+    
+
     /// <summary>
     /// The Expression that was called e.g. rect(5, 6).area() -> 'rect(5, 6)'
     /// </summary>
@@ -48,9 +51,9 @@ internal class CallExpression : IExpression
             {
                 throw new RunTimeError(this.Paren, "Expected " + function.Arity + " argumnets but got " + arguments.Count + ".");
             }
-            return function.Call(arguments, this.Paren);
+            return function?.Call(arguments);
         }
-        throw new RunTimeError(this.Paren, "Can only call functions and classes");
+        throw new RunTimeError(this.Paren, Messages.CallOnNonFunctionOrClassErrorMessage);
     }
 
     public override string ToString() => IExpression.Parenthesize(this.Calle.ToString(), this.Arguments.ToArray());

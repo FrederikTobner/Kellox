@@ -1,6 +1,5 @@
 ﻿using Kellox.Exceptions;
 using Kellox.Expressions;
-using Kellox.i18n;
 using Kellox.Interpreter;
 using Kellox.Statements;
 using Kellox.Tokens;
@@ -34,7 +33,7 @@ internal static class KelloxParser
                 statements.Add(statement);
                 if (StatementConsumesSemicolon(statement))
                 {
-                    Consume(tokens, TokenType.SEMICOLON, Messages.ExpectSemicolonAfterValueErrorMessage);
+                    Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after value");
                 }
             }
             catch (ParseError error)
@@ -67,7 +66,7 @@ internal static class KelloxParser
         }
         else if (Match(tokens, TokenType.FUN))
         {
-            return CreateFunctionStatement(tokens, Constants.FunctionVerboseWord);
+            return CreateFunctionStatement(tokens, "function");
         }
         else if (Match(tokens, TokenType.VAR))
         {
@@ -117,7 +116,7 @@ internal static class KelloxParser
         {
             value = Expression(tokens);
         }
-        Consume(tokens, TokenType.SEMICOLON, Messages.ExpectSemicolonAfterReturnErrorMessage);
+        Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after return value");
         return new ReturnStatement(keyword, value);
     }
 
@@ -134,10 +133,10 @@ internal static class KelloxParser
             statements.Add(statement);
             if (StatementConsumesSemicolon(statement))
             {
-                Consume(tokens, TokenType.SEMICOLON, Messages.ExpectSemicolonAfterValueErrorMessage);
+                Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after value");
             }
         }
-        Consume(tokens, TokenType.RIGHT_BRACE, Messages.ExpectClosingBraceAfterBlockErrorMessage);
+        Consume(tokens, TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
         return statements;
     }
 
@@ -146,20 +145,20 @@ internal static class KelloxParser
     /// </summary>
     private static IStatement CreateClassStatement(IReadOnlyList<Token> tokens)
     {
-        Token name = Consume(tokens, TokenType.IDENTIFIER, Messages.ExpectClassNameErrorMessage);
+        Token name = Consume(tokens, TokenType.IDENTIFIER, "Expect class name.");
         VariableExpression? superClass = null;
         if (Match(tokens, TokenType.LESS))
         {
-            Consume(tokens, TokenType.IDENTIFIER, Messages.ExpectSuperClassNameErrorMessage);
+            Consume(tokens, TokenType.IDENTIFIER, "Expet superclass name.");
             superClass = new VariableExpression(Previous(tokens));
         }
-        Consume(tokens, TokenType.LEFT_BRACE, Messages.ExpectLeftBracketBeforeClassBodyErrorMessage);
+        Consume(tokens, TokenType.LEFT_BRACE, "Expect \'{\' before class body.");
         List<FunctionStatement> methods = new();
         while (!Check(tokens, TokenType.RIGHT_BRACE))
         {
             methods.Add((FunctionStatement)CreateFunctionStatement(tokens, "method"));
         }
-        Consume(tokens, TokenType.RIGHT_BRACE, Messages.ExpectRightBracketAfterClassBodyErrorMessage);
+        Consume(tokens, TokenType.RIGHT_BRACE, "Expect \'}\' after class body.");
         return new ClassStatement(name, methods, superClass);
     }
 
@@ -178,13 +177,13 @@ internal static class KelloxParser
             {
                 if (parameters.Count >= 255)
                 {
-                    throw new ParseError(Peek(tokens), Messages.MaxParametersExcededErrorMessage);
+                    throw new ParseError(Peek(tokens), "Can't have more than 255 parameters.");
                 }
-                parameters.Add(Consume(tokens, TokenType.IDENTIFIER, Messages.ExpectParameterNameErrorMessage));
+                parameters.Add(Consume(tokens, TokenType.IDENTIFIER, "Expect parameter name."));
 
             } while (Match(tokens, TokenType.COMMA));
         }
-        Consume(tokens, TokenType.RIGHT_PARENTHESIS, Messages.ExpectRightParenAfterParamsErrorMessage);
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after parameters");
         //Handles body
         Consume(tokens, TokenType.LEFT_BRACE, "Expect \'}\' before " + kind + " body");
         List<IStatement> body = ReadBlock(tokens);
@@ -196,9 +195,9 @@ internal static class KelloxParser
     /// </summary>
     private static IStatement CreateWhileStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(tokens, TokenType.LEFT_PARENTHESIS, Messages.ExpectLeftParenAfterWhileErrorMessage);
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after while.");
         IExpression condition = Expression(tokens);
-        Consume(tokens, TokenType.RIGHT_PARENTHESIS, Messages.ExpectRightParenAfterConditionErrorMessage);
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after condition.");
         IStatement body = Statement(tokens);
         return new WhileStatement(condition, body);
     }
@@ -208,7 +207,7 @@ internal static class KelloxParser
     /// </summary>
     private static IStatement CreateForStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(tokens, TokenType.LEFT_PARENTHESIS, Messages.ExpectLeftParenAfterForErrorMessage);
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after for.");
 
         IStatement? initializerExpression = null;
         if (Match(tokens, TokenType.VAR))
@@ -230,10 +229,10 @@ internal static class KelloxParser
         IExpression? incrementExpression = null;
         if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
         {
-            Consume(tokens, TokenType.SEMICOLON, Messages.ExpectSemicolonAfterLoopConditionErrorMessage);
+            Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after loop condition");
             incrementExpression = Expression(tokens);
         }
-        Consume(tokens, TokenType.RIGHT_PARENTHESIS, Messages.ExpectRightParenAfterForErrorMessage);
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");
 
         IStatement body = Statement(tokens);
 
@@ -262,9 +261,9 @@ internal static class KelloxParser
     /// </summary>
     private static IStatement CreateIfStatement(IReadOnlyList<Token> tokens)
     {
-        Consume(tokens, TokenType.LEFT_PARENTHESIS, Messages.ExpectLeftParenAfterIfErrorMessage);
+        Consume(tokens, TokenType.LEFT_PARENTHESIS, "Expect \'(\' after \'if\'.");
         IExpression condition = Expression(tokens);
-        Consume(tokens, TokenType.RIGHT_PARENTHESIS, Messages.ExpectRightPareAfterrIfErrorMessage);
+        Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after if condition.");
         IStatement thenBranch = Statement(tokens);
         IStatement? elseBranch = null;
         if (Match(tokens, TokenType.ELSE))
@@ -279,7 +278,7 @@ internal static class KelloxParser
     /// </summary>
     private static IStatement CreateDeclarationStatement(IReadOnlyList<Token> tokens)
     {
-        Token token = Consume(tokens, TokenType.IDENTIFIER, Messages.ExpectVariableNameErrorMessage);
+        Token token = Consume(tokens, TokenType.IDENTIFIER, "Expect variable name");
         if (Check(tokens, TokenType.SEMICOLON))
         {
             // No value assigned -> value is null
@@ -318,7 +317,7 @@ internal static class KelloxParser
             {
                 return new SetExpression(getExpression.Object, getExpression.Name, value);
             }
-            throw new ParseError(token, Messages.InvalidAssignmentTargetErrorMessage);
+            throw new ParseError(token, "Invalid assignment target.");
         }
         return expression;
     }
@@ -343,16 +342,28 @@ internal static class KelloxParser
         TokenType.MINUS_EQUAL => CreateMinusEqualExpression(tokens, token, expression),
         TokenType.STAR_EQUAL => CreateStarEqualExpression(tokens, token, expression),
         TokenType.SLASH_EQUAL => CreateSlashEqualExpression(tokens, token, expression),
-        _ => throw new ParseError(token, Messages.InvalidOperatorErrorMessage),
+        _ => throw new ParseError(token, "Invalid Operator"),
     };
 
-    private static IExpression CreatePlusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, token.Line), Expression(tokens));
+    private static IExpression CreatePlusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression)
+    {
+        return new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, token.Line), Expression(tokens));
+    }
 
-    private static IExpression CreateMinusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, token.Line), Expression(tokens));
+    private static IExpression CreateMinusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression)
+    {
+        return new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, token.Line), Expression(tokens));
+    }
 
-    private static IExpression CreateStarEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.STAR, "*", null, token.Line), Expression(tokens));
+    private static IExpression CreateStarEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression)
+    {
+        return new BinaryExpression(expression, new Token(TokenType.STAR, "*", null, token.Line), Expression(tokens));
+    }
 
-    private static IExpression CreateSlashEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => new BinaryExpression(expression, new Token(TokenType.SLASH, "/", null, token.Line), Expression(tokens));
+    private static IExpression CreateSlashEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression)
+    {
+        return new BinaryExpression(expression, new Token(TokenType.SLASH, "/", null, token.Line), Expression(tokens));
+    }
 
     /// <summary>
     /// Creates an OrExpressionn
@@ -477,7 +488,7 @@ internal static class KelloxParser
             }
             else if (Match(tokens, TokenType.DOT))
             {
-                Token name = Consume(tokens, TokenType.IDENTIFIER, Messages.ExpectPropertyNameAfterDotErrorMessage);
+                Token name = Consume(tokens, TokenType.IDENTIFIER, "Expect property name after \'.\'.");
                 expression = new GetExpression(expression, name);
             }
             else
@@ -504,13 +515,13 @@ internal static class KelloxParser
             {
                 if (arguments.Count >= 255)
                 {
-                    throw new ParseError(Peek(tokens), Messages.MaxParametersExcededErrorMessage);
+                    throw new ParseError(Peek(tokens), "Can't have more than 255 parameters.");
                 }
                 arguments.Add(Expression(tokens));
             } while (Match(tokens, TokenType.COMMA));
         }
 
-        Token paren = Consume(tokens, TokenType.RIGHT_PARENTHESIS, Messages.ExpectRightParenAfterArgsErrorMessage);
+        Token paren = Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after arguments.");
         return new CallExpression(calle, paren, arguments);
     }
 
@@ -538,8 +549,8 @@ internal static class KelloxParser
         if (Match(tokens, TokenType.SUPER))
         {
             Token keyword = Previous(tokens);
-            Consume(tokens, TokenType.DOT, Messages.ExpectDotAfterSuperErrorMessage);
-            Token method = Consume(tokens, TokenType.IDENTIFIER, Messages.ExpectSuperclassMethodNameErrorMessage);
+            Consume(tokens, TokenType.DOT, "Expect \'.\' after \'super\'");
+            Token method = Consume(tokens, TokenType.IDENTIFIER, "Expect superclass method name");
             return new SuperExpression(keyword, method);
         }
         if (Match(tokens, TokenType.THIS))
@@ -554,10 +565,10 @@ internal static class KelloxParser
         if (Match(tokens, TokenType.LEFT_PARENTHESIS))
         {
             IExpression expr = Expression(tokens);
-            Consume(tokens, TokenType.RIGHT_PARENTHESIS, Messages.ExpectRightParenAfterExpressionErrorMessage);
+            Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after expression.");
             return new GroupingExpression(expr);
         }
-        throw new ParseError(Peek(tokens), Messages.ExpectExpressionErrorMessage);
+        throw new ParseError(Peek(tokens), "Expect expression");
     }
 
     #endregion Expressions

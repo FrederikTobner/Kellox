@@ -1,5 +1,4 @@
 ﻿using Kellox.Exceptions;
-using Kellox.i18n;
 using Kellox.Tokens;
 
 namespace Kellox.Interpreter;
@@ -45,7 +44,7 @@ internal class KelloxEnvironment
             Enclosing.Assign(name, value);
             return;
         }
-        throw new RunTimeError(name, Messages.VariableNotDefinedAssignmentErrorMessage);
+        throw new RunTimeError(name, "Variable not defined yet. Assignment impossible");
     }
 
     /// <summary>

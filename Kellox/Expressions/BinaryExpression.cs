@@ -1,5 +1,4 @@
 ﻿using Kellox.Exceptions;
-using Kellox.i18n;
 using Kellox.Tokens;
 
 namespace Kellox.Expressions;
@@ -56,7 +55,7 @@ internal class BinaryExpression : IExpression
                 TokenType.STAR => leftNumber * rightNumber,
                 TokenType.BANG_EQUAL => !IExpression.IsEqual(leftNumber, rightNumber),
                 TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftNumber, rightNumber),
-                _ => throw new RunTimeError(OperatorToken, Messages.OperatorNotSupportedErrorMessage),
+                _ => throw new RunTimeError(OperatorToken, "Operator not supported"),
             };
         }
 
@@ -65,14 +64,14 @@ internal class BinaryExpression : IExpression
             return OperatorToken.TokenType switch
             {
                 TokenType.PLUS => leftString + rightString,
-                _ => throw new RunTimeError(OperatorToken, Messages.OperatorNotSupportedErrorMessage)
+                _ => throw new RunTimeError(OperatorToken, "Operator not supported")
             };
         }
         return OperatorToken.TokenType switch
         {
             TokenType.BANG_EQUAL => !IExpression.IsEqual(leftResult, rightResult),
             TokenType.EQUAL_EQUAL => IExpression.IsEqual(leftResult, rightResult),
-            _ => throw new RunTimeError(OperatorToken, Messages.OperatorNotSupportedErrorMessage)
+            _ => throw new RunTimeError(OperatorToken, "Operator not supported")
         };
     }
 }

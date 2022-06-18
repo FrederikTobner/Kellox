@@ -1,6 +1,6 @@
-﻿using Kellox.Keywords;
+﻿using Lox.i18n;
 
-namespace Kellox.Expressions;
+namespace Lox.Expressions;
 
 /// <summary>
 /// Models a literal expression
@@ -30,7 +30,7 @@ internal class LiteralExpression : IExpression
                 return result;
             }
         }
-        return KeywordConstants.NilKeyword;
+        return Constants.NilKeyword;
     }
 
     public object? EvaluateExpression() => Value;

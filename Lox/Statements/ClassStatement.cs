@@ -1,12 +1,12 @@
-﻿using Kellox.Classes;
-using Kellox.Expressions;
-using Kellox.Functions;
-using Kellox.Interpreter;
-using Kellox.Keywords;
-using Kellox.Tokens;
-using Kellox.Utils;
+﻿using Lox.Classes;
+using Lox.Expressions;
+using Lox.Functions;
+using Lox.i18n;
+using Lox.Interpreter;
+using Lox.Tokens;
+using Lox.Utils;
 
-namespace Kellox.Statements;
+namespace Lox.Statements;
 
 /// <summary>
 /// Models a class statement in lox -> the whole class declaration
@@ -42,31 +42,31 @@ internal class ClassStatement : IStatement
         {
             superClass = SuperClass.EvaluateExpression();
             // superClass has to be a Loxclass
-            if (superClass is not KelloxClass)
+            if (superClass is not LoxClass)
             {
-                ErrorLogger.Error(SuperClass.Token, "Superclass must be a class");
+                LoxErrorLogger.Error(SuperClass.Token, Messages.SuperClassMustBeAClassErrorMessage);
             }
         }
         //Defines the class in the current environment
-        KelloxInterpreter.currentEnvironment.Define(Token.Lexeme, null);
+        LoxInterpreter.currentEnvironment.Define(Token.Lexeme, null);
         if (superClass is not null)
         {
-            KelloxInterpreter.currentEnvironment = new(KelloxInterpreter.currentEnvironment);
-            KelloxInterpreter.currentEnvironment.Define(KeywordConstants.SuperKeyword, superClass);
+            LoxInterpreter.currentEnvironment = new(LoxInterpreter.currentEnvironment);
+            LoxInterpreter.currentEnvironment.Define(Constants.SuperKeyword, superClass);
         }
-        Dictionary<string, KelloxFunction> newMethods = new();
+        Dictionary<string, LoxFunction> newMethods = new();
         foreach (FunctionStatement? method in Methods)
         {
             if (method is not null)
             {
-                newMethods.Add(method.Token.Lexeme, new KelloxFunction(method, KelloxInterpreter.currentEnvironment, method.Token.Lexeme.Equals(KeywordConstants.InitKeyword)));
+                newMethods.Add(method.Token.Lexeme, new LoxFunction(method, LoxInterpreter.currentEnvironment, method.Token.Lexeme.Equals(Constants.InitKeyword)));
             }
         }
-        KelloxClass loxClass = new(Token.Lexeme, newMethods, (KelloxClass?)superClass);
-        if (superClass is not null && KelloxInterpreter.currentEnvironment.Enclosing is not null)
+        LoxClass loxClass = new(Token.Lexeme, newMethods, (LoxClass?)superClass);
+        if (superClass is not null && LoxInterpreter.currentEnvironment.Enclosing is not null)
         {
-            KelloxInterpreter.currentEnvironment = KelloxInterpreter.currentEnvironment.Enclosing;
+            LoxInterpreter.currentEnvironment = LoxInterpreter.currentEnvironment.Enclosing;
         }
-        KelloxInterpreter.currentEnvironment.Assign(Token, loxClass);
+        LoxInterpreter.currentEnvironment.Assign(Token, loxClass);
     }
 }

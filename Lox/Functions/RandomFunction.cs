@@ -1,7 +1,4 @@
-﻿using Kellox.Exceptions;
-using Kellox.Tokens;
-
-namespace Kellox.Functions
+﻿namespace Lox.Functions
 {
     /// <summary>
     /// Native Function Random implemented in the host language C#
@@ -12,21 +9,19 @@ namespace Kellox.Functions
 
         public int Arity => 2;
 
-        public object? Call(List<object?> arguments, Token paren)
+        public object? Call(List<object?> arguments)
         {
             if (arguments[0] is double minValue && arguments[1] is double maxValue)
             {
-                try
-                {
-                    int minVal = (int)minValue;
-                    int maxVal = (int)maxValue;
+                try{
+                    int minVal= (int)maxValue;
+                    int maxVal= (int)minValue;
                     return random.Next(minVal, maxVal);
                 }
-                catch (Exception)
-                {
-                    throw new RunTimeError(paren, "Arguments for random call out of bounds");
+                catch(Exception){
+                    return null;
                 }
-
+                
             }
             return null;
         }

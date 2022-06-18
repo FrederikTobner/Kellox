@@ -13,7 +13,7 @@ internal class KelloxInstance
     /// <summary>
     /// The class of this Instance
     /// </summary>
-    public KelloxClass Class { get; init; }
+    public KelloxClass KelloxClass { get; init; }
 
     /// <summary>
     /// The fields of this Instance
@@ -23,11 +23,11 @@ internal class KelloxInstance
     /// <summary>
     /// Creates a new Kellox instance 🚼
     /// </summary>
-    /// <param name="LoxClass">The class of the instance</param>
-    public KelloxInstance(KelloxClass LoxClass)
+    /// <param name="kelloxClass">The class of the instance</param>
+    public KelloxInstance(KelloxClass kelloxClass)
     {
-        Class = LoxClass;
-        fields = new();
+        this.KelloxClass = kelloxClass;
+        this.fields = new();
     }
 
     public override string ToString() => KelloxInstanceSerializer.Serialize(this.fields);
@@ -39,11 +39,11 @@ internal class KelloxInstance
     /// <exception cref="RunTimeError">Throws an runtime error if the property is not defined</exception>
     internal object? Get(Token name)
     {
-        if (fields.ContainsKey(name.Lexeme))
+        if (this.fields.ContainsKey(name.Lexeme))
         {
-            return fields[name.Lexeme];
+            return this.fields[name.Lexeme];
         }
-        if (Class.TryFindMethod(name.Lexeme, out KelloxFunction? method))
+        if (this.KelloxClass.TryFindMethod(name.Lexeme, out KelloxFunction? method))
         {
             return method?.Bind(this);
         }
@@ -57,12 +57,12 @@ internal class KelloxInstance
     /// <param name="value">The value that is assigned to the property</param>
     internal void Set(Token name, object? value)
     {
-        if (fields.ContainsKey(name.Lexeme))
+        if (this.fields.ContainsKey(name.Lexeme))
         {
-            fields[name.Lexeme] = value;
+            this.fields[name.Lexeme] = value;
             return;
         }
-        fields.Add(name.Lexeme, value);
+        this.fields.Add(name.Lexeme, value);
         return;
     }
 }
