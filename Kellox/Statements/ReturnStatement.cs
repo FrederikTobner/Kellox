@@ -1,5 +1,5 @@
-﻿using Kellox.Expressions;
-using Kellox.Functions.Exceptions;
+﻿using Kellox.Exceptions;
+using Kellox.Expressions;
 using Kellox.Tokens;
 
 namespace Kellox.Statements;

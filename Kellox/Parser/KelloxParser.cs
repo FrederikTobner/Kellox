@@ -1,7 +1,7 @@
-﻿using Kellox.Expressions;
+﻿using Kellox.Exceptions;
+using Kellox.Expressions;
 using Kellox.i18n;
 using Kellox.Interpreter;
-using Kellox.Parser.Exceptions;
 using Kellox.Statements;
 using Kellox.Tokens;
 using Kellox.Utils;
@@ -20,9 +20,9 @@ internal static class KelloxParser
     private static int current;
 
     /// <summary>
-    /// Builds a LoxProgramm out of a flat sequence of Tokens
+    /// Builds a KelloxProgram out of a flat sequence of Tokens
     /// </summary>
-    internal static LoxProgram Parse(IReadOnlyList<Token> tokens)
+    internal static KelloxProgram Parse(IReadOnlyList<Token> tokens)
     {
         current = 0;
         List<IStatement> statements = new();
@@ -40,7 +40,7 @@ internal static class KelloxParser
             catch (ParseError error)
             {
                 ErrorLogger.Error(error.ErrorToken, error.Message);
-                Synchronize(tokens);
+                Synchronizer.Synchronize(tokens, ref current);
             }
         }
         return new(statements);
@@ -164,7 +164,7 @@ internal static class KelloxParser
     }
 
     /// <summary>
-    /// Creates a new Function statement (declaration  not calle)
+    /// Creates a new Function statement (declaration not calle)
     /// </summary>
     private static IStatement CreateFunctionStatement(IReadOnlyList<Token> tokens, string kind)
     {
@@ -285,7 +285,7 @@ internal static class KelloxParser
             // No value assigned -> value is null
             return new DeclarationStatement(token);
         }
-        current++;
+        Advance(tokens);
         return new DeclarationStatement(token, Expression(tokens));
     }
 
@@ -563,42 +563,6 @@ internal static class KelloxParser
     #endregion Expressions
 
     /// <summary>
-    /// Can be used to parse statements after a statment that has caused a RunTimeError
-    /// </summary>
-    private static void Synchronize(IReadOnlyList<Token> tokens)
-    {
-        Advance(tokens);
-        while (!IsAtEnd(tokens))
-        {
-            if (Previous(tokens).TokenType is TokenType.SEMICOLON)
-            {
-                return;
-            }
-
-            switch (Peek(tokens).TokenType)
-            {
-                case TokenType.CLASS:
-                    break;
-                case TokenType.FUN:
-                    break;
-                case TokenType.VAR:
-                    break;
-                case TokenType.FOR:
-                    break;
-                case TokenType.IF:
-                    break;
-                case TokenType.WHILE:
-                    break;
-                case TokenType.PRINT:
-                    break;
-                case TokenType.RETURN:
-                    return;
-            }
-            Advance(tokens);
-        }
-    }
-
-    /// <summary>
     /// Determines weather the next Token is from the specified TokenTypes and advances a position further, if that is the case
     /// </summary>
     /// <param name="tokenTypes">Types of the Tokens</param>
@@ -622,7 +586,7 @@ internal static class KelloxParser
     private static bool Check(IReadOnlyList<Token> tokens, TokenType tokenType) => !IsAtEnd(tokens) && Peek(tokens).TokenType == tokenType;
 
     /// <summary>
-    /// Advances a position further in the flat sequence of Tokens
+    /// Advances a position further in the flat sequence of Tokens and returns the prevoius token
     /// </summary>
     private static Token Advance(IReadOnlyList<Token> tokens)
     {
@@ -636,7 +600,7 @@ internal static class KelloxParser
     /// <summary>
     /// Determines whether the ned of the file has been reached
     /// </summary>
-    private static bool IsAtEnd(IReadOnlyList<Token> tokens) => Peek(tokens).TokenType == TokenType.EOF;
+    private static bool IsAtEnd(IReadOnlyList<Token> tokens) => Peek(tokens).TokenType is TokenType.EOF;
 
     /// <summary>
     /// Returns current Token

@@ -1,6 +1,6 @@
 ﻿using Kellox.Tokens;
 
-namespace Kellox.Interpreter.Exceptions;
+namespace Kellox.Exceptions;
 
 /// <summary>
 /// Models an Error that occured during runtime

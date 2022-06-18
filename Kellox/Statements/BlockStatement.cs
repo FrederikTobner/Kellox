@@ -27,10 +27,10 @@ namespace Kellox.Statements
         public void ExecuteStatement()
         {
             // Saves the current environment
-            LoxEnvironment environment = LoxInterpreter.currentEnvironment;
+            KelloxEnvironment environment = KelloxInterpreter.currentEnvironment;
 
             // Creates a new Environment after execution
-            LoxInterpreter.currentEnvironment = new LoxEnvironment(environment);
+            KelloxInterpreter.currentEnvironment = new KelloxEnvironment(environment);
 
             foreach (IStatement statement in Statements)
             {
@@ -38,7 +38,7 @@ namespace Kellox.Statements
             }
 
             // Resets the currentEnvironment
-            LoxInterpreter.currentEnvironment = environment;
+            KelloxInterpreter.currentEnvironment = environment;
 
         }
     }

@@ -10,18 +10,6 @@ namespace Kellox.Utils
     internal static class ErrorLogger
     {
         /// <summary>
-        /// Reports an error that occured during the lexical analysis
-        /// </summary>
-        /// <param name="line">The line where the error has occured</param>
-        /// <param name="where">A description where the Error occured</param>
-        /// <param name="message">The Error Message that is displayed</param>
-        private static void Report(int line, string where, string message)
-        {
-            Console.WriteLine($"[line {line}] Error{where}: {message}");
-            LoxInterpreter.ErrorOccurred = true;
-        }
-
-        /// <summary>
         /// Reports an error in specific line
         /// </summary>
         internal static void Error(int line, string message) => Report(line, "", message);
@@ -40,6 +28,18 @@ namespace Kellox.Utils
                     Report(token.Line, $" at '{token.Lexeme}'", message);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Reports an error that occured during the lexical analysis
+        /// </summary>
+        /// <param name="line">The line where the error has occured</param>
+        /// <param name="where">A description where the Error occured</param>
+        /// <param name="message">The Error Message that is displayed</param>
+        private static void Report(int line, string where, string message)
+        {
+            Console.WriteLine($"[line {line}] Error{where}: {message}");
+            KelloxInterpreter.ErrorOccurred = true;
         }
     }
 }

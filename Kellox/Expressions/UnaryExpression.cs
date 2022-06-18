@@ -1,4 +1,4 @@
-﻿using Kellox.Interpreter.Exceptions;
+﻿using Kellox.Exceptions;
 using Kellox.Tokens;
 
 namespace Kellox.Expressions;

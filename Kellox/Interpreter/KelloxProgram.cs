@@ -7,7 +7,7 @@ namespace Kellox.Interpreter;
 /// <summary>
 /// Model of a program written in Lox
 /// </summary>
-internal class LoxProgram : IEnumerable<IStatement>
+internal class KelloxProgram : IEnumerable<IStatement>
 {
     /// <summary>
     /// A readonly list conatining the parsed statements
@@ -17,19 +17,19 @@ internal class LoxProgram : IEnumerable<IStatement>
     /// <summary>
     /// Boolean value that determines whether the program is runnable
     /// </summary>
-    public bool Runnable => Statements is not null && !LoxInterpreter.ErrorOccurred;
+    public bool Runnable => Statements is not null && !KelloxInterpreter.ErrorOccurred;
 
     /// <summary>
-    /// The constructor of the LoxProgram class
+    /// The constructor of the KelloxProgram class
     /// </summary>
-    /// <param name="statements">The statements the LoxProgram contains</param>
-    public LoxProgram(IReadOnlyList<IStatement> statements)
+    /// <param name="statements">The statements that make up the KelloxProgram</param>
+    public KelloxProgram(IReadOnlyList<IStatement> statements)
     {
         Statements = statements;
     }
 
     /// <summary>
-    /// Enumeration over the specific LoxProgram
+    /// Enumeration over the specific KelloxProgram
     /// </summary>
     public IEnumerator<IStatement> GetEnumerator()
     {

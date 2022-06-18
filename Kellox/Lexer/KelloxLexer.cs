@@ -131,7 +131,7 @@ internal static class KelloxLexer
                     // A comment goes until the end of the line.
                     while (Peek(source) is not '\n' && !IsAtEnd(source))
                     {
-                        current++;
+                        Advance(source);
                     }
                 }
                 // Slash Equal "/="
@@ -150,11 +150,11 @@ internal static class KelloxLexer
                             ErrorLogger.Error(line, Messages.BlockCommentNotClosedErrorMessage);
                             break;
                         }
-                        current++;
+                        Advance(source);
                     }
                     if (!IsAtEnd(source))
                     {
-                        current++;
+                        Advance(source);
                     }
                 }
                 else
@@ -231,11 +231,12 @@ internal static class KelloxLexer
     {
         while (CharacterAnalysizer.IsAlphaNumeric(Peek(source)))
         {
-            current++;
+            Advance(source);
         }
 
         string text = source[start..current];
-        if (!KelloxKeywords.GetTokenType(text, out TokenType type))
+        // Not a reserved keyword of kellox
+        if (!KelloxKeywords.TryGetKeywordTokenType(text, out TokenType type))
         {
             type = TokenType.IDENTIFIER;
         }
@@ -253,7 +254,7 @@ internal static class KelloxLexer
             {
                 line++;
             }
-            current++;
+            Advance(source);
         }
 
         if (IsAtEnd(source))
@@ -261,7 +262,7 @@ internal static class KelloxLexer
             ErrorLogger.Error(line, Messages.UnterminatedStringErrorMessage);
             return;
         }
-        current++;
+        Advance(source);
 
         // Trims the surrounding quotes.
         string value = source.Substring(start + 1, current - start - 2);
@@ -277,17 +278,17 @@ internal static class KelloxLexer
 
         while (CharacterAnalysizer.IsDigit(Peek(source)))
         {
-            current++;
+            Advance(source);
         }
 
         // Look for a fractional part.
         if (Peek(source) is '.' && CharacterAnalysizer.IsDigit(PeekNext(source)))
         {
             // Consumes the "."
-            current++;
+            Advance(source);
             while (CharacterAnalysizer.IsDigit(Peek(source)))
             {
-                current++;
+                Advance(source);
                 digitsAfterPoint++;
             }
         }
@@ -302,6 +303,7 @@ internal static class KelloxLexer
     {
         if (current + 1 >= source.Length)
         {
+            //end of file
             return '\0';
         }
         return source[current + 1];
@@ -314,6 +316,7 @@ internal static class KelloxLexer
     {
         if (IsAtEnd(source))
         {
+            //end of file
             return '\0';
         }
         return source[current];

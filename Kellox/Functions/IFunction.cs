@@ -1,4 +1,6 @@
-﻿namespace Kellox.Functions;
+﻿using Kellox.Tokens;
+
+namespace Kellox.Functions;
 
 internal interface IFunction
 {
@@ -11,5 +13,5 @@ internal interface IFunction
     /// Calls the function
     /// </summary>
     /// <param name="arguments">Arguments used when the function was called</param>
-    object? Call(List<object?> arguments);
+    object? Call(List<object?> arguments, Token paren);
 }

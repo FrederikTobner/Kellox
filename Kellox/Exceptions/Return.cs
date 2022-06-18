@@ -1,4 +1,4 @@
-﻿namespace Kellox.Functions.Exceptions;
+﻿namespace Kellox.Exceptions;
 
 /// <summary>
 /// Return Exception used for control flow

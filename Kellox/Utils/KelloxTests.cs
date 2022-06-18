@@ -17,7 +17,7 @@ namespace Kellox.Utils
         /// <summary>
         /// Tests the interrpreter by running the sample Program
         /// </summary>
-        internal static void RunSampleProgram() => LoxInterpreter.RunFile(sampleProgramPath);
+        internal static void RunSampleProgram() => KelloxInterpreter.RunLoxInterpreter(sampleProgramPath);
 
         /// <summary>
         /// Tests printing of a nested Expression

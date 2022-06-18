@@ -1,4 +1,3 @@
-print "test\teyy\n";
 class Doughnut 
 {
 	init(fryingColor)
@@ -7,53 +6,83 @@ class Doughnut
 	}
 	cook() 
 	{
-		println "Fry until " + this.fryingColor;
+		return "Fry until " + this.fryingColor;
 	}
 }
 
 class FilledDougnut < Doughnut 
 {
-	init(filling, fryingColor)
+	init(fryingColor, filling)
 	{
 		super.init(fryingColor);
 		this.filling = filling;		
 	}
 	cook()
 	{
-		super.cook();
-		println "With " + this.filling;
+		return super.cook()+ ", filled with " + this.filling;
 	}
 }
 
 class FilledDougnutWithChocolateCoat < FilledDougnut
 {
-	init(chocolateColor, filling, fryingColor)
+	init(fryingColor, filling, chocolateColor)
 	{
-		super.init(filling, fryingColor);
+		super.init(fryingColor, filling);
 		this.chocolateColor = chocolateColor;		
 	}
 	cook()
 	{
-		super.cook();
-		println "And a " + this.chocolateColor + " chocolate coat";
+		return super.cook() + " and a " + this.chocolateColor + " chocolate coat";
 	}
 }
 
-FilledDougnutWithChocolateCoat("dark", "custard", "golden brown").cook();
-
-class LoxKlasse < Doughnut
+class FilledDougnutWithChocolateCoatAndSprinkles < FilledDougnutWithChocolateCoat
 {
-	init(x, y, parentColor)
+	init(fryingColor, filling, chocolateColor, sprinkleColor)
 	{
-		super.init(parentColor);
-		this.x = x;
-		this.y = y;
+		super.init(fryingColor, filling, chocolateColor);
+		this.sprinkleColor = sprinkleColor;		
+	}
+	cook()
+	{
+		return super.cook() +" with " + this.sprinkleColor + " sprinkles on top";
 	}
 }
 
-print LoxKlasse(4, 3, "green");
+// very tasty 🍩
+var donut = FilledDougnutWithChocolateCoatAndSprinkles("golden brown", "custard", "dark", "rainbow");
+println donut.cook();
+println donut;
 
-print LoxKlasse(6, 4, "blue");
+class DoughnutPair
+{
+	init(firstDonut, secondDonut)
+	{
+		this.firstDonut = firstDonut;
+		this.secondDonut = secondDonut;
+	}
+	cook()
+	{
+		return this.firstDonut.cook() + "\n" + this.secondDonut.cook();
+	}
+}
+
+class DoughnutPairPair
+{
+	init(firstDonutPair, secondDonutPair)
+	{
+		this.firstDonutPair = firstDonutPair;
+		this.secondDonutPair = secondDonutPair;
+	}
+	cook()
+	{
+		return this.firstDonutPair.cook() + "\n" + this.secondDonutPair.cook();
+	}
+}
+
+var donuts = DoughnutPair(donut, FilledDougnutWithChocolateCoatAndSprinkles("golden brown", "raspberry jelly", "white", "red"));
+
+println DoughnutPairPair(donuts, donuts);
 
 class Rect
 {
@@ -143,3 +172,4 @@ fun Countdown(x)
 }
 
 Countdown(10);
+

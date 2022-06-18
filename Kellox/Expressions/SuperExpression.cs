@@ -1,8 +1,8 @@
 ﻿using Kellox.Classes;
+using Kellox.Exceptions;
 using Kellox.Functions;
 using Kellox.i18n;
 using Kellox.Interpreter;
-using Kellox.Interpreter.Exceptions;
 using Kellox.Tokens;
 
 namespace Kellox.Expressions;
@@ -15,39 +15,35 @@ internal class SuperExpression : IExpression
     public Token Token { get; init; }
 
     /// <summary>
-    /// The Method that was called by the super Expression -> e.g. 
+    /// The Method that was called by the super Expression -> e.g. init
     /// </summary>
-    public Token Method { get; init; }
+    private readonly Token method;
 
-    public SuperExpression(Token Token, Token Method)
+    public SuperExpression(Token Token, Token method)
     {
         this.Token = Token;
-        this.Method = Method;
+        this.method = method;
     }
 
     public object? EvaluateExpression()
     {
-        LoxInterpreter.TryGetDepthOfLocal(this, out int distance);
-        KelloxClass? superClass = (KelloxClass?)LoxInterpreter.currentEnvironment.GetAt(distance, Token);
+        KelloxInterpreter.TryGetDepthOfLocal(this, out int distance);
+        KelloxClass? superClass = (KelloxClass?)KelloxInterpreter.currentEnvironment.GetAt(distance, Token);
         if (superClass is null)
         {
-            throw new RunTimeError(this.Method, Messages.ThereIsNoSuperClassDefinedErrorMessage);
+            throw new RunTimeError(this.method, Messages.ThereIsNoSuperClassDefinedErrorMessage);
         }
-        KelloxInstance? instance = (KelloxInstance?)LoxInterpreter.currentEnvironment.GetAt(distance - 1, new Token(TokenType.THIS, "this", null, 0));
-        KelloxFunction? function = superClass.FindMethod(this.Method.Lexeme);
+        KelloxInstance? instance = (KelloxInstance?)KelloxInterpreter.currentEnvironment.GetAt(distance - 1, new Token(TokenType.THIS, "this", null, 0));
         if (instance is null)
         {
-            return null;
+            throw new RunTimeError(this.method, "instance is nil");
         }
-        if (function is null)
+        if (!superClass.TryFindMethod(this.method.Lexeme, out KelloxFunction? function))
         {
-            throw new RunTimeError(this.Method, "Undefiended property \'" + Method.Lexeme + "\'.");
+            throw new RunTimeError(this.method, "Undefiended method \'" + method.Lexeme + "\'in superclass.");
         }
-        return function.Bind(instance);
+        return function?.Bind(instance);
     }
 
-    public override string ToString()
-    {
-        return Token.Lexeme + '.' + Method.Lexeme;
-    }
+    public override string ToString() => Token.Lexeme + '.' + method.Lexeme;
 }

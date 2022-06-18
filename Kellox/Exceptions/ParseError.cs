@@ -1,6 +1,6 @@
 ﻿using Kellox.Tokens;
 
-namespace Kellox.Parser.Exceptions;
+namespace Kellox.Exceptions;
 
 /// <summary>
 /// Represents an Error that has occured during the parsing process

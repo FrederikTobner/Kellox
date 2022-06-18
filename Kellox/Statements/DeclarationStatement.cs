@@ -37,6 +37,6 @@ internal class DeclarationStatement : IStatement
         {
             value = Expression.EvaluateExpression();
         }
-        LoxInterpreter.currentEnvironment.Define(Name.Lexeme, value);
+        KelloxInterpreter.currentEnvironment.Define(Name.Lexeme, value);
     }
 }

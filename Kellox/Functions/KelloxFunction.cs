@@ -1,5 +1,5 @@
 ﻿using Kellox.Classes;
-using Kellox.Functions.Exceptions;
+using Kellox.Exceptions;
 using Kellox.Interpreter;
 using Kellox.Statements;
 using Kellox.Tokens;
@@ -21,9 +21,9 @@ internal class KelloxFunction : IFunction
     /// <summary>
     /// Data structure that closes over and holds on to the surrounding variables where the function is declared
     /// </summary>
-    public LoxEnvironment Closure { get; init; }
+    public KelloxEnvironment Closure { get; init; }
 
-    public KelloxFunction(FunctionStatement Declaration, LoxEnvironment Closure, bool isInitializer)
+    public KelloxFunction(FunctionStatement Declaration, KelloxEnvironment Closure, bool isInitializer)
     {
         this.Declaration = Declaration;
         this.Closure = Closure;
@@ -32,16 +32,16 @@ internal class KelloxFunction : IFunction
 
     public int Arity => this.Declaration.Parameters.Count;
 
-    public object? Call(List<object?> arguments)
+    public object? Call(List<object?> arguments, Token paren)
     {
         object? result = null;
         // Saves the old environment
-        LoxEnvironment oldEnvironment = LoxInterpreter.currentEnvironment;
+        KelloxEnvironment oldEnvironment = KelloxInterpreter.currentEnvironment;
         // Creates a new Environemt for the scope of the function body
-        LoxInterpreter.currentEnvironment = new(Closure);
+        KelloxInterpreter.currentEnvironment = new(Closure);
         for (int i = 0; i < Declaration.Parameters.Count; i++)
         {
-            LoxInterpreter.currentEnvironment.Define(Declaration.Parameters[i].Lexeme, arguments[i]);
+            KelloxInterpreter.currentEnvironment.Define(Declaration.Parameters[i].Lexeme, arguments[i]);
         }
         //Catches Return exception and returns value
         try
@@ -51,7 +51,6 @@ internal class KelloxFunction : IFunction
                 statement.ExecuteStatement();
             }
         }
-        // Catches return
         catch (Return returnValue)
         {
             result = returnValue.Value;
@@ -59,17 +58,17 @@ internal class KelloxFunction : IFunction
         if (IsInitializer)
         {
             //Calls the constructor/initializer
-            result = Closure.GetAt(0, new Token(TokenType.THIS, "this", null, 0));
+            result = Closure.GetAt(0, new Token(TokenType.THIS, "this", null, Declaration.Token.Line));
         }
         //Resets Environment
-        LoxInterpreter.currentEnvironment = oldEnvironment;
+        KelloxInterpreter.currentEnvironment = oldEnvironment;
         return result;
     }
 
     // Binds an instance to the enviroment of the function
     internal KelloxFunction Bind(KelloxInstance loxInstance)
     {
-        LoxEnvironment environment = new(Closure);
+        KelloxEnvironment environment = new(Closure);
         environment.Define("this", loxInstance);
         return new(Declaration, environment, IsInitializer);
     }

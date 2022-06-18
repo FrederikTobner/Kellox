@@ -1,8 +1,7 @@
-﻿using Kellox.Functions;
-using Kellox.Interpreter.Exceptions;
+﻿using Kellox.Exceptions;
+using Kellox.Functions;
 using Kellox.Tokens;
 using Kellox.Utils;
-using System.Text;
 
 namespace Kellox.Classes;
 
@@ -21,6 +20,10 @@ internal class KelloxInstance
     /// </summary>
     private readonly Dictionary<string, object?> fields;
 
+    /// <summary>
+    /// Creates a new Kellox instance 🚼
+    /// </summary>
+    /// <param name="LoxClass">The class of the instance</param>
     public KelloxInstance(KelloxClass LoxClass)
     {
         Class = LoxClass;
@@ -33,17 +36,16 @@ internal class KelloxInstance
     /// Used to get a method//property associated with the instance
     /// </summary>
     /// <param name="name">The Token of the property/method</param>
-    /// <exception cref="RunTimeError"></exception>
+    /// <exception cref="RunTimeError">Throws an runtime error if the property is not defined</exception>
     internal object? Get(Token name)
     {
         if (fields.ContainsKey(name.Lexeme))
         {
             return fields[name.Lexeme];
         }
-        KelloxFunction? method = Class.FindMethod(name.Lexeme);
-        if (method is not null)
+        if (Class.TryFindMethod(name.Lexeme, out KelloxFunction? method))
         {
-            return method.Bind(this);
+            return method?.Bind(this);
         }
         throw new RunTimeError(name, "Undefiened property \'" + name.Lexeme + "\'.");
     }

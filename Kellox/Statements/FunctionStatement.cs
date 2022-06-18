@@ -39,7 +39,7 @@ internal class FunctionStatement : IStatement
 
     public void ExecuteStatement()
     {
-        KelloxFunction loxFunction = new(this, LoxInterpreter.currentEnvironment, false);
-        LoxInterpreter.currentEnvironment.Define(Token.Lexeme, loxFunction);
+        KelloxFunction loxFunction = new(this, KelloxInterpreter.currentEnvironment, false);
+        KelloxInterpreter.currentEnvironment.Define(Token.Lexeme, loxFunction);
     }
 }

@@ -48,25 +48,25 @@ internal class ClassStatement : IStatement
             }
         }
         //Defines the class in the current environment
-        LoxInterpreter.currentEnvironment.Define(Token.Lexeme, null);
+        KelloxInterpreter.currentEnvironment.Define(Token.Lexeme, null);
         if (superClass is not null)
         {
-            LoxInterpreter.currentEnvironment = new(LoxInterpreter.currentEnvironment);
-            LoxInterpreter.currentEnvironment.Define(Constants.SuperKeyword, superClass);
+            KelloxInterpreter.currentEnvironment = new(KelloxInterpreter.currentEnvironment);
+            KelloxInterpreter.currentEnvironment.Define(Constants.SuperKeyword, superClass);
         }
         Dictionary<string, KelloxFunction> newMethods = new();
         foreach (FunctionStatement? method in Methods)
         {
             if (method is not null)
             {
-                newMethods.Add(method.Token.Lexeme, new KelloxFunction(method, LoxInterpreter.currentEnvironment, method.Token.Lexeme.Equals(Constants.InitKeyword)));
+                newMethods.Add(method.Token.Lexeme, new KelloxFunction(method, KelloxInterpreter.currentEnvironment, method.Token.Lexeme.Equals(Constants.InitKeyword)));
             }
         }
         KelloxClass loxClass = new(Token.Lexeme, newMethods, (KelloxClass?)superClass);
-        if (superClass is not null && LoxInterpreter.currentEnvironment.Enclosing is not null)
+        if (superClass is not null && KelloxInterpreter.currentEnvironment.Enclosing is not null)
         {
-            LoxInterpreter.currentEnvironment = LoxInterpreter.currentEnvironment.Enclosing;
+            KelloxInterpreter.currentEnvironment = KelloxInterpreter.currentEnvironment.Enclosing;
         }
-        LoxInterpreter.currentEnvironment.Assign(Token, loxClass);
+        KelloxInterpreter.currentEnvironment.Assign(Token, loxClass);
     }
 }

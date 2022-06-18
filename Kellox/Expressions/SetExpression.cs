@@ -1,6 +1,6 @@
 ﻿using Kellox.Classes;
+using Kellox.Exceptions;
 using Kellox.i18n;
-using Kellox.Interpreter.Exceptions;
 using Kellox.Tokens;
 
 namespace Kellox.Expressions;

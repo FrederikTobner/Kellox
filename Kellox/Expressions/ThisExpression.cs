@@ -20,13 +20,13 @@ internal class ThisExpression : IExpression
 
     public object? EvaluateExpression()
     {
-        if (LoxInterpreter.TryGetDepthOfLocal(this, out int distance))
+        if (KelloxInterpreter.TryGetDepthOfLocal(this, out int distance))
         {
-            return LoxInterpreter.currentEnvironment.GetAt(distance, Token);
+            return KelloxInterpreter.currentEnvironment.GetAt(distance, Token);
         }
         else
         {
-            return LoxInterpreter.currentEnvironment.Get(Token);
+            return KelloxInterpreter.currentEnvironment.Get(Token);
         }
     }
 

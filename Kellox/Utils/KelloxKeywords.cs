@@ -9,14 +9,14 @@ namespace Kellox.Utils
     internal static class KelloxKeywords
     {
         /// <summary>
-        /// /The Dictionary containing the keywords
+        /// The Dictionary containing the keywords
         /// </summary>
         private static readonly Dictionary<string, TokenType> keywords = InitializeKeywords();
 
         /// <summary>
         /// Gets the type of a given Token
         /// </summary>
-        internal static bool GetTokenType(string key, out TokenType type) => keywords.TryGetValue(key, out type);
+        internal static bool TryGetKeywordTokenType(string key, out TokenType type) => keywords.TryGetValue(key, out type);
 
         /// <summary>
         /// Initializes the Dictionary with the Keywords of the language

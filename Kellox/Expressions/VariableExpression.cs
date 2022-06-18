@@ -20,13 +20,13 @@ namespace Kellox.Expressions
 
         public object? EvaluateExpression()
         {
-            if (LoxInterpreter.TryGetDepthOfLocal(this, out int distance))
+            if (KelloxInterpreter.TryGetDepthOfLocal(this, out int distance))
             {
-                return LoxInterpreter.currentEnvironment.GetAt(distance, Token);
+                return KelloxInterpreter.currentEnvironment.GetAt(distance, Token);
             }
             else
             {
-                return LoxInterpreter.globalEnvironment.Get(Token);
+                return KelloxInterpreter.globalEnvironment.Get(Token);
             }
         }
 

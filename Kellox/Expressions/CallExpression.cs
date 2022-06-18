@@ -1,5 +1,5 @@
-﻿using Kellox.Functions;
-using Kellox.Interpreter.Exceptions;
+﻿using Kellox.Exceptions;
+using Kellox.Functions;
 using Kellox.Tokens;
 
 namespace Kellox.Expressions;
@@ -50,7 +50,7 @@ internal class CallExpression : IExpression
             {
                 throw new RunTimeError(this.Paren, "Expected " + function.Arity + " argumnets but got " + arguments.Count + ".");
             }
-            return function?.Call(arguments);
+            return function.Call(arguments, this.Paren);
         }
         throw new RunTimeError(this.Paren, CallOnNNonFunctionOrClassErrorMessage);
     }

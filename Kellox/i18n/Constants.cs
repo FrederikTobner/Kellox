@@ -2,7 +2,7 @@ namespace Kellox.i18n;
 
 internal static class Constants
 {
-    public const string loxPromptMessage = "> ";
+    public const string kelloxPromptMessage = "> ";
     public const string FunctionVerboseWord = "function";
 
     #region Keywords

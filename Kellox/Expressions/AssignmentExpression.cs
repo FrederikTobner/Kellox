@@ -32,13 +32,13 @@ internal class AssignmentExpression : IExpression
     public object? EvaluateExpression()
     {
         object? result = Value.EvaluateExpression();
-        if (LoxInterpreter.TryGetDepthOfLocal(this, out int distance))
+        if (KelloxInterpreter.TryGetDepthOfLocal(this, out int distance))
         {
-            LoxInterpreter.currentEnvironment.AssignAt(distance, Token, result);
+            KelloxInterpreter.currentEnvironment.AssignAt(distance, Token, result);
         }
         else
         {
-            LoxInterpreter.globalEnvironment.Assign(Token, result);
+            KelloxInterpreter.globalEnvironment.Assign(Token, result);
         }
         return result;
     }

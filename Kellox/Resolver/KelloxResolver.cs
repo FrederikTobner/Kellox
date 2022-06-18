@@ -33,7 +33,7 @@ internal static class KelloxResolver
     /// Resolves a LoxProgram -> walks over the Syntaxtree and resolves all the variables it contains
     /// </summary>
     /// <param name="program">The LoxProgram that is getting resolved</param>
-    public static void Resolve(LoxProgram program)
+    public static void Resolve(KelloxProgram program)
     {
         if (!program.Runnable)
         {
@@ -479,7 +479,7 @@ internal static class KelloxResolver
         {
             if (scope.ContainsKey(token.Lexeme))
             {
-                LoxInterpreter.Resolve(expression, scopes.Count - 1 - i);
+                KelloxInterpreter.Resolve(expression, scopes.Count - 1 - i);
             }
             i--;
         }

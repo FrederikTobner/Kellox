@@ -1,5 +1,5 @@
-﻿using Kellox.i18n;
-using Kellox.Interpreter.Exceptions;
+﻿using Kellox.Exceptions;
+using Kellox.i18n;
 using Kellox.Tokens;
 
 namespace Kellox.Interpreter;
@@ -8,20 +8,20 @@ namespace Kellox.Interpreter;
 /// Environment for the Programming Language
 /// Associates values to variables
 /// </summary>
-internal class LoxEnvironment
+internal class KelloxEnvironment
 {
     /// <summary>
     /// The enclosing Environment 
     /// e.g. 'global' if the Scope is definied in the global Scope
     /// </summary>
-    public LoxEnvironment? Enclosing { get; set; }
+    public KelloxEnvironment? Enclosing { get; set; }
 
     /// <summary>
     /// Dictionary that conntains all the values defined in this Environment
     /// </summary>
     private readonly Dictionary<string, object?> values;
 
-    public LoxEnvironment(LoxEnvironment? environment = null)
+    public KelloxEnvironment(KelloxEnvironment? environment = null)
     {
         values = new Dictionary<string, object?>();
         Enclosing = environment;
@@ -103,9 +103,9 @@ internal class LoxEnvironment
     /// Iterates through the ancestors/parents/enclosing environments of the current Environment
     /// </summary>
     /// <param name="distance"></param>
-    private LoxEnvironment Ancestor(int distance)
+    private KelloxEnvironment Ancestor(int distance)
     {
-        LoxEnvironment environment = this;
+        KelloxEnvironment environment = this;
         for (int i = 0; i < distance; i++)
         {
             if (environment.Enclosing is not null)

@@ -1,5 +1,6 @@
 ﻿using Kellox.Functions;
 using Kellox.i18n;
+using Kellox.Tokens;
 
 namespace Kellox.Classes;
 
@@ -11,7 +12,7 @@ internal class KelloxClass : IFunction
     /// <summary>
     /// The Name of the class
     /// </summary>
-    public string Name { get; init; }
+    private readonly string name;
 
     /// <summary>
     /// Parameters for the Constructor
@@ -33,48 +34,57 @@ internal class KelloxClass : IFunction
     /// </summary>
     private readonly Dictionary<string, KelloxFunction> methods;
 
-    public KelloxClass? SuperClass { get; init; }
+    /// <summary>
+    /// The superclass / parentclass -> null if the class has no parent
+    /// </summary>
+    private readonly KelloxClass? superClass;
 
     /// <summary>
     /// Constructor of the LoxClass class
     /// </summary>
-    /// <param name="Name">The Name of the class</param>
-    public KelloxClass(string Name, Dictionary<string, KelloxFunction> Methods, KelloxClass? SuperClass)
+    /// <param name="name">The Name of the class</param>
+    /// <param name="methods">Parameters for the Constructor</param>
+    /// <param name="superClass">The superclass / parentclass</param>
+    public KelloxClass(string name, Dictionary<string, KelloxFunction> methods, KelloxClass? superClass)
     {
-        this.Name = Name;
-        methods = Methods;
-        this.SuperClass = SuperClass;
+        this.name = name;
+        this.methods = methods;
+        this.superClass = superClass;
     }
 
-    public override string ToString()
-    {
-        return Name;
-    }
+    public override string ToString() => name;
 
-    public KelloxFunction? FindMethod(string name)
+    /// <summary>
+    /// Looks up a method in the dictionary and returns it if it was present, otherwise null is returned
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public bool TryFindMethod(string name, out KelloxFunction? function)
     {
-        if (methods.ContainsKey(name))
+        if (this.methods.ContainsKey(name))
         {
-            return methods[name];
+            function = this.methods[name];
+            return true;
         }
-        if (SuperClass is not null)
+        if (this.superClass is not null)
         {
-            return SuperClass.FindMethod(name);
+            return this.superClass.TryFindMethod(name, out function);
         }
-        return null;
+        function = null;
+        return false;
     }
 
     /// <summary>
     /// Creates a new Instance of the Class
     /// </summary>
     /// <param name="arguments">Arguments passed in the constructor -> ignored at the moment</param>
-    public object? Call(List<object?> arguments)
+    public object? Call(List<object?> arguments, Token paren)
     {
         KelloxInstance instance = new(this);
         if (methods.ContainsKey(Constants.InitKeyword))
         {
             KelloxFunction initializer = methods[Constants.InitKeyword];
-            initializer.Bind(instance).Call(arguments);
+            initializer.Bind(instance).Call(arguments, paren);
         }
         return instance;
     }
