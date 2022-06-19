@@ -143,7 +143,7 @@ internal static class KelloxInterpreter
         {
             try
             {
-                statement.ExecuteStatement();
+                statement.Execute();
             }
             catch (RunTimeError runTimeError)
             {

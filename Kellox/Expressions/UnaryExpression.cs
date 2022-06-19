@@ -29,9 +29,9 @@ internal class UnaryExpression : IExpression
     /// </summary>
     public override string ToString() => IExpression.Parenthesize(this.OperatorToken.Lexeme, this.Right);
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
-        object? result = this.Right.EvaluateExpression();
+        object? result = this.Right.Evaluate();
         if (result is null)
         {
             return null;

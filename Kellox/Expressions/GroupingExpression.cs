@@ -20,5 +20,5 @@ internal class GroupingExpression : IExpression
     /// </summary>
     public override string ToString() => IExpression.Parenthesize("group", Expression);
 
-    public object? EvaluateExpression() => this.Expression.EvaluateExpression();
+    public object? Evaluate() => this.Expression.Evaluate();
 }

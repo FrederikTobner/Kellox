@@ -31,15 +31,15 @@ internal class IfStatement : IStatement
         this.ElseBranch = elseStatement;
     }
 
-    public void ExecuteStatement()
+    public void Execute()
     {
-        if (IExpression.IsTruthy(Condition.EvaluateExpression()))
+        if (IExpression.IsTruthy(Condition.Evaluate()))
         {
-            ThenBranch.ExecuteStatement();
+            ThenBranch.Execute();
         }
         else if (ElseBranch is not null)
         {
-            ElseBranch.ExecuteStatement();
+            ElseBranch.Execute();
         }
     }
 }

@@ -17,8 +17,8 @@ internal class ExpressionStatement : IStatement
         this.Expression = expression;
     }
 
-    public void ExecuteStatement()
+    public void Execute()
     {
-        Expression.EvaluateExpression();
+        Expression.Evaluate();
     }
 }

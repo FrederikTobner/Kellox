@@ -37,7 +37,7 @@ namespace Kellox.Utils
         /// <param name="message">The Error Message that is displayed</param>
         private static void Report(int line, string where, string message)
         {
-            Console.WriteLine($"[line {line}] Error{where}: {message}");
+            Console.WriteLine($"[line {line}] Error{where} : {message}");
             KelloxInterpreter.ErrorOccurred = true;
         }
     }

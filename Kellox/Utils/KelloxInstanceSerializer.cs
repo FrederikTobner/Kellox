@@ -6,6 +6,10 @@ namespace Kellox.Utils
 {
     internal static class KelloxInstanceSerializer
     {
+
+        /// <summary>
+        /// The depth in the KelloxInstanceTree
+        /// </summary>
         private static int depth = 1;
 
         /// <summary>
@@ -27,19 +31,20 @@ namespace Kellox.Utils
                 stringBuilder.Append("\": ");
                 switch (field.Value)
                 {
-                    //strings
-                    case string:
-                        stringBuilder.Append('"');
-                        stringBuilder.Append(field.Value);
-                        stringBuilder.Append('"');
-                        break;
+                    // A Kellox Instance✨
                     case KelloxInstance:
                         depth++;
                         stringBuilder.Append(' ');
                         stringBuilder.Append(field.Value is not null ? field.Value : KeywordConstants.NilKeyword);
                         depth--;
                         break;
-                    //Numbers, boolean's and null
+                    //Strings
+                    case string:
+                        stringBuilder.Append('"');
+                        stringBuilder.Append(field.Value);
+                        stringBuilder.Append('"');
+                        break;
+                    //Numbers, Boolean's and nil
                     default:
                         stringBuilder.Append(field.Value is not null ? field.Value : KeywordConstants.NilKeyword);
                         break;

@@ -25,12 +25,12 @@ internal class ReturnStatement : IStatement
         this.Expression = expression;
     }
 
-    public void ExecuteStatement()
+    public void Execute()
     {
         object? value = null;
         if (Expression is not null)
         {
-            value = Expression.EvaluateExpression();
+            value = Expression.Evaluate();
         }
         // Throws an return exception to get to the beginning of the call stack
         throw new Return(value);

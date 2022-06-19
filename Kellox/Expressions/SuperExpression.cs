@@ -24,7 +24,7 @@ internal class SuperExpression : IExpression
         this.method = method;
     }
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
         KelloxInterpreter.TryGetDepthOfLocal(this, out int distance);
         KelloxClass? superClass = (KelloxClass?)KelloxInterpreter.currentEnvironment.GetAt(distance, Token);

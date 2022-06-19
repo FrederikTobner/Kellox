@@ -29,9 +29,9 @@ internal class LogicalExpression : IExpression
         this.operatorToken = operatorToken;
     }
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
-        object? leftResult = Left.EvaluateExpression();
+        object? leftResult = Left.Evaluate();
         if (operatorToken.TokenType is TokenType.OR)
         {
             if (IExpression.IsTruthy(leftResult))
@@ -46,7 +46,7 @@ internal class LogicalExpression : IExpression
                 return leftResult;
             }
         }
-        return Right.EvaluateExpression();
+        return Right.Evaluate();
     }
 
     /// <summary>

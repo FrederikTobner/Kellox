@@ -3,29 +3,20 @@ using Kellox.Tokens;
 
 namespace Kellox.Functions
 {
+    /// <summary>
+    /// Native typeof function -> used to determine the type of a variable in Kellox. Can be String, Number, Boolean, a kelloxclass or undefiened for nil
+    /// </summary>
     internal class TypeOfFunction : IFunction
     {
         public int Arity => 1;
 
-        public object? Call(List<object?> arguments, Token paren)
+        public object? Call(List<object?> arguments, Token paren) => arguments[0] switch
         {
-            if (arguments[0] is string)
-            {
-                return "String";
-            }
-            if (arguments[0] is double)
-            {
-                return "Number";
-            }
-            if (arguments[0] is bool)
-            {
-                return "Boolean";
-            }
-            if (arguments[0] is KelloxInstance kelloxInstance)
-            {
-                return kelloxInstance.KelloxClass.ToString();
-            }
-            return "Undefiended";
-        }
+            string => "String",
+            double => "Number",
+            bool => "Boolean",
+            KelloxInstance kelloxInstance => kelloxInstance.KelloxClass.ToString(),
+            _ => "Undefiened"
+        };
     }
 }

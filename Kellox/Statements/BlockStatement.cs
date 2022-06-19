@@ -24,19 +24,17 @@ namespace Kellox.Statements
         /// <summary>
         /// Executes the statements in the block
         /// </summary>
-        public void ExecuteStatement()
+        public void Execute()
         {
             // Saves the current environment
             KelloxEnvironment environment = KelloxInterpreter.currentEnvironment;
-
             // Creates a new Environment after execution
             KelloxInterpreter.currentEnvironment = new KelloxEnvironment(environment);
-
+            //Executes all the statements in the Block
             foreach (IStatement statement in Statements)
             {
-                statement.ExecuteStatement();
+                statement.Execute();
             }
-
             // Resets the currentEnvironment
             KelloxInterpreter.currentEnvironment = environment;
 

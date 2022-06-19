@@ -29,9 +29,9 @@ internal class AssignmentExpression : IExpression
     /// </summary>
     public override string ToString() => IExpression.Parenthesize(Token.Lexeme, Value);
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
-        object? result = Value.EvaluateExpression();
+        object? result = Value.Evaluate();
         if (KelloxInterpreter.TryGetDepthOfLocal(this, out int distance))
         {
             KelloxInterpreter.currentEnvironment.AssignAt(distance, Token, result);

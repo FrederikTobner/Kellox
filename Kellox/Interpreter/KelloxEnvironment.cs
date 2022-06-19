@@ -20,14 +20,18 @@ internal class KelloxEnvironment
     /// </summary>
     private readonly Dictionary<string, object?> values;
 
-    public KelloxEnvironment(KelloxEnvironment? environment = null)
+    /// <summary>
+    /// Initializes a new instance of the KelloxEnvironment class
+    /// </summary>
+    /// <param name="enclosing">The Enclosing environment</param>
+    public KelloxEnvironment(KelloxEnvironment? enclosing = null)
     {
         values = new Dictionary<string, object?>();
-        Enclosing = environment;
+        this.Enclosing = enclosing;
     }
 
     /// <summary>
-    /// Assigns a value to a variable in the environment
+    /// Assigns a value to a variable that is already defined in the environment
     /// </summary>
     /// <param name="name">The name of the variable</param>
     /// <param name="value">The value that shall be assigned to the variable</param>
@@ -53,23 +57,17 @@ internal class KelloxEnvironment
     /// <param name="distance">distance to the specified environment ()from the current Environment</param>
     /// <param name="token">The Token (var identifierr)</param>
     /// <param name="value">The value assigned to the variable</param>
-    public void AssignAt(int distance, Token token, object? value)
-    {
-        Ancestor(distance).values[token.Lexeme] = value;
-    }
+    public void AssignAt(int distance, Token token, object? value) => Ancestor(distance).values[token.Lexeme] = value;
 
     /// <summary>
-    /// Defines a new variable
+    /// Defines a new variable in the Environment
     /// </summary>
     /// <param name="name">The name of the variable</param>
     /// <param name="value">The value that shall be assigned to the variable</param>
-    public void Define(string name, object? value)
-    {
-        values.Add(name, value);
-    }
+    public void Define(string name, object? value) => values.Add(name, value);
 
     /// <summary>
-    /// Gets the value associated to a specific Variable
+    /// Gets the value associated to a specific Variable from an Enviroment or the Enclosing Environments
     /// </summary>
     /// <param name="token">The identifier token</param>
     /// <returns>The value associated to the variable</returns>
@@ -92,16 +90,12 @@ internal class KelloxEnvironment
     /// </summary>
     /// <param name="distance">The specified distance</param>
     /// <param name="token">The IdentifierToken</param>
-    /// <returns></returns>
-    public object? GetAt(int distance, Token token)
-    {
-        return Ancestor(distance).Get(token);
-    }
+    public object? GetAt(int distance, Token token) => Ancestor(distance).Get(token);
 
     /// <summary>
-    /// Iterates through the ancestors/parents/enclosing environments of the current Environment
+    /// Iterates through the ancestors/parents/enclosing environments of the current Environment and returns the ancestor environment from a specific distance
     /// </summary>
-    /// <param name="distance"></param>
+    /// <param name="distance">The distance to the ancestor</param>
     private KelloxEnvironment Ancestor(int distance)
     {
         KelloxEnvironment environment = this;

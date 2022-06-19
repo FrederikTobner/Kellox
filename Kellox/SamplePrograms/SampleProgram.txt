@@ -48,12 +48,12 @@ class FilledDougnutWithChocolateCoatAndSprinkles < FilledDougnutWithChocolateCoa
 		return super.cook() +" with " + this.sprinkleColor + " sprinkles on top";
 	}
 }
-
+println typeof(nil);
 // very tasty 🍩
 var donut = FilledDougnutWithChocolateCoatAndSprinkles("golden brown", "custard", "dark", "rainbow");
 println donut.cook();
 println donut;
-
+println typeof(donut);
 class DoughnutPair
 {
 	init(firstDonut, secondDonut)
@@ -128,7 +128,7 @@ var counter = makeCounter();
 println counter(); // "1".
 println counter(); // "2"
 
-println random(1, 5);
+println random(1, 10);
 
 var zahl = 7;
 println zahl;

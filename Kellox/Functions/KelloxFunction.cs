@@ -48,7 +48,7 @@ internal class KelloxFunction : IFunction
         {
             foreach (IStatement? statement in Declaration.Body)
             {
-                statement.ExecuteStatement();
+                statement.Execute();
             }
         }
         catch (Return returnValue)

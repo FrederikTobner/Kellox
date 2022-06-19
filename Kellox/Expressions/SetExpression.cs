@@ -32,12 +32,12 @@ internal class SetExpression : IExpression
         this.Value = Value;
     }
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
-        object? result = Object.EvaluateExpression();
+        object? result = Object.Evaluate();
         if (result is KelloxInstance loxInstance)
         {
-            object? value = Value.EvaluateExpression();
+            object? value = Value.Evaluate();
             loxInstance.Set(Name, value);
             return value;
         }
@@ -46,7 +46,7 @@ internal class SetExpression : IExpression
 
     public override string ToString()
     {
-        object? result = Object.EvaluateExpression();
+        object? result = Object.Evaluate();
         return "set -> " + Name.Lexeme + "to " + (result is null ? KeywordConstants.NilKeyword : result.ToString()) + ".";
     }
 }

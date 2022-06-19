@@ -18,7 +18,7 @@ namespace Kellox.Expressions
             this.Token = token;
         }
 
-        public object? EvaluateExpression()
+        public object? Evaluate()
         {
             if (KelloxInterpreter.TryGetDepthOfLocal(this, out int distance))
             {

@@ -33,5 +33,5 @@ internal class LiteralExpression : IExpression
         return KeywordConstants.NilKeyword;
     }
 
-    public object? EvaluateExpression() => Value;
+    public object? Evaluate() => Value;
 }

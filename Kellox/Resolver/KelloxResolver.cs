@@ -61,50 +61,37 @@ internal static class KelloxResolver
     /// </summary>
     private static void ResolveStatement(IStatement statement)
     {
-        if (statement is BlockStatement blockStatement)
+        switch (statement)
         {
-            ResolveStatement(blockStatement);
-            return;
-        }
-        if (statement is DeclarationStatement declarationStatement)
-        {
-            ResolveStatement(declarationStatement);
-            return;
-        }
-        if (statement is ClassStatement classStatement)
-        {
-            ResolveStatement(classStatement);
-            return;
-        }
-        if (statement is FunctionStatement functionStatement)
-        {
-            ResolveStatement(functionStatement, FunctionType.FUNCTION);
-            return;
-        }
-        if (statement is ExpressionStatement expressionStatement)
-        {
-            ResolveStatement(expressionStatement);
-            return;
-        }
-        if (statement is IfStatement ifStatement)
-        {
-            ResolveStatement(ifStatement);
-            return;
-        }
-        if (statement is PrintStatement printStatement)
-        {
-            ResolveStatement(printStatement);
-            return;
-        }
-        if (statement is ReturnStatement returnStatement)
-        {
-            ResolveStatement(returnStatement);
-            return;
-        }
-        if (statement is WhileStatement whileStatement)
-        {
-            ResolveStatement(whileStatement);
-            return;
+            case BlockStatement blockStatement:
+                ResolveStatement(blockStatement);
+                return;
+            case DeclarationStatement declarationStatement:
+                ResolveStatement(declarationStatement);
+                return;
+            case ClassStatement classStatement:
+                ResolveStatement(classStatement);
+                return;
+            case FunctionStatement functionStatement:
+                ResolveStatement(functionStatement, FunctionType.FUNCTION);
+                return;
+            case ExpressionStatement expressionStatement:
+                ResolveStatement(expressionStatement);
+                return;
+            case IfStatement ifStatement:
+                ResolveStatement(ifStatement);
+                return;
+            case PrintStatement printStatement:
+                ResolveStatement(printStatement);
+                return;
+            case ReturnStatement returnStatement:
+                ResolveStatement(returnStatement);
+                return;
+            case WhileStatement whileStatement:
+                ResolveStatement(whileStatement);
+                return;
+            default:
+                throw new NotImplementedException();
         }
     }
 
@@ -113,65 +100,46 @@ internal static class KelloxResolver
     /// </summary>
     private static void ResolveExpression(IExpression expression)
     {
-        if (expression is LiteralExpression)
+        switch (expression)
         {
-            //A Literal can be ignored
-            return;
-        }
-        if (expression is GetExpression getExpression)
-        {
-            ResolveExpression(getExpression);
-            return;
-        }
-        if (expression is SuperExpression superExpression)
-        {
-            ResolveExpression(superExpression);
-            return;
-        }
-        if (expression is ThisExpression thisExpression)
-        {
-            ResolveExpression(thisExpression);
-            return;
-        }
-        if (expression is SetExpression setExpression)
-        {
-            ResolveExpression(setExpression);
-            return;
-        }
-        if (expression is VariableExpression variableExpression)
-        {
-            ResolveExpression(variableExpression);
-            return;
-        }
-        if (expression is AssignmentExpression assignmentExpression)
-        {
-            ResolveExpression(assignmentExpression);
-            return;
-        }
-        if (expression is BinaryExpression binaryExpression)
-        {
-            ResolveExpression(binaryExpression);
-            return;
-        }
-        if (expression is CallExpression callExpression)
-        {
-            ResolveExpression(callExpression);
-            return;
-        }
-        if (expression is GroupingExpression groupingExpression)
-        {
-            ResolveExpression(groupingExpression);
-            return;
-        }
-        if (expression is LogicalExpression logicalExpression)
-        {
-            ResolveExpression(logicalExpression);
-            return;
-        }
-        if (expression is UnaryExpression unaryExpression)
-        {
-            ResolveExpression(unaryExpression);
-            return;
+            case LiteralExpression:
+                //A Literal can be ignored
+                return;
+            case GetExpression getExpression:
+                ResolveExpression(getExpression);
+                return;
+            case SuperExpression superExpression:
+                ResolveExpression(superExpression);
+                return;
+            case ThisExpression thisExpression:
+                ResolveExpression(thisExpression);
+                return;
+            case SetExpression setExpression:
+                ResolveExpression(setExpression);
+                return;
+            case VariableExpression variableExpression:
+                ResolveExpression(variableExpression);
+                return;
+            case AssignmentExpression assignmentExpression:
+                ResolveExpression(assignmentExpression);
+                return;
+            case BinaryExpression binaryExpression:
+                ResolveExpression(binaryExpression);
+                return;
+            case CallExpression callExpression:
+                ResolveExpression(callExpression);
+                return;
+            case GroupingExpression groupingExpression:
+                ResolveExpression(groupingExpression);
+                return;
+            case LogicalExpression logicalExpression:
+                ResolveExpression(logicalExpression);
+                return;
+            case UnaryExpression unaryExpression:
+                ResolveExpression(unaryExpression);
+                return;
+            default:
+                throw new NotImplementedException();
         }
     }
 
@@ -219,30 +187,18 @@ internal static class KelloxResolver
             if (classStatement.SuperClass.Token.Lexeme.Equals(classStatement.Token.Lexeme))
             {
                 ErrorLogger.Error(classStatement.Token, "A class can't inherit from itself");
+                return;
             }
-            else
-            {
-                currentClass = ClassType.SUBCLASS;
-                ResolveExpression(classStatement.SuperClass);
-            }
-        }
-        if (classStatement.SuperClass is not null)
-        {
+            currentClass = ClassType.SUBCLASS;
+            ResolveExpression(classStatement.SuperClass);
             BeginScope();
             scopes.Peek().Add(KeywordConstants.SuperKeyword, true);
+
         }
         BeginScope();
         foreach (FunctionStatement? method in classStatement.Methods)
         {
-            if (method.Token.Lexeme.Equals(KeywordConstants.InitKeyword))
-            {
-                ResolveStatement(method, FunctionType.INITIALIZER);
-            }
-            else
-            {
-                ResolveStatement(method, FunctionType.METHOD);
-            }
-
+            ResolveStatement(method, method.Token.Lexeme.Equals(KeywordConstants.InitKeyword) ? FunctionType.INITIALIZER : FunctionType.METHOD);
         }
         EndScope();
         if (classStatement.SuperClass is not null)

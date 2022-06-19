@@ -35,16 +35,17 @@ internal class ClassStatement : IStatement
         this.SuperClass = SuperClass;
     }
 
-    public void ExecuteStatement()
+    public void Execute()
     {
         object? superClass = null;
         if (SuperClass is not null)
         {
-            superClass = SuperClass.EvaluateExpression();
+            superClass = SuperClass.Evaluate();
             // superClass has to be a Loxclass
             if (superClass is not KelloxClass)
             {
                 ErrorLogger.Error(SuperClass.Token, "Superclass must be a class");
+                return;
             }
         }
         //Defines the class in the current environment

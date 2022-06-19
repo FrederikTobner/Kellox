@@ -32,15 +32,15 @@ internal class CallExpression : IExpression
         this.Arguments = arguments;
     }
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
-        object? callee = Calle.EvaluateExpression();
+        object? callee = Calle.Evaluate();
 
         List<object?> arguments = new();
 
         foreach (IExpression expression in Arguments)
         {
-            arguments.Add(expression.EvaluateExpression());
+            arguments.Add(expression.Evaluate());
         }
         if (callee is IFunction function)
         {

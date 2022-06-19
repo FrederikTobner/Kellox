@@ -18,7 +18,7 @@ internal class ThisExpression : IExpression
         this.Token = Keyword;
     }
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
         if (KelloxInterpreter.TryGetDepthOfLocal(this, out int distance))
         {
@@ -30,5 +30,5 @@ internal class ThisExpression : IExpression
         }
     }
 
-    public override string ToString() => $"{Token.Lexeme} -> {this.EvaluateExpression()}.";
+    public override string ToString() => $"{Token.Lexeme} -> {this.Evaluate()}.";
 }

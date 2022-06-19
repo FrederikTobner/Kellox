@@ -30,12 +30,12 @@ internal class DeclarationStatement : IStatement
         this.Expression = expression;
     }
 
-    public void ExecuteStatement()
+    public void Execute()
     {
         object? value = null;
         if (Expression is not null)
         {
-            value = Expression.EvaluateExpression();
+            value = Expression.Evaluate();
         }
         KelloxInterpreter.currentEnvironment.Define(Name.Lexeme, value);
     }

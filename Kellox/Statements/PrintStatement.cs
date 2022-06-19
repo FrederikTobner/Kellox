@@ -24,9 +24,9 @@ internal class PrintStatement : IStatement
         this.Expression = expression;
     }
 
-    public void ExecuteStatement()
+    public void Execute()
     {
-        object? obj = Expression.EvaluateExpression();
+        object? obj = Expression.Evaluate();
         if (obj is not null)
         {
             if (obj is string text)

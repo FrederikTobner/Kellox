@@ -8,6 +8,7 @@ namespace Kellox.Functions
     /// </summary>
     internal class RandomFunction : IFunction
     {
+        // Native Pseudo Random Number Generator of the .Net framework
         private static readonly Random random = new();
 
         public int Arity => 2;
@@ -16,6 +17,10 @@ namespace Kellox.Functions
         {
             if (arguments[0] is double minValue && arguments[1] is double maxValue)
             {
+                if (minValue > maxValue)
+                {
+                    throw new RunTimeError(paren, "minValue must be greater than maxvalue");
+                }
                 try
                 {
                     int minVal = (int)minValue;
@@ -24,7 +29,7 @@ namespace Kellox.Functions
                 }
                 catch (Exception)
                 {
-                    throw new RunTimeError(paren, "Arguments for random call out of bounds");
+                    throw new RunTimeError(paren, "Arguments for random call out of bounds, maxValue is " + int.MaxValue + " and minValue" + int.MinValue);
                 }
 
             }

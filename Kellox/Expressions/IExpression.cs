@@ -15,13 +15,19 @@ internal interface IExpression
     /// <summary>
     /// Evaluates the Expression an returns the result
     /// </summary>
-    public abstract object? EvaluateExpression();
+    public abstract object? Evaluate();
 
+    /// <summary>
+    /// Adds paranthesize to an array of Expressions
+    /// </summary>
+    /// <param name="name">The name of the expression -> kind</param>
+    /// <param name="expressions">The inner expressions</param>
+    /// <returns></returns>
     protected static string Parenthesize(string name, params IExpression[] expressions)
     {
         StringBuilder builder = new();
-
-        builder.Append('(').Append(name);
+        builder.Append('(');
+        builder.Append(name);
         foreach (IExpression expression in expressions)
         {
             builder.Append(' ');

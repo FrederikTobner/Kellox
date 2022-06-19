@@ -11,6 +11,7 @@ namespace Kellox.Parser
         {
             // Do we only need to ignore a statement or a whole block?
             int scopeDepth = 0;
+            current++;
             SynchronizeWithTokenTypes(tokens, TokenType.SEMICOLON, ref current, ref scopeDepth);
         }
 

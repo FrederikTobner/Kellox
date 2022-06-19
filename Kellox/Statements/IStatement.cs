@@ -5,5 +5,5 @@ internal interface IStatement
     /// <summary>
     /// Executes the Statement
     /// </summary>
-    void ExecuteStatement();
+    void Execute();
 }

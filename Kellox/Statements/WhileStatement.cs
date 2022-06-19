@@ -23,11 +23,11 @@ internal class WhileStatement : IStatement
         this.Body = body;
     }
 
-    public void ExecuteStatement()
+    public void Execute()
     {
-        while (IExpression.IsTruthy(Condition.EvaluateExpression()))
+        while (IExpression.IsTruthy(Condition.Evaluate()))
         {
-            Body.ExecuteStatement();
+            Body.Execute();
         }
     }
 }

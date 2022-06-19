@@ -9,7 +9,7 @@ namespace Kellox.Interpreter;
 internal class KelloxProgram : IEnumerable<IStatement>
 {
     /// <summary>
-    /// A readonly list conatining the parsed statements
+    /// A readonly list containing of parsed statements/instructions that can be executed
     /// </summary>
     public IReadOnlyList<IStatement> Statements { get; init; }
 

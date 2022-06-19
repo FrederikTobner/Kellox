@@ -37,10 +37,10 @@ internal class BinaryExpression : IExpression
     /// </summary>
     public override string ToString() => IExpression.Parenthesize(OperatorToken.Lexeme, Left, Right);
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
-        object? leftResult = Left.EvaluateExpression();
-        object? rightResult = Right.EvaluateExpression();
+        object? leftResult = Left.Evaluate();
+        object? rightResult = Right.Evaluate();
         if (leftResult is double leftNumber && rightResult is double rightNumber)
         {
             return OperatorToken.TokenType switch

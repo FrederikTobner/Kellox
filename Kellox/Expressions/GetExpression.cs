@@ -27,9 +27,9 @@ internal class GetExpression : IExpression
         this.Name = Name;
     }
 
-    public object? EvaluateExpression()
+    public object? Evaluate()
     {
-        object? result = Object.EvaluateExpression();
+        object? result = Object.Evaluate();
         if (result is KelloxInstance loxInstance)
         {
             return loxInstance.Get(Name);
