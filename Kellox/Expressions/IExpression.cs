@@ -54,7 +54,7 @@ internal interface IExpression
     {
         if (obj1 is null && obj2 is null)
         {
-            return false;
+            return true;
         }
         if (obj1 is null)
         {

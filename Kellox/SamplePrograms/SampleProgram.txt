@@ -48,7 +48,6 @@ class FilledDougnutWithChocolateCoatAndSprinkles < FilledDougnutWithChocolateCoa
 		return super.cook() +" with " + this.sprinkleColor + " sprinkles on top";
 	}
 }
-println typeof(nil);
 // very tasty 🍩
 var donut = FilledDougnutWithChocolateCoatAndSprinkles("golden brown", "custard", "dark", "rainbow");
 println donut.cook();
@@ -171,5 +170,58 @@ fun Countdown(x)
 	}
 }
 
-Countdown(10);
+//Countdown(10);
 
+class Node
+{
+	init(value, nextNode)
+	{
+		this.value = value;
+		this.nextNode = nextNode;
+	}
+}
+
+class SingleLinkedList
+{
+	init()
+	{
+		this.head = nil;
+	}
+
+	addLast(value)
+	{
+		if(this.head == nil)
+		{
+			this.head = Node(value, nil);
+			return;
+		}
+		var current = this.head;
+		while(current.nextNode != nil)
+		{
+			current = current.nextNode;
+		}
+		current.nextNode = Node(value, nil);
+	}
+
+	addFirst(value)
+	{
+		this.head = Node(value, this.head);
+	}
+
+	printList()
+	{
+		var current = this.head;
+		while(current != nil)
+		{
+			println current.value;
+			current = current.nextNode;
+		}
+	}
+}
+
+var liste = SingleLinkedList();
+liste.addFirst(5);
+liste.addFirst(10);
+liste.addFirst(15);
+liste.printList();
+println liste;

@@ -33,7 +33,7 @@ namespace Kellox.Functions
                 }
 
             }
-            return null;
+            throw new RunTimeError(paren, "Can't call random function with anything that is not a number");
         }
 
         public override string ToString() => "native random function";

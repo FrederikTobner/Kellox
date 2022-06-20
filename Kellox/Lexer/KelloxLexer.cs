@@ -150,6 +150,10 @@ internal static class KelloxLexer
                             ErrorLogger.Error(line, "Blockcomment was never closed, no \"*/\" found");
                             break;
                         }
+                        if (Match(source, '\n'))
+                        {
+                            line++;
+                        }
                         Advance(source);
                     }
                     if (!IsAtEnd(source))

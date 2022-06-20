@@ -12,14 +12,13 @@ namespace Kellox.Parser;
 /// </summary>
 internal static class KelloxParser
 {
-
     /// <summary>
     /// The current Position in the sequence of tokens
     /// </summary>
     private static int current;
 
     /// <summary>
-    /// Builds a KelloxProgram out of a flat sequence of Tokens
+    /// Builds a KelloxProgram (containing an abstract syntax tree) out of a flat sequence of Tokens
     /// </summary>
     internal static KelloxProgram Parse(IReadOnlyList<Token> tokens)
     {
@@ -39,6 +38,7 @@ internal static class KelloxParser
             catch (ParseError error)
             {
                 ErrorLogger.Error(error.ErrorToken, error.Message);
+                // Synchronizes the parser after a parsing error has ocured
                 Synchronizer.Synchronize(tokens, ref current);
             }
         }
@@ -325,9 +325,8 @@ internal static class KelloxParser
     /// <summary>
     /// Creates a Binaryexpression e.g. for x++ -> x + 1, that will be assigned to the variable
     /// </summary>
-    /// <param name="token"></param>
-    /// <param name="expression"></param>
-    /// <returns></returns>
+    /// <param name="token">The increament/decrement token</param>
+    /// <param name="expression">The Expression that will we incremented</param>
     private static IExpression CreateIncOrDecExpression(Token token, IExpression expression)
     {
         return new BinaryExpression(expression, token.TokenType is TokenType.PLUS_PLUS ?
@@ -336,6 +335,14 @@ internal static class KelloxParser
                 new LiteralExpression(1.0));
     }
 
+
+    /// <summary>
+    /// Creates a new XEqual expression e.g. x+=3/x-=3/x*=3/x/=3
+    /// </summary>
+    /// <param name="tokens">The linear sequence of tokens that is used to create a abstract syntax tree</param>
+    /// <param name="token">The Token of the Expression (PLUS_EQUAL/MINUS_EQUAL/STAR_EQUAL/SLASH_EQUAL)</param>
+    /// <param name="expression">The expression left of the Operator</param>
+    /// <exception cref="ParseError">Thrown if the operator is not supported</exception>
     private static IExpression CreateXEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => token.TokenType switch
     {
         TokenType.PLUS_EQUAL => CreatePlusEqualExpression(tokens, token, expression),
@@ -630,10 +637,11 @@ internal static class KelloxParser
     /// <param name="message">The Message of the exception, that is thrown if the next token is not of the given type</param>
     private static Token Consume(IReadOnlyList<Token> tokens, TokenType tokenType, string message)
     {
-        if (Check(tokens, tokenType))
+        if (!Check(tokens, tokenType))
         {
-            return Advance(tokens);
+            throw new ParseError(Peek(tokens), message);
         }
-        throw new ParseError(Peek(tokens), message);
+        return Advance(tokens);
+
     }
 }
