@@ -85,47 +85,58 @@ class Rectangle
 	}
 }  
 ```
-Tasty oop breakfast
+Single Linked List
 ```
-class Doughnut 
+class Node
 {
-	init(fryingColor)
+	init(value, nextNode)
 	{
-		this.fryingColor = fryingColor;
-	}
-	cook() 
-	{
-		println "Fry until " + this.fryingColor;
+		this.value = value;
+		this.nextNode = nextNode;
 	}
 }
 
-class FilledDougnut < Doughnut 
+class SingleLinkedList
 {
-	init(filling, fryingColor)
+	init()
 	{
-		super.init(fryingColor);
-		this.filling = filling;		
+		this.head = nil;
 	}
-	cook()
+
+	addLast(value)
 	{
-		super.cook();
-		println "With " + this.filling;
+		if(this.head == nil)
+		{
+			this.head = Node(value, nil);
+			return;
+		}
+		var current = this.head;
+		while(current.nextNode != nil)
+		{
+			current = current.nextNode;
+		}
+		current.nextNode = Node(value, nil);
+	}
+
+	addFirst(value)
+	{
+		this.head = Node(value, this.head);
+	}
+
+	printList()
+	{
+		var current = this.head;
+		while(current != nil)
+		{
+			println current.value;
+			current = current.nextNode;
+		}
 	}
 }
 
-class FilledDougnutWithChocolateCoat < FilledDougnut
-{
-	init(chocolateColor, filling, fryingColor)
-	{
-		super.init(filling, fryingColor);
-		this.chocolateColor = chocolateColor;		
-	}
-	cook()
-	{
-		super.cook();
-		println "And a " + this.chocolateColor + " chocolate coat";
-	}
-}
-
-FilledDougnutWithChocolateCoat("dark", "custard", "golden brown").cook();
+var list = SingleLinkedList();
+list.addFirst(5);
+list.addFirst(10);
+list.addFirst(15);
+list.printList();
 ```
