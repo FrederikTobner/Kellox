@@ -15,7 +15,7 @@ class FilledDougnut < Doughnut
 	init(fryingColor, filling)
 	{
 		super.init(fryingColor);
-		this.filling = filling;		
+		this.filling = filling;
 	}
 	cook()
 	{

@@ -6,16 +6,15 @@ namespace Kellox.Utils
 {
     internal static class KelloxInstanceSerializer
     {
-
         /// <summary>
         /// The depth in the KelloxInstanceTree
         /// </summary>
         private static int depth = 1;
 
         /// <summary>
-        /// Serializes a loxInstance to JSON
+        /// Converts a loxInstance into a JSON string
         /// </summary>
-        /// <param name="loxInstance">The LoxInstance that is serialized</param>
+        /// <param name="fields">The fields of the LoxInstance that is serialized</param>
         internal static string Serialize(IReadOnlyDictionary<string, object?> fields)
         {
             StringBuilder stringBuilder = new();

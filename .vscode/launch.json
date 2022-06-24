@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Lox/bin/Debug/net6.0/Lox.dll",
+            "program": "${workspaceFolder}/Kellox/bin/Debug/net6.0/Kellox.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Lox",
+            "cwd": "${workspaceFolder}/Kellox",
             "console": "internalConsole",
             "stopAtEntry": false
         },

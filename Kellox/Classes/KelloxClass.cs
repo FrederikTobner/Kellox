@@ -21,6 +21,7 @@ internal class KelloxClass : IFunction
     {
         get
         {
+            //No constructor / initializer found
             if (!methods.ContainsKey(KeywordConstants.InitKeyword))
             {
                 return 0;
@@ -57,8 +58,8 @@ internal class KelloxClass : IFunction
     /// <summary>
     /// Looks up a method in the dictionary and returns it if it was present, otherwise null is returned
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="name">The name of the method</param>
+    /// <returns>A boolean value indicating whether the method was found</returns>
     public bool TryFindMethod(string name, out KelloxFunction? function)
     {
         if (this.methods.ContainsKey(name))
@@ -75,15 +76,15 @@ internal class KelloxClass : IFunction
     }
 
     /// <summary>
-    /// Creates a new Instance of the Class
+    /// Creates a new Instance of the Class 🚼
     /// </summary>
-    /// <param name="arguments">Arguments passed in the constructor -> ignored at the moment</param>
+    /// <param name="arguments">Arguments used to call the initializer/param>
     public object? Call(List<object?> arguments, Token paren)
     {
         KelloxInstance instance = new(this);
-        if (methods.ContainsKey(KeywordConstants.InitKeyword))
-        {
-            KelloxFunction initializer = methods[KeywordConstants.InitKeyword];
+        if (methods.TryGetValue(KeywordConstants.InitKeyword, out KelloxFunction? initializer))
+        {   
+            // Binds this instance to a copy of the initializer and then calls it with the arguments provided in the initalizer (and the closing paren for error logging)
             initializer.Bind(instance).Call(arguments, paren);
         }
         return instance;

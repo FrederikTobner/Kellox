@@ -3,7 +3,7 @@
 namespace Kellox.Keywords
 {
     /// <summary>
-    /// Stores all the keywords of the language lox
+    /// Stores all the keywords of the language Kellox
     /// </summary>
     internal static class KelloxKeywords
     {
@@ -20,28 +20,27 @@ namespace Kellox.Keywords
         /// <summary>
         /// Initializes the Dictionary with the Keywords of the language
         /// </summary>
-        /// <returns></returns>
         private static Dictionary<string, TokenType> InitializeKeywords()
         {
-            Dictionary<string, TokenType> words = new();
-            words.Add(KeywordConstants.AndKeyword, TokenType.AND);
-            words.Add(KeywordConstants.ClassKeyword, TokenType.CLASS);
-            words.Add(KeywordConstants.ElseKeyword, TokenType.ELSE);
-            words.Add(KeywordConstants.FalseKeyword, TokenType.FALSE);
-            words.Add(KeywordConstants.ForKeyWord, TokenType.FOR);
-            words.Add(KeywordConstants.FunctionKeyword, TokenType.FUN);
-            words.Add(KeywordConstants.IfKeyword, TokenType.IF);
-            words.Add(KeywordConstants.NilKeyword, TokenType.NIL);
-            words.Add(KeywordConstants.OrKeyword, TokenType.OR);
-            words.Add(KeywordConstants.PrintKeyword, TokenType.PRINT);
-            words.Add(KeywordConstants.PrintLineKeyword, TokenType.PRINTLN);
-            words.Add(KeywordConstants.ReturnKeyword, TokenType.RETURN);
-            words.Add(KeywordConstants.SuperKeyword, TokenType.SUPER);
-            words.Add(KeywordConstants.ThisKeyword, TokenType.THIS);
-            words.Add(KeywordConstants.TrueKeyword, TokenType.TRUE);
-            words.Add(KeywordConstants.VarKeyword, TokenType.VAR);
-            words.Add(KeywordConstants.WhileKeyword, TokenType.WHILE);
-            return words;
+            Dictionary<string, TokenType> keyWords = new();
+            keyWords.Add(KeywordConstants.AndKeyword, TokenType.AND);
+            keyWords.Add(KeywordConstants.ClassKeyword, TokenType.CLASS);
+            keyWords.Add(KeywordConstants.ElseKeyword, TokenType.ELSE);
+            keyWords.Add(KeywordConstants.FalseKeyword, TokenType.FALSE);
+            keyWords.Add(KeywordConstants.ForKeyWord, TokenType.FOR);
+            keyWords.Add(KeywordConstants.FunctionKeyword, TokenType.FUN);
+            keyWords.Add(KeywordConstants.IfKeyword, TokenType.IF);
+            keyWords.Add(KeywordConstants.NilKeyword, TokenType.NIL);
+            keyWords.Add(KeywordConstants.OrKeyword, TokenType.OR);
+            keyWords.Add(KeywordConstants.PrintKeyword, TokenType.PRINT);
+            keyWords.Add(KeywordConstants.PrintLineKeyword, TokenType.PRINTLN);
+            keyWords.Add(KeywordConstants.ReturnKeyword, TokenType.RETURN);
+            keyWords.Add(KeywordConstants.SuperKeyword, TokenType.SUPER);
+            keyWords.Add(KeywordConstants.ThisKeyword, TokenType.THIS);
+            keyWords.Add(KeywordConstants.TrueKeyword, TokenType.TRUE);
+            keyWords.Add(KeywordConstants.VarKeyword, TokenType.VAR);
+            keyWords.Add(KeywordConstants.WhileKeyword, TokenType.WHILE);
+            return keyWords;
         }
     }
 }

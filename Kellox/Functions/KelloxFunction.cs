@@ -51,13 +51,14 @@ internal class KelloxFunction : IFunction
                 statement.Execute();
             }
         }
+        // Return exception is thrown to get to the root of the abstract syntax tree
         catch (Return returnValue)
         {
             result = returnValue.Value;
         }
         if (IsInitializer)
         {
-            //Calls the constructor/initializer
+            //Returns the constructor/initializer
             result = Closure.GetAt(0, new Token(TokenType.THIS, "this", null, Declaration.Token.Line));
         }
         //Resets Environment
@@ -65,7 +66,7 @@ internal class KelloxFunction : IFunction
         return result;
     }
 
-    // Binds an instance to the enviroment of the function
+    // Binds an KelloxInstance to the enviroment of a copy of this function and returns the copy
     internal KelloxFunction Bind(KelloxInstance loxInstance)
     {
         KelloxEnvironment environment = new(Closure);

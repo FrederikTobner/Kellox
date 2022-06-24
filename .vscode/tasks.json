@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Lox/Lox.csproj",
+                "${workspaceFolder}/Kellox/Kellox.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Lox/Lox.csproj",
+                "${workspaceFolder}/Kellox/Kellox.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Lox/Lox.csproj"
+                "${workspaceFolder}/Kellox/Kellox.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

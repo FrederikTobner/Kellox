@@ -12,7 +12,7 @@ namespace Kellox.Utils
         /// <summary>
         /// Path of the SampleProgram
         /// </summary>
-        private static readonly string sampleProgramPath = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}\\SamplePrograms\\SampleProgram.txt";
+        private static readonly string sampleProgramPath = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}\\SamplePrograms\\SampleProgram.klx";
 
         /// <summary>
         /// Tests the interrpreter by running the sample Program

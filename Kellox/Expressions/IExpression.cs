@@ -13,7 +13,7 @@ internal interface IExpression
     public abstract string ToString();
 
     /// <summary>
-    /// Evaluates the Expression an returns the result
+    /// Evaluates the Expression an returns the result 🧐
     /// </summary>
     public abstract object? Evaluate();
 

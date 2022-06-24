@@ -65,7 +65,7 @@ internal static class KelloxInterpreter
     }
 
     /// <summary>
-    /// Executes a lox program from a file
+    /// Executes a Kellox program from a file
     /// </summary>
     private static void RunFile(string path)
     {
@@ -85,7 +85,7 @@ internal static class KelloxInterpreter
     }
 
     /// <summary>
-    /// Executes a lox program from the Command prompt
+    /// Executes a Kellox program from the Command prompt
     /// </summary>
     private static void RunPrompt()
     {
@@ -107,7 +107,7 @@ internal static class KelloxInterpreter
     }
 
     /// <summary>
-    /// Executes a lox program
+    /// Executes a Kellox program
     /// </summary>
     /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
     private static void Run(string sourceCode)
@@ -134,7 +134,7 @@ internal static class KelloxInterpreter
     }
 
     /// <summary>
-    /// Executes the Program written in Lox after the variables in the inner scopes have been resolved
+    /// Executes the Program written in Kellox after the variables in the inner scopes have been resolved
     /// </summary>
     /// <param name="program">The program that is executed</param>
     private static void RunProgram(KelloxProgram program)
