@@ -22,12 +22,12 @@ internal static class KelloxResolver
     /// <summary>
     /// The current function type -> used to keep track if the resolver is currently in a function
     /// </summary>
-    private static FunctionType currentFunction = FunctionType.NONE;
+    private static FunctionType currentFunctionType = FunctionType.NONE;
 
     /// <summary>
     /// The current class type -> used to keep track if the resolver is currently in a class
     /// </summary>
-    private static ClassType currentClass = ClassType.NONE;
+    private static ClassType currentClassType = ClassType.NONE;
 
     /// <summary>
     /// Resolves a LoxProgram -> walks over the Syntaxtree and resolves all the variables it contains
@@ -96,7 +96,160 @@ internal static class KelloxResolver
     }
 
     /// <summary>
-    ///  Casts the Expression to it's respective type and handles further resolving
+    /// Resolves a BlockStatement
+    /// </summary>
+    /// <param name="blockStatement">The BlockStatement that is resolved</param>
+    private static void ResolveStatement(BlockStatement blockStatement)
+    {
+        BeginScope();
+        ResolveStatements(blockStatement.Statements);
+        EndScope();
+    }
+
+
+    /// <summary>
+    /// Resolves a DeclarationStatement
+    /// </summary>
+    /// <param name="declarationStatement">The Declaration that is resolved</param>
+    private static void ResolveStatement(DeclarationStatement declarationStatement)
+    {
+        if (scopes.Count is not 0 && scopes.Peek().ContainsKey(declarationStatement.Name.Lexeme))
+        {
+            ErrorLogger.Error(declarationStatement.Name, "A variable with this name (" + declarationStatement.Name.Lexeme + ") was already defined in this scope");
+        }
+        Declare(declarationStatement.Name);
+        if (declarationStatement.Expression is not null)
+        {
+            ResolveExpression(declarationStatement.Expression);
+            Define(declarationStatement.Name);
+        }
+    }
+
+    /// <summary>
+    /// Resolves a classStatement
+    /// </summary>
+    /// <param name="classStatement"></param>
+    private static void ResolveStatement(ClassStatement classStatement)
+    {
+        ClassType enclosingClass = currentClassType;
+        currentClassType = ClassType.CLASS;
+        Define(classStatement.Token);
+        if (classStatement.SuperClass is not null)
+        {
+            if (classStatement.SuperClass.Token.Lexeme.Equals(classStatement.Token.Lexeme))
+            {
+                ErrorLogger.Error(classStatement.Token, "A class can't inherit from itself");
+                return;
+            }
+            currentClassType = ClassType.SUBCLASS;
+            ResolveExpression(classStatement.SuperClass);
+            BeginScope();
+            scopes.Peek().Add(KeywordConstants.SuperKeyword, true);
+
+        }
+        BeginScope();
+        foreach (FunctionStatement? method in classStatement.Methods)
+        {
+            ResolveStatement(method, method.Token.Lexeme.Equals(KeywordConstants.InitKeyword) ? FunctionType.INITIALIZER : FunctionType.METHOD);
+        }
+        EndScope();
+        if (classStatement.SuperClass is not null)
+        {
+            EndScope();
+        }
+        currentClassType = enclosingClass;
+    }
+
+    /// <summary>
+    /// Resolves a FunctionStatement
+    /// </summary>
+    /// <param name="functionStatement">The FunctionStatement that shall be resolved</param>
+    private static void ResolveStatement(FunctionStatement functionStatement, FunctionType functionType)
+    {
+        FunctionType enclosingType = currentFunctionType;
+        currentFunctionType = functionType;
+        Define(functionStatement.Token);
+        BeginScope();
+        foreach (Token? token in functionStatement.Parameters)
+        {
+            if (token is not null)
+            {
+                Define(token);
+            }
+        }
+        ResolveStatements(functionStatement.Body);
+        EndScope();
+        currentFunctionType = enclosingType;
+    }
+
+    /// <summary>
+    /// Resolves a ExpressionStatement
+    /// </summary>
+    /// <param name="expressionStatement">The ExpressionStatement that shall be resolved</param>
+    private static void ResolveStatement(ExpressionStatement expressionStatement)
+    {
+        ResolveExpression(expressionStatement.Expression);
+    }
+
+    /// <summary>
+    /// Resolves a IfStatement
+    /// </summary>
+    /// <param name="ifStatement">The IfStatement that shall be resolved</param>
+    private static void ResolveStatement(IfStatement ifStatement)
+    {
+        ResolveExpression(ifStatement.Condition);
+        ResolveStatement(ifStatement.ThenBranch);
+        if (ifStatement.ElseBranch is not null)
+        {
+            ResolveStatement(ifStatement.ElseBranch);
+        }
+    }
+
+    /// <summary>
+    /// Resolves a PrintStatement
+    /// </summary>
+    /// <param name="printStatement">The PrintStatement that shall be resolved</param>
+    private static void ResolveStatement(PrintStatement printStatement)
+    {
+        ResolveExpression(printStatement.Expression);
+    }
+
+    /// <summary>
+    /// Resolves a ReturnStatement
+    /// </summary>
+    /// <param name="returnStatement">The ReturnStatement that shall be resolved</param>
+    private static void ResolveStatement(ReturnStatement returnStatement)
+    {
+        if (currentFunctionType is FunctionType.NONE)
+        {
+            ErrorLogger.Error(returnStatement.Keyword, "Can't return from top level code");
+        }
+        if (returnStatement.Expression is not null)
+        {
+            if (currentFunctionType is FunctionType.INITIALIZER)
+            {
+                ErrorLogger.Error(returnStatement.Keyword, "Can't return from an initializer");
+            }
+            ResolveExpression(returnStatement.Expression);
+        }
+    }
+
+    /// <summary>
+    /// Resolves a WhileStatement
+    /// </summary>
+    /// <param name="whileStatement">The ReturnStatement that shall be resolved</param>
+    private static void ResolveStatement(WhileStatement whileStatement)
+    {
+        ResolveExpression(whileStatement.Condition);
+        ResolveStatement(whileStatement.Body);
+    }
+
+    #endregion Statements
+
+    #region Expressions
+
+    /// <summary>
+    /// Casts the Expression to it's respective type and handles further resolving
     /// </summary>
     private static void ResolveExpression(IExpression expression)
     {
@@ -142,171 +295,18 @@ internal static class KelloxResolver
                 throw new NotImplementedException();
         }
     }
-
-    /// <summary>
-    /// Resolves a BlockStatement
-    /// </summary>
-    /// <param name="blockStatement">The BlockStatement that is resolved</param>
-    private static void ResolveStatement(BlockStatement blockStatement)
-    {
-        BeginScope();
-        ResolveStatements(blockStatement.Statements);
-        EndScope();
-    }
-
-
-    /// <summary>
-    /// Resolves a DeclarationStatement
-    /// </summary>
-    /// <param name="declarationStatement">The Declaration that is resolved</param>
-    private static void ResolveStatement(DeclarationStatement declarationStatement)
-    {
-        if (scopes.Count is not 0 && scopes.Peek().ContainsKey(declarationStatement.Name.Lexeme))
-        {
-            ErrorLogger.Error(declarationStatement.Name, "A variable with this name (" + declarationStatement.Name.Lexeme + ") was already defined in this scope");
-        }
-        Declare(declarationStatement.Name);
-        if (declarationStatement.Expression is not null)
-        {
-            ResolveExpression(declarationStatement.Expression);
-            Define(declarationStatement.Name);
-        }
-    }
-
-    /// <summary>
-    /// Resolves a classStatement
-    /// </summary>
-    /// <param name="classStatement"></param>
-    private static void ResolveStatement(ClassStatement classStatement)
-    {
-        ClassType enclosingClass = currentClass;
-        currentClass = ClassType.CLASS;
-        Define(classStatement.Token);
-        if (classStatement.SuperClass is not null)
-        {
-            if (classStatement.SuperClass.Token.Lexeme.Equals(classStatement.Token.Lexeme))
-            {
-                ErrorLogger.Error(classStatement.Token, "A class can't inherit from itself");
-                return;
-            }
-            currentClass = ClassType.SUBCLASS;
-            ResolveExpression(classStatement.SuperClass);
-            BeginScope();
-            scopes.Peek().Add(KeywordConstants.SuperKeyword, true);
-
-        }
-        BeginScope();
-        foreach (FunctionStatement? method in classStatement.Methods)
-        {
-            ResolveStatement(method, method.Token.Lexeme.Equals(KeywordConstants.InitKeyword) ? FunctionType.INITIALIZER : FunctionType.METHOD);
-        }
-        EndScope();
-        if (classStatement.SuperClass is not null)
-        {
-            EndScope();
-        }
-        currentClass = enclosingClass;
-    }
-
-    /// <summary>
-    /// Resolves a FunctionStatement
-    /// </summary>
-    /// <param name="functionStatement">The FunctionStatement that shall be resolved</param>
-    private static void ResolveStatement(FunctionStatement functionStatement, FunctionType functionType)
-    {
-        FunctionType enclosingType = currentFunction;
-        currentFunction = functionType;
-        Define(functionStatement.Token);
-        BeginScope();
-        foreach (Token? token in functionStatement.Parameters)
-        {
-            if (token is not null)
-            {
-                Define(token);
-            }
-        }
-        ResolveStatements(functionStatement.Body);
-        EndScope();
-        currentFunction = enclosingType;
-    }
-
-    /// <summary>
-    /// Resolves a ExpressionStatement
-    /// </summary>
-    /// <param name="expressionStatement">The ExpressionStatement that shall be resolved</param>
-    private static void ResolveStatement(ExpressionStatement expressionStatement)
-    {
-        ResolveExpression(expressionStatement.Expression);
-    }
-
-    /// <summary>
-    /// Resolves a IfStatement
-    /// </summary>
-    /// <param name="ifStatement">The IfStatement that shall be resolved</param>
-    private static void ResolveStatement(IfStatement ifStatement)
-    {
-        ResolveExpression(ifStatement.Condition);
-        ResolveStatement(ifStatement.ThenBranch);
-        if (ifStatement.ElseBranch is not null)
-        {
-            ResolveStatement(ifStatement.ElseBranch);
-        }
-    }
-
-    /// <summary>
-    /// Resolves a PrintStatement
-    /// </summary>
-    /// <param name="printStatement">The PrintStatement that shall be resolved</param>
-    private static void ResolveStatement(PrintStatement printStatement)
-    {
-        ResolveExpression(printStatement.Expression);
-    }
-
-    /// <summary>
-    /// Resolves a ReturnStatement
-    /// </summary>
-    /// <param name="returnStatement">The ReturnStatement that shall be resolved</param>
-    private static void ResolveStatement(ReturnStatement returnStatement)
-    {
-        if (currentFunction is FunctionType.NONE)
-        {
-            ErrorLogger.Error(returnStatement.Keyword, "Can't return from top level code");
-        }
-        if (returnStatement.Expression is not null)
-        {
-            if (currentFunction is FunctionType.INITIALIZER)
-            {
-                ErrorLogger.Error(returnStatement.Keyword, "Can't return from an initializer");
-            }
-            ResolveExpression(returnStatement.Expression);
-        }
-    }
-
-    /// <summary>
-    /// Resolves a WhileStatement
-    /// </summary>
-    /// <param name="whileStatement">The ReturnStatement that shall be resolved</param>
-    private static void ResolveStatement(WhileStatement whileStatement)
-    {
-        ResolveExpression(whileStatement.Condition);
-        ResolveStatement(whileStatement.Body);
-    }
-
-    #endregion Statements
-
-    #region Expressions
-
+    
     /// <summary>
     /// Resolves a super expression
     /// </summary>
     /// <param name="superExpression"></param>
     private static void ResolveExpression(SuperExpression superExpression)
     {
-        if (currentClass is ClassType.NONE)
+        if (currentClassType is ClassType.NONE)
         {
             ErrorLogger.Error(superExpression.Token, "Can't use \'super\' outside of a class");
         }
-        else if (currentClass is not ClassType.SUBCLASS)
+        else if (currentClassType is not ClassType.SUBCLASS)
         {
             ErrorLogger.Error(superExpression.Token, "Can't use \'super\' with no superclass");
         }
@@ -319,7 +319,7 @@ internal static class KelloxResolver
     /// <param name="thisExpression">The ThisExpression that shall be resolved</param>
     private static void ResolveExpression(ThisExpression thisExpression)
     {
-        if (currentClass is ClassType.NONE)
+        if (currentClassType is ClassType.NONE)
         {
             ErrorLogger.Error(thisExpression.Token, "Cant use \'this\' outside of a class");
             return;

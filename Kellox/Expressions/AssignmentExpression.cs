@@ -35,11 +35,9 @@ internal class AssignmentExpression : IExpression
         if (KelloxInterpreter.TryGetDepthOfLocal(this, out int distance))
         {
             KelloxInterpreter.currentEnvironment.AssignAt(distance, Token, result);
+            return result;
         }
-        else
-        {
-            KelloxInterpreter.globalEnvironment.Assign(Token, result);
-        }
+        KelloxInterpreter.globalEnvironment.Assign(Token, result);
         return result;
     }
 }

@@ -9,7 +9,6 @@ namespace Kellox.Expressions;
 internal class BinaryExpression : IExpression
 {
 
-
     /// <summary>
     /// The expression left of the operator
     /// </summary>

@@ -7,6 +7,7 @@ using Kellox.Statements;
 using Kellox.Tokens;
 using Kellox.Utils;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Kellox.Interpreter;
 
@@ -42,25 +43,85 @@ internal static class KelloxInterpreter
     /// </summary>
     internal static KelloxEnvironment currentEnvironment = globalEnvironment;
 
+    private const string KelloxFilePattern = @".klx+$";
+
     /// <summary>
     /// Starts the interpreter from file or as command prompt, if no file is specified
     /// </summary>
     /// <param name="args">The arguments provided by the user when the interpreter was started</param>
-    internal static void RunLoxInterpreter(params string[] args)
+    internal static void RunKelloxInterpreter(params string[] args)
     {
-        if (args.Length > 1)
+        if (args.Length is 0)
+        {
+            RunPrompt();
+        }
+        if (args.Length > 2)
         {
             Console.WriteLine("To much arguments");
             //Exit code 64 -> The command was used incorrectly, wrong number of anguments
             Environment.Exit(64);
         }
+        if (args.Length is 2)
+        {
+            if (args[1][0] is '-')
+            {
+                if (args[1] is "-c")
+                {
+                    CheckSyntaxOfFile(args[1]);
+                }
+            }
+        }
         if (args.Length is 1)
         {
+            if (args[0][0] is '-')
+            {
+                RunWithGenericOption(args[0]);
+                return;
+            }
             RunFile(args[0]);
         }
-        else
+    }
+
+
+    private static void RunWithGenericOption(string option)
+    {
+        switch (option)
         {
-            RunPrompt();
+            case "-h" or "--help":
+                Console.WriteLine("Kellox Help");
+                break;
+            case "-v" or "--version":
+                Console.WriteLine("Kellox 1.0");
+                break;
+            default:
+                Console.WriteLine("Unsupported Option");
+                Environment.Exit(65);
+                break;
+        }
+    }
+
+
+    private static void CheckSyntaxOfFile(string path)
+    {
+        if (!Regex.IsMatch(path, KelloxFilePattern))
+        {
+            Console.WriteLine("File at " + path + " is not a kellox file");
+            Environment.Exit(64);
+        }
+        byte[] file = File.ReadAllBytes(path);
+        string sourceCode = Encoding.UTF8.GetString(file);
+        IReadOnlyList<Token> tokens = KelloxLexer.ScanTokens(sourceCode);
+        // Error during the lexical analysis
+        if (ErrorOccurred)
+        {
+            return;
+        }
+        KelloxProgram program = KelloxParser.Parse(tokens);
+        // Error during the Parsing process
+        if (program.Runnable)
+        {
+            Console.WriteLine("Syntax OK");
+            return;
         }
     }
 
@@ -69,6 +130,11 @@ internal static class KelloxInterpreter
     /// </summary>
     private static void RunFile(string path)
     {
+        if (!Regex.IsMatch(path, KelloxFilePattern))
+        {
+            Console.WriteLine("File at " + path + " is not a kellox file");
+            Environment.Exit(64);
+        }
         byte[] file = File.ReadAllBytes(path);
         Run(Encoding.UTF8.GetString(file));
         if (RunTimeErrorOccurred)
@@ -78,10 +144,9 @@ internal static class KelloxInterpreter
         }
         if (ErrorOccurred)
         {
-            // The input data was incorrect -> Error during the lexical analysis or the parsing process
+            // The input data/kellox programm was incorrect -> Error during the lexical analysis or the parsing process
             Environment.Exit(65);
         }
-
     }
 
     /// <summary>

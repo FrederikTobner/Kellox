@@ -4,7 +4,7 @@ using Kellox.Tokens;
 namespace Kellox.Utils
 {
     /// <summary>
-    /// Class contains methods to report an error during the ParingProcess/at runtime/during the lexical analysis/during the binding and resolution process 😨
+    /// Class contains methods to report an error during the parsing process, during the lexical analysis, during the resolution of the abstract syntax tree or at runtime 😨
     /// </summary>
     internal static class ErrorLogger
     {

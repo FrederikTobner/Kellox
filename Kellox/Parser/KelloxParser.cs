@@ -38,7 +38,7 @@ internal static class KelloxParser
             catch (ParseError error)
             {
                 ErrorLogger.Error(error.ErrorToken, error.Message);
-                // Synchronizes the parser after a parsing error has ocured
+                // Synchronizes the parser after a parsing error has occured
                 Synchronizer.Synchronize(tokens, ref current);
             }
         }
@@ -74,11 +74,11 @@ internal static class KelloxParser
         }
         else if (Match(tokens, TokenType.PRINT))
         {
-            return new PrintStatement(Expression(tokens));
+            return new PrintStatement(Expression(tokens), Previous(tokens));
         }
         else if (Match(tokens, TokenType.PRINTLN))
         {
-            return new PrintStatement(Expression(tokens), true);
+            return new PrintStatement(Expression(tokens), Previous(tokens), true);
         }
         else if (Match(tokens, TokenType.RETURN))
         {
@@ -303,38 +303,46 @@ internal static class KelloxParser
     private static IExpression Assignment(IReadOnlyList<Token> tokens)
     {
         IExpression expression = OrExpression(tokens);
-
-        if (Match(tokens, TokenType.EQUAL, TokenType.PLUS_PLUS, TokenType.MINUS_MINUS, TokenType.PLUS_EQUAL, TokenType.MINUS_EQUAL, TokenType.STAR_EQUAL, TokenType.SLASH_EQUAL))
+        //Creates an Assignment expression
+        if (Check(tokens, TokenType.EQUAL, TokenType.PLUS_PLUS, TokenType.MINUS_MINUS, TokenType.PLUS_EQUAL, TokenType.MINUS_EQUAL, TokenType.STAR_EQUAL, TokenType.SLASH_EQUAL))
         {
-            Token token = Previous(tokens);
-            IExpression value = token.TokenType is TokenType.EQUAL or TokenType.PLUS_PLUS or TokenType.MINUS_MINUS ? token.TokenType is TokenType.EQUAL ? Assignment(tokens) : CreateIncOrDecExpression(token, expression) : CreateXEqualExpression(tokens, token, expression);
+            Token assignementTarget = Previous(tokens);
+            IExpression value;
+            if (Match(tokens, TokenType.EQUAL))
+            {
+                //Normal Assignment
+                value = Assignment(tokens);
+            }
+            else if (Match(tokens, TokenType.PLUS_PLUS))
+            {
+                //Increment
+                value = new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, assignementTarget.Line), new LiteralExpression(1.0));
+            }
+            else if (Match(tokens, TokenType.MINUS_MINUS))
+            {
+                //Decrement
+                value = new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, assignementTarget.Line), new LiteralExpression(1.0));
+            }
+            else
+            {
+                // +=, -=, *=, /=
+                value = CreateXEqualExpression(tokens, Advance(tokens), expression);
+            }
             if (expression is VariableExpression variableExpression)
             {
                 Token name = variableExpression.Token;
                 return new AssignmentExpression(name, value);
             }
+            // Assignnment target is a get expression e.g. rect.x = 10;
             else if (expression is GetExpression getExpression)
             {
+
                 return new SetExpression(getExpression.Object, getExpression.Name, value);
             }
-            throw new ParseError(token, "Invalid assignment target.");
+            throw new ParseError(assignementTarget, "Invalid assignment target.");
         }
         return expression;
     }
-
-    /// <summary>
-    /// Creates a Binaryexpression e.g. for x++ -> x + 1, that will be assigned to the variable
-    /// </summary>
-    /// <param name="token">The increament/decrement token</param>
-    /// <param name="expression">The Expression that will we incremented</param>
-    private static IExpression CreateIncOrDecExpression(Token token, IExpression expression)
-    {
-        return new BinaryExpression(expression, token.TokenType is TokenType.PLUS_PLUS ?
-                new Token(TokenType.PLUS, "+", null, token.Line) :
-                new Token(TokenType.MINUS, "-", null, token.Line),
-                new LiteralExpression(1.0));
-    }
-
 
     /// <summary>
     /// Creates a new XEqual expression e.g. x+=3/x-=3/x*=3/x/=3
@@ -345,32 +353,12 @@ internal static class KelloxParser
     /// <exception cref="ParseError">Thrown if the operator is not supported</exception>
     private static IExpression CreateXEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression) => token.TokenType switch
     {
-        TokenType.PLUS_EQUAL => CreatePlusEqualExpression(tokens, token, expression),
-        TokenType.MINUS_EQUAL => CreateMinusEqualExpression(tokens, token, expression),
-        TokenType.STAR_EQUAL => CreateStarEqualExpression(tokens, token, expression),
-        TokenType.SLASH_EQUAL => CreateSlashEqualExpression(tokens, token, expression),
+        TokenType.PLUS_EQUAL => new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, token.Line), Expression(tokens)),
+        TokenType.MINUS_EQUAL => new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, token.Line), Expression(tokens)),
+        TokenType.STAR_EQUAL => new BinaryExpression(expression, new Token(TokenType.STAR, "*", null, token.Line), Expression(tokens)),
+        TokenType.SLASH_EQUAL => new BinaryExpression(expression, new Token(TokenType.SLASH, "/", null, token.Line), Expression(tokens)),
         _ => throw new ParseError(token, "Invalid Operator"),
     };
-
-    private static IExpression CreatePlusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression)
-    {
-        return new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, token.Line), Expression(tokens));
-    }
-
-    private static IExpression CreateMinusEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression)
-    {
-        return new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, token.Line), Expression(tokens));
-    }
-
-    private static IExpression CreateStarEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression)
-    {
-        return new BinaryExpression(expression, new Token(TokenType.STAR, "*", null, token.Line), Expression(tokens));
-    }
-
-    private static IExpression CreateSlashEqualExpression(IReadOnlyList<Token> tokens, Token token, IExpression expression)
-    {
-        return new BinaryExpression(expression, new Token(TokenType.SLASH, "/", null, token.Line), Expression(tokens));
-    }
 
     /// <summary>
     /// Creates an OrExpressionn
@@ -601,7 +589,17 @@ internal static class KelloxParser
     /// Checks if the next Token is of a given type
     /// </summary>
     /// <param name="tokenType">The tokentype that shall be checked</param>
-    private static bool Check(IReadOnlyList<Token> tokens, TokenType tokenType) => !IsAtEnd(tokens) && Peek(tokens).TokenType == tokenType;
+    private static bool Check(IReadOnlyList<Token> tokens, params TokenType[] tokenTypes)
+    {
+        foreach (TokenType type in tokenTypes)
+        {
+            if (!IsAtEnd(tokens) && Peek(tokens).TokenType == type)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /// <summary>
     /// Advances a position further in the flat sequence of Tokens and returns the prevoius token

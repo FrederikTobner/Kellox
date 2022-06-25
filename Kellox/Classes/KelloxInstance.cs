@@ -30,6 +30,9 @@ internal class KelloxInstance
         this.fields = new();
     }
 
+    /// <summary>
+    /// Converts this KelloxInstace to a JSON string
+    /// </summary>
     public override string ToString() => KelloxInstanceSerializer.Serialize(this.fields);
 
     /// <summary>

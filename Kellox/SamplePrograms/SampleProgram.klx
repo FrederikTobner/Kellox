@@ -131,11 +131,13 @@ println random(1, 10);
 
 var zahl = 7;
 println zahl;
-zahl += 5;
+zahl += 3+2;
 println zahl;
-zahl += 5;
+zahl *= 6-1;
 println zahl;
-zahl += 5;
+zahl /= 2.5*2;
+println zahl;
+zahl -= 10/2;
 println zahl;
 
 // prints the first 25 fibonacci numbers
@@ -225,3 +227,33 @@ liste.addFirst(10);
 liste.addFirst(15);
 liste.printList();
 println liste;
+
+// Mario Victory Theme 🤓
+
+beep(130, 100);
+beep(262, 100);
+beep(330, 100);
+beep(392, 100);
+beep(523, 100);
+beep(660, 100);
+beep(784, 300);
+beep(660, 300);
+beep(146, 100);
+beep(262, 100);
+beep(311, 100);
+beep(415, 100);
+beep(523, 100);
+beep(622, 100);
+beep(831, 300);
+beep(622, 300);
+beep(155, 100);
+beep(294, 100);
+beep(349, 100);
+beep(466, 100);
+beep(588, 100);
+beep(699, 100);
+beep(933, 300);
+beep(933, 100);
+beep(933, 100);
+beep(933, 100);
+beep(1047, 400);

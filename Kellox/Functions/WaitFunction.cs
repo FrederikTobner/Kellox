@@ -17,13 +17,12 @@ internal class WaitFunction : IFunction
             if (seconds >= 0)
             {
                 Thread.Sleep((int)(1000 * seconds));
+                return null;
             }
-            else
-            {
-                throw new RunTimeError(paren, "Can't wait a negative amount of seconds");
-            }
+            throw new RunTimeError(paren, "Can't wait a negative amount of seconds");            
         }
-        return null;
+        throw new RunTimeError(paren, "Can't call beep function with anything that is not a Number");
+        
     }
 
     public override string ToString() => "native wait function";
