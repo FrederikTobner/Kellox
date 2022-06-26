@@ -1,4 +1,5 @@
-﻿using Kellox.Tokens;
+﻿using Kellox.Exceptions;
+using Kellox.Tokens;
 
 namespace Kellox.Functions;
 
@@ -11,7 +12,14 @@ internal class ClearFunction : IFunction
 
     public object? Call(List<object?> arguments, Token paren)
     {
-        Console.Clear();
+        try
+        {
+            Console.Clear();
+        }
+        catch (IOException)
+        {
+            throw new RunTimeError(paren, "An I/O error occurred.");
+        }
         return null;
     }
 }

@@ -1,4 +1,4 @@
-using Kellox.Exceptions;
+﻿using Kellox.Exceptions;
 using Kellox.Tokens;
 using System.Runtime.Versioning;
 
@@ -24,12 +24,9 @@ namespace Kellox.Functions
             }
             try
             {
+                // Plays beep sound 🎵
                 Console.Beep((int)frequency, (int)duration);
                 return null;
-            }
-            catch (InvalidCastException)
-            {
-                throw new RunTimeError(paren, "Arguments for random call out of bounds, maxValue is " + int.MaxValue + " and minValue" + int.MinValue);
             }
             catch (ArgumentOutOfRangeException)
             {

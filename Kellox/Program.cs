@@ -2,6 +2,6 @@
 using Kellox.Utils;
 
 // Starts Interpreter
-//LoxInterpreter.RunLoxInterpreter(args);
+KelloxInterpreter.RunKelloxInterpreter(args);
 // Tests Interpreter with the sample program
-KelloxTests.RunSampleProgram();
+//KelloxTests.RunSampleProgram();

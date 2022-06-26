@@ -26,10 +26,6 @@ namespace Kellox.Functions
                 int maxVal = (int)maxValue;
                 return random.Next(minVal, maxVal);
             }
-            catch (InvalidCastException)
-            {
-                throw new RunTimeError(paren, "Arguments for random call out of bounds, maxValue is " + int.MaxValue + " and minValue" + int.MinValue);
-            }
             catch (ArgumentOutOfRangeException)
             {
                 throw new RunTimeError(paren, "minValue must be greater than maxvalue");

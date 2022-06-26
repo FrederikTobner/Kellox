@@ -4,7 +4,7 @@ using Kellox.Tokens;
 namespace Kellox.Expressions;
 
 /// <summary>
-/// Models a This expressionn in lox
+/// Models a This expressionn in Kellox
 /// </summary>
 internal class ThisExpression : IExpression
 {
@@ -30,5 +30,5 @@ internal class ThisExpression : IExpression
         }
     }
 
-    public override string ToString() => $"{Token.Lexeme} -> {this.Evaluate()}.";
+    public override string ToString() => $"{Token.Lexeme}";
 }

@@ -82,6 +82,11 @@ internal enum TokenType
     /// </summary>
     LESS,
 
+    /// <summary>
+    /// :
+    /// </summary>
+    DOUBLEDOT,
+
     #endregion SingleCharacterTokens
 
     #region TwoCharacterTokens

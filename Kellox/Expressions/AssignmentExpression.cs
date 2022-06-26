@@ -27,7 +27,7 @@ internal class AssignmentExpression : IExpression
     /// <summary>
     /// Returns a representation of the Expression as a string
     /// </summary>
-    public override string ToString() => IExpression.Parenthesize(Token.Lexeme, Value);
+    public override string ToString() => $"{Token.Lexeme} = {Value}";
 
     public object? Evaluate()
     {

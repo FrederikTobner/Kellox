@@ -52,5 +52,5 @@ internal class LogicalExpression : IExpression
     /// <summary>
     /// Returns a representation of the Expression as a string
     /// </summary>
-    public override string ToString() => IExpression.Parenthesize(operatorToken.Lexeme, Right, Left);
+    public override string ToString() => $"{Left} {operatorToken.Lexeme} {Right}";
 }

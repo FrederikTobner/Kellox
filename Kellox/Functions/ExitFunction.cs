@@ -23,10 +23,6 @@ internal class ExitFunction : IFunction
             Environment.Exit((int)exitCode);
             return null;
         }
-        catch (InvalidCastException)
-        {
-            throw new RunTimeError(paren, "Arguments for exitCall call out of bounds, maxValue is " + int.MaxValue + " and minValue" + int.MinValue);
-        }
         catch (SecurityException)
         {
             throw new RunTimeError(paren, "You do not have sufficient security permission to perform this function.");

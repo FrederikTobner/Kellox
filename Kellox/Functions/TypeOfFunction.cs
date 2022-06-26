@@ -16,7 +16,8 @@ namespace Kellox.Functions
             double => "Number",
             bool => "Boolean",
             KelloxInstance kelloxInstance => kelloxInstance.KelloxClass.ToString(),
-            _ => "Undefiened"
+            null => "Undefiened",
+            _ => throw new NotImplementedException()
         };
     }
 }

@@ -34,7 +34,7 @@ internal class BinaryExpression : IExpression
     /// <summary>
     /// Returns a representation of the Expression as a string
     /// </summary>
-    public override string ToString() => IExpression.Parenthesize(OperatorToken.Lexeme, Left, Right);
+    public override string ToString() => $"{Left} {OperatorToken.Lexeme} {Right}";
 
     public object? Evaluate()
     {

@@ -1,3 +1,12 @@
+if(false or true)
+	println "Yes";
+else
+	println "No";
+
+var testNumber = 0; 
+while(testNumber < 10)
+	println testNumber++;
+
 class Doughnut 
 {
 	init(fryingColor)
@@ -10,7 +19,7 @@ class Doughnut
 	}
 }
 
-class FilledDougnut < Doughnut 
+class FilledDougnut : Doughnut 
 {
 	init(fryingColor, filling)
 	{
@@ -23,7 +32,7 @@ class FilledDougnut < Doughnut
 	}
 }
 
-class FilledDougnutWithChocolateCoat < FilledDougnut
+class FilledDougnutWithChocolateCoat : FilledDougnut
 {
 	init(fryingColor, filling, chocolateColor)
 	{
@@ -36,7 +45,7 @@ class FilledDougnutWithChocolateCoat < FilledDougnut
 	}
 }
 
-class FilledDougnutWithChocolateCoatAndSprinkles < FilledDougnutWithChocolateCoat
+class FilledDougnutWithChocolateCoatAndSprinkles : FilledDougnutWithChocolateCoat
 {
 	init(fryingColor, filling, chocolateColor, sprinkleColor)
 	{
@@ -142,10 +151,8 @@ println zahl;
 
 // prints the first 25 fibonacci numbers
 var fibo = fibonacci();
-for (var i = 0; i < 25; i++) 
-{
+for (var i = 0; i < 25; i++)
 	println fibo();
-}
 
 fun Add(x, y)
 {

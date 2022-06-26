@@ -105,6 +105,9 @@ internal static class KelloxLexer
             case ';':
                 AddToken(source, TokenType.SEMICOLON);
                 break;
+            case ':':
+                AddToken(source, TokenType.DOUBLEDOT);
+                break;
             // Star Equal "*=" or only Star "*" ?
             case '*':
                 AddToken(source, Match(source, '=') ? TokenType.STAR_EQUAL : TokenType.STAR);

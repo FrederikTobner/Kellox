@@ -23,15 +23,18 @@ internal interface IExpression
     /// <param name="name">The name of the expression -> kind</param>
     /// <param name="expressions">The inner expressions</param>
     /// <returns></returns>
-    protected static string Parenthesize(string name, params IExpression[] expressions)
+    protected static string Parenthesize(params IExpression[] expressions)
     {
         StringBuilder builder = new();
         builder.Append('(');
-        builder.Append(name);
-        foreach (IExpression expression in expressions)
+        for (int i = 0; i < expressions.Length; i++)
         {
-            builder.Append(' ');
+            IExpression expression = expressions[i];
             builder.Append(expression.ToString());
+            if (i != expressions.Length - 1)
+            {
+                builder.Append(' ');
+            }
         }
         builder.Append(')');
         return builder.ToString();

@@ -30,10 +30,6 @@ internal static class KelloxParser
             {
                 IStatement statement = Statement(tokens);
                 statements.Add(statement);
-                if (StatementConsumesSemicolon(statement))
-                {
-                    Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after value");
-                }
             }
             catch (ParseError error)
             {
@@ -52,50 +48,54 @@ internal static class KelloxParser
     /// </summary>
     private static IStatement Statement(IReadOnlyList<Token> tokens)
     {
+        IStatement statement;
         if (Match(tokens, TokenType.FOR))
         {
-            return CreateForStatement(tokens);
+            statement = CreateForStatement(tokens);
         }
         else if (Match(tokens, TokenType.IF))
         {
-            return CreateIfStatement(tokens);
+            statement = CreateIfStatement(tokens);
         }
         else if (Match(tokens, TokenType.CLASS))
         {
-            return CreateClassStatement(tokens);
+            statement = CreateClassStatement(tokens);
         }
         else if (Match(tokens, TokenType.FUN))
         {
-            return CreateFunctionStatement(tokens, "function");
+            statement = CreateFunctionStatement(tokens, "function");
         }
         else if (Match(tokens, TokenType.VAR))
         {
-            return CreateDeclarationStatement(tokens);
+            statement = CreateDeclarationStatement(tokens);
         }
-        else if (Match(tokens, TokenType.PRINT))
+        else if (Check(tokens, TokenType.PRINT, TokenType.PRINTLN))
         {
-            return new PrintStatement(Expression(tokens), Previous(tokens));
+            Token printToken = Advance(tokens);
+            statement = new PrintStatement(Expression(tokens), printToken, printToken.TokenType is TokenType.PRINTLN);
         }
-        else if (Match(tokens, TokenType.PRINTLN))
+        else if (Check(tokens, TokenType.RETURN))
         {
-            return new PrintStatement(Expression(tokens), Previous(tokens), true);
-        }
-        else if (Match(tokens, TokenType.RETURN))
-        {
-            return CreateReturnStatement(tokens);
+            statement = CreateReturnStatement(tokens);
         }
         else if (Match(tokens, TokenType.WHILE))
         {
-            return CreateWhileStatement(tokens);
+            statement = CreateWhileStatement(tokens);
         }
         else if (Match(tokens, TokenType.LEFT_BRACE))
         {
-            return new BlockStatement(ReadBlock(tokens));
+            statement = new BlockStatement(ReadBlock(tokens));
         }
         else
         {
-            return new ExpressionStatement(Expression(tokens));
+            statement = new ExpressionStatement(Expression(tokens));
         }
+
+        if (StatementConsumesSemicolon(statement))
+        {
+            Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after value");
+        }
+        return statement;
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ internal static class KelloxParser
     /// <returns></returns>
     private static IStatement CreateReturnStatement(IReadOnlyList<Token> tokens)
     {
-        Token keyword = Previous(tokens);
+        Token keyword = Advance(tokens);
         IExpression? value = null;
         if (!Check(tokens, TokenType.SEMICOLON))
         {
@@ -131,10 +131,6 @@ internal static class KelloxParser
         {
             IStatement statement = Statement(tokens);
             statements.Add(statement);
-            if (StatementConsumesSemicolon(statement))
-            {
-                Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after value");
-            }
         }
         Consume(tokens, TokenType.RIGHT_BRACE, "Expected \'}\' after Block");
         return statements;
@@ -147,10 +143,9 @@ internal static class KelloxParser
     {
         Token name = Consume(tokens, TokenType.IDENTIFIER, "Expect class name.");
         VariableExpression? superClass = null;
-        if (Match(tokens, TokenType.LESS))
+        if (Match(tokens, TokenType.DOUBLEDOT))
         {
-            Consume(tokens, TokenType.IDENTIFIER, "Expet superclass name.");
-            superClass = new VariableExpression(Previous(tokens));
+            superClass = new VariableExpression(Consume(tokens, TokenType.IDENTIFIER, "Expet superclass name after \':\'"));
         }
         Consume(tokens, TokenType.LEFT_BRACE, "Expect \'{\' before class body.");
         List<FunctionStatement> methods = new();
@@ -235,7 +230,6 @@ internal static class KelloxParser
         Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");
 
         IStatement body = Statement(tokens);
-
         if (incrementExpression is not null)
         {
             //Adds the increment-expression at the end of the while body if it is not null
@@ -244,7 +238,7 @@ internal static class KelloxParser
         }
         if (conditionalExpression is null)
         {
-            //If there is no Ccondition specified it is always true
+            //If there is no Condition specified it is always true
             conditionalExpression = new LiteralExpression(true);
         }
         body = new WhileStatement(conditionalExpression, body);
@@ -306,27 +300,27 @@ internal static class KelloxParser
         //Creates an Assignment expression
         if (Check(tokens, TokenType.EQUAL, TokenType.PLUS_PLUS, TokenType.MINUS_MINUS, TokenType.PLUS_EQUAL, TokenType.MINUS_EQUAL, TokenType.STAR_EQUAL, TokenType.SLASH_EQUAL))
         {
-            Token assignementTarget = Previous(tokens);
             IExpression value;
-            if (Match(tokens, TokenType.EQUAL))
+            Token operatorToken = Advance(tokens);
+            if (operatorToken.TokenType is TokenType.EQUAL)
             {
                 //Normal Assignment
                 value = Assignment(tokens);
             }
-            else if (Match(tokens, TokenType.PLUS_PLUS))
+            else if (operatorToken.TokenType is TokenType.PLUS_PLUS)
             {
-                //Increment
-                value = new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, assignementTarget.Line), new LiteralExpression(1.0));
+                //Increment                
+                value = new BinaryExpression(expression, new Token(TokenType.PLUS, "+", null, operatorToken.Line), new LiteralExpression(1.0));
             }
-            else if (Match(tokens, TokenType.MINUS_MINUS))
+            else if (operatorToken.TokenType is TokenType.MINUS_MINUS)
             {
                 //Decrement
-                value = new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, assignementTarget.Line), new LiteralExpression(1.0));
+                value = new BinaryExpression(expression, new Token(TokenType.MINUS, "-", null, operatorToken.Line), new LiteralExpression(1.0));
             }
             else
             {
                 // +=, -=, *=, /=
-                value = CreateXEqualExpression(tokens, Advance(tokens), expression);
+                value = CreateXEqualExpression(tokens, operatorToken, expression);
             }
             if (expression is VariableExpression variableExpression)
             {
@@ -336,10 +330,9 @@ internal static class KelloxParser
             // Assignnment target is a get expression e.g. rect.x = 10;
             else if (expression is GetExpression getExpression)
             {
-
                 return new SetExpression(getExpression.Object, getExpression.Name, value);
             }
-            throw new ParseError(assignementTarget, "Invalid assignment target.");
+            throw new ParseError(operatorToken, "Invalid assignment target: " + expression.ToString());
         }
         return expression;
     }
@@ -366,9 +359,9 @@ internal static class KelloxParser
     private static IExpression OrExpression(IReadOnlyList<Token> tokens)
     {
         IExpression expression = AndExpression(tokens);
-        while (Match(tokens, TokenType.OR))
+        while (Check(tokens, TokenType.OR))
         {
-            Token operatorToken = Previous(tokens);
+            Token operatorToken = Advance(tokens);
             IExpression right = AndExpression(tokens);
             expression = new LogicalExpression(expression, right, operatorToken);
         }
@@ -381,9 +374,9 @@ internal static class KelloxParser
     private static IExpression AndExpression(IReadOnlyList<Token> tokens)
     {
         IExpression expression = Equality(tokens);
-        while (Match(tokens, TokenType.AND))
+        while (Check(tokens, TokenType.AND))
         {
-            Token operatorToken = Previous(tokens);
+            Token operatorToken = Advance(tokens);
             IExpression right = Equality(tokens);
             expression = new LogicalExpression(expression, right, operatorToken);
         }
@@ -398,9 +391,9 @@ internal static class KelloxParser
     {
         IExpression expression = Comparison(tokens);
 
-        while (Match(tokens, TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL))
+        while (Check(tokens, TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL))
         {
-            Token operatorToken = Previous(tokens);
+            Token operatorToken = Advance(tokens);
             IExpression right = Comparison(tokens);
             expression = new BinaryExpression(expression, operatorToken, right);
         }
@@ -414,9 +407,9 @@ internal static class KelloxParser
     private static IExpression Comparison(IReadOnlyList<Token> tokens)
     {
         IExpression expression = Term(tokens);
-        while (Match(tokens, TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
+        while (Check(tokens, TokenType.GREATER, TokenType.GREATER_EQUAL, TokenType.LESS, TokenType.LESS_EQUAL))
         {
-            Token operatorToken = Previous(tokens);
+            Token operatorToken = Advance(tokens);
             IExpression right = Term(tokens);
             expression = new BinaryExpression(expression, operatorToken, right);
         }
@@ -429,9 +422,9 @@ internal static class KelloxParser
     private static IExpression Term(IReadOnlyList<Token> tokens)
     {
         IExpression expression = Factor(tokens);
-        while (Match(tokens, TokenType.MINUS, TokenType.PLUS))
+        while (Check(tokens, TokenType.MINUS, TokenType.PLUS))
         {
-            Token operatorToken = Previous(tokens);
+            Token operatorToken = Advance(tokens);
             IExpression right = Factor(tokens);
             expression = new BinaryExpression(expression, operatorToken, right);
         }
@@ -444,9 +437,9 @@ internal static class KelloxParser
     private static IExpression Factor(IReadOnlyList<Token> tokens)
     {
         IExpression expression = Unary(tokens);
-        while (Match(tokens, TokenType.SLASH, TokenType.STAR))
+        while (Check(tokens, TokenType.SLASH, TokenType.STAR))
         {
-            Token operatorToken = Previous(tokens);
+            Token operatorToken = Advance(tokens);
             IExpression right = Unary(tokens);
             expression = new BinaryExpression(expression, operatorToken, right);
         }
@@ -459,9 +452,9 @@ internal static class KelloxParser
     /// </summary>
     private static IExpression Unary(IReadOnlyList<Token> tokens)
     {
-        if (Match(tokens, TokenType.BANG, TokenType.MINUS))
+        if (Check(tokens, TokenType.BANG, TokenType.MINUS))
         {
-            Token operatorToken = Previous(tokens);
+            Token operatorToken = Advance(tokens);
             IExpression right = Unary(tokens);
             return new UnaryExpression(operatorToken, right);
         }
@@ -537,24 +530,24 @@ internal static class KelloxParser
         {
             return new LiteralExpression(null);
         }
-        if (Match(tokens, TokenType.NUMBER, TokenType.STRING))
+        if (Check(tokens, TokenType.NUMBER, TokenType.STRING))
         {
-            return new LiteralExpression(Previous(tokens).Literal);
+            return new LiteralExpression(Advance(tokens).Literal);
         }
-        if (Match(tokens, TokenType.SUPER))
+        if (Check(tokens, TokenType.SUPER))
         {
-            Token keyword = Previous(tokens);
+            Token keyword = Advance(tokens);
             Consume(tokens, TokenType.DOT, "Expect \'.\' after \'super\'");
             Token method = Consume(tokens, TokenType.IDENTIFIER, "Expect superclass method name");
             return new SuperExpression(keyword, method);
         }
-        if (Match(tokens, TokenType.THIS))
+        if (Check(tokens, TokenType.THIS))
         {
-            return new ThisExpression(Previous(tokens));
+            return new ThisExpression(Advance(tokens));
         }
-        if (Match(tokens, TokenType.IDENTIFIER))
+        if (Check(tokens, TokenType.IDENTIFIER))
         {
-            return new VariableExpression(Previous(tokens));
+            return new VariableExpression(Advance(tokens));
         }
 
         if (Match(tokens, TokenType.LEFT_PARENTHESIS))
@@ -608,9 +601,12 @@ internal static class KelloxParser
     {
         if (!IsAtEnd(tokens))
         {
+            Token token = Peek(tokens);
             current++;
+            return token;
         }
-        return Previous(tokens);
+        return Peek(tokens);
+
     }
 
     /// <summary>
@@ -622,11 +618,6 @@ internal static class KelloxParser
     /// Returns current Token
     /// </summary>
     private static Token Peek(IReadOnlyList<Token> tokens) => tokens[current];
-
-    /// <summary>
-    /// Returns the prevoius Token
-    /// </summary>
-    private static Token Previous(IReadOnlyList<Token> tokens) => tokens[current - 1];
 
     /// <summary>
     /// Checks weather the next token is of the given type

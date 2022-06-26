@@ -22,13 +22,18 @@ internal class LiteralExpression : IExpression
     /// </summary>
     public override string ToString()
     {
-        if (Value is not null)
+        if (Value is null)
         {
-            string? result = Value.ToString();
-            if (result is not null)
-            {
-                return result;
-            }
+            return KeywordConstants.NilKeyword;
+        }
+        if (Value is bool logicalValue)
+        {
+            return logicalValue ? KeywordConstants.TrueKeyword : KeywordConstants.FalseKeyword;
+        }
+        string? result = Value.ToString();
+        if (result is not null)
+        {
+            return result;
         }
         return KeywordConstants.NilKeyword;
     }

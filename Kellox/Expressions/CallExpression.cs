@@ -53,5 +53,5 @@ internal class CallExpression : IExpression
         throw new RunTimeError(this.Paren, "Can only call functions and classes");
     }
 
-    public override string ToString() => IExpression.Parenthesize(this.Calle.ToString(), this.Arguments.ToArray());
+    public override string ToString() => $"{this.Calle}{IExpression.Parenthesize(this.Arguments.ToArray())}";
 }
