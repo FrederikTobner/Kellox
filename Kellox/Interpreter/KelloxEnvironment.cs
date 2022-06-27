@@ -27,7 +27,7 @@ internal class KelloxEnvironment
     public KelloxEnvironment(KelloxEnvironment? enclosing = null)
     {
         values = new Dictionary<string, object?>();
-        this.Enclosing = enclosing;
+        Enclosing = enclosing;
     }
 
     /// <summary>

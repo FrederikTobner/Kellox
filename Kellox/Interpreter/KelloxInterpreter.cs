@@ -1,4 +1,5 @@
-﻿using Kellox.Exceptions;
+﻿using Kellox.Arguments;
+using Kellox.Exceptions;
 using Kellox.Expressions;
 using Kellox.Interpreter.Arguments;
 using Kellox.Lexer;
@@ -44,11 +45,6 @@ internal static class KelloxInterpreter
     internal static KelloxEnvironment currentEnvironment = globalEnvironment;
 
     /// <summary>
-    /// Boolean value indicating weather the file shall only be analyzed
-    /// </summary>
-    private static bool onlyAnalyze = false;
-
-    /// <summary>
     /// Starts the interpreter from file or as command prompt, if no file is specified
     /// </summary>
     /// <param name="args">The arguments provided by the user when the interpreter was started</param>
@@ -56,85 +52,30 @@ internal static class KelloxInterpreter
     {
         List<string> options = new();
         string? specifiedFile = null;
+        // TODO Kelloxargs should be available as an array in main
         List<string> kelloxArgs = new();
         for (int i = 0; i < args.Length; i++)
         {
             try
             {
-                ArgumentFabricator.GroupArgs(options, ref specifiedFile, kelloxArgs, args);
+                ArgumentPreProcessor.GroupArgs(options, ref specifiedFile, kelloxArgs, args);
             }
             catch (ArgumentError argumentError)
             {
                 Console.WriteLine(argumentError.Message);
                 Environment.Exit(64);
             }
+            ArgumentPostProcessor.Process(options, specifiedFile);
         }
-        if (specifiedFile is null && options.Count is 0)
-        {
-            PrintKelloxVersion();
-            RunPrompt();
-        }
-
-        foreach (string? option in options)
-        {
-            switch (option)
-            {
-                case "-h" or "--help":
-                    PrintKelloxHelp();
-                    Environment.Exit(0);
-                    break;
-                case "-v" or "--version":
-                    PrintKelloxVersion();
-                    Environment.Exit(0);
-                    break;
-                case "-a":
-                    if (specifiedFile is null)
-                    {
-                        Console.WriteLine("file not specified, but option \'-a\' used");
-                        PrintKelloxHelp();
-                        //Exit code 64 -> The command was used incorrectly, unsupported options
-                        Environment.Exit(64);
-                    }
-                    onlyAnalyze = true;
-                    break;
-                default:
-                    Console.WriteLine("unknown option: " + option);
-                    PrintKelloxHelp();
-                    //Exit code 64 -> The command was used incorrectly, unsupported options
-                    Environment.Exit(64);
-                    break;
-            }
-        }
-
-        if (specifiedFile is not null)
-        {
-            RunFile(specifiedFile);
-        }
-    }
-
-    private static void PrintKelloxHelp()
-    {
-        Console.WriteLine("usage: kellox [-h|-v||[-c file| file]]?");
-        Console.WriteLine("These are common Kellox Interpreter commands:\nRun from Prompt\nkellox\nRun a Kellox file\nkellox file.klx\nAnaylize file\nkellox -a file.klx");
-    }
-
-    private static void PrintKelloxVersion()
-    {
-        Console.WriteLine("Kellox 0.1");
-    }
-
-    private static void PrintPrompt()
-    {
-        Console.Write(">>> ");
     }
 
     /// <summary>
     /// Executes a Kellox program from a file
     /// </summary>
-    private static void RunFile(string path)
+    internal static void RunFile(string path, bool onlyAnalyze)
     {
         byte[] file = File.ReadAllBytes(path);
-        Run(Encoding.UTF8.GetString(file));
+        Run(Encoding.UTF8.GetString(file), onlyAnalyze);
         if (RunTimeErrorOccurred)
         {
             // An internal software error has been detected
@@ -150,21 +91,21 @@ internal static class KelloxInterpreter
     /// <summary>
     /// Executes a Kellox program from the Command prompt
     /// </summary>
-    private static void RunPrompt()
+    internal static void RunPrompt(bool onlyAnalyze)
     {
-        PrintPrompt();
+        PrintUtils.PrintPrompt();
         string? line = Console.ReadLine();
         // If the user hasn't given any input the console will close
         while (line is not "" && line is not null)
         {
-            Run(line);
+            Run(line, onlyAnalyze);
             ErrorOccurred = false;
             // Adds linebreak if the writing position in the console is not at the left border
             if (Console.GetCursorPosition().Left is not 0)
             {
                 Console.Write(Environment.NewLine);
             }
-            PrintPrompt();
+            PrintUtils.PrintPrompt();
             line = Console.ReadLine();
         }
     }
@@ -173,7 +114,7 @@ internal static class KelloxInterpreter
     /// Executes a Kellox program
     /// </summary>
     /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
-    private static void Run(string sourceCode)
+    private static void Run(string sourceCode, bool onlyAnalyze)
     {
         IReadOnlyList<Token> tokens = KelloxLexer.ScanTokens(sourceCode);
         // Error during the lexical analysis
@@ -185,7 +126,7 @@ internal static class KelloxInterpreter
         // Error during the Parsing process
         if (!program.Runnable || onlyAnalyze)
         {
-            if (onlyAnalyze && program.Runnable)
+            if (program.Runnable)
             {
                 Console.WriteLine("Syntax OK");
             }
