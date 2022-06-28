@@ -5,7 +5,13 @@ else
 
 var testNumber = 0; 
 while(testNumber < 10)
+{
 	println testNumber++;
+	if(testNumber==7)
+	{
+		break;
+	}
+}
 
 class Doughnut 
 {

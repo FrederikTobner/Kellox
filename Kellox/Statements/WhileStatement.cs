@@ -1,4 +1,6 @@
-﻿using Kellox.Expressions;
+﻿using Kellox.Exceptions;
+using Kellox.Expressions;
+using Kellox.Interpreter;
 
 namespace Kellox.Statements;
 
@@ -25,9 +27,18 @@ internal class WhileStatement : IStatement
 
     public void Execute()
     {
+        KelloxEnvironment kelloxEnvironment = KelloxInterpreter.currentEnvironment;
         while (IExpression.IsTruthy(Condition.Evaluate()))
         {
-            Body.Execute();
+            try
+            {
+                Body.Execute();
+            }
+            catch (Break)
+            {
+                KelloxInterpreter.currentEnvironment = kelloxEnvironment;
+                break;
+            }
         }
     }
 }

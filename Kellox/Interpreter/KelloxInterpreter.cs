@@ -54,19 +54,16 @@ internal static class KelloxInterpreter
         string? specifiedFile = null;
         // TODO Kelloxargs should be available as an array in main
         List<string> kelloxArgs = new();
-        for (int i = 0; i < args.Length; i++)
+        try
         {
-            try
-            {
-                ArgumentPreProcessor.GroupArgs(options, ref specifiedFile, kelloxArgs, args);
-            }
-            catch (ArgumentError argumentError)
-            {
-                Console.WriteLine(argumentError.Message);
-                Environment.Exit(64);
-            }
-            ArgumentPostProcessor.Process(options, specifiedFile);
+            ArgumentPreProcessor.GroupArgs(options, ref specifiedFile, kelloxArgs, args);
         }
+        catch (ArgumentError argumentError)
+        {
+            Console.WriteLine(argumentError.Message);
+            Environment.Exit(64);
+        }
+        ArgumentPostProcessor.Process(options, specifiedFile);
     }
 
     /// <summary>

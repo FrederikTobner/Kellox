@@ -12,7 +12,7 @@
             "program": "${workspaceFolder}/Kellox/bin/Debug/net6.0/Kellox.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Kellox",
-            "console": "internalConsole",
+            "console": "externalTerminal",
             "stopAtEntry": false
         },
         {

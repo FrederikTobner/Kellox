@@ -24,6 +24,7 @@ namespace Kellox.Keywords
         {
             Dictionary<string, TokenType> keyWords = new();
             keyWords.Add(KeywordConstants.AndKeyword, TokenType.AND);
+            keyWords.Add(KeywordConstants.BreakKeyword, TokenType.BREAK);
             keyWords.Add(KeywordConstants.ClassKeyword, TokenType.CLASS);
             keyWords.Add(KeywordConstants.ElseKeyword, TokenType.ELSE);
             keyWords.Add(KeywordConstants.FalseKeyword, TokenType.FALSE);

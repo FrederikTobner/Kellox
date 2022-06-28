@@ -12,7 +12,6 @@ namespace Kellox.Resolver;
 /// </summary>
 internal static class KelloxResolver
 {
-
     /// <summary>
     /// Stack for keeping track of the variables in the current scope and all outer scopes.
     /// Each scope is defined as a dictionary in the stack
@@ -28,6 +27,9 @@ internal static class KelloxResolver
     /// The current class type -> used to keep track if the resolver is currently in a class
     /// </summary>
     private static ClassType currentClassType = ClassType.NONE;
+
+
+    private static LoopType currentLoopType = LoopType.NONE;
 
     /// <summary>
     /// Resolves a LoxProgram -> walks over the Syntaxtree and resolves all the variables it contains
@@ -89,6 +91,9 @@ internal static class KelloxResolver
                 return;
             case WhileStatement whileStatement:
                 ResolveStatement(whileStatement);
+                return;
+            case BreakStatement breakStatement:
+                ResolveStatement(breakStatement);
                 return;
             default:
                 throw new NotImplementedException();
@@ -241,8 +246,23 @@ internal static class KelloxResolver
     private static void ResolveStatement(WhileStatement whileStatement)
     {
         ResolveExpression(whileStatement.Condition);
+        currentLoopType = LoopType.WHILE;
         ResolveStatement(whileStatement.Body);
+        currentLoopType = LoopType.NONE;
     }
+
+    /// <summary>
+    /// Resolves a Breakstatement
+    /// </summary>
+    /// <param name="whileStatement">The ReturnStatement that shall be resolved</param>
+    private static void ResolveStatement(BreakStatement breakStatement)
+    {
+        if (currentLoopType == LoopType.NONE)
+        {
+            ErrorLogger.Error(breakStatement.Token, "Can't use break outside of a loop");
+        }
+    }
+
 
     #endregion Statements
 
@@ -295,7 +315,7 @@ internal static class KelloxResolver
                 throw new NotImplementedException();
         }
     }
-    
+
     /// <summary>
     /// Resolves a super expression
     /// </summary>

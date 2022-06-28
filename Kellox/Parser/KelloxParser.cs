@@ -53,6 +53,10 @@ internal static class KelloxParser
         {
             statement = CreateForStatement(tokens);
         }
+        else if (Check(tokens, TokenType.BREAK))
+        {
+            statement = new BreakStatement(Advance(tokens));
+        }
         else if (Match(tokens, TokenType.IF))
         {
             statement = CreateIfStatement(tokens);
@@ -102,7 +106,7 @@ internal static class KelloxParser
     /// Determines whether a statement is Consuming a semicolon
     /// </summary>
     /// <param name="statement">The statement that shall be evaluated</param>
-    private static bool StatementConsumesSemicolon(IStatement statement) => statement is DeclarationStatement or ExpressionStatement or PrintStatement;
+    private static bool StatementConsumesSemicolon(IStatement statement) => statement is DeclarationStatement or ExpressionStatement or PrintStatement or BreakStatement;
 
     /// <summary>
     /// Creates a new Return statement

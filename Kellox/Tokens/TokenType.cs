@@ -214,6 +214,11 @@ internal enum TokenType
     /// </summary>
     VAR,
 
+    /// <summary>
+    /// break keyword, for stpoing a loop -> "break"
+    /// </summary>
+    BREAK,
+
 
     #region FunctionSpecific
 
