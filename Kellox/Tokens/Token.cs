@@ -3,7 +3,7 @@
 /// <summary>
 /// Models a Token (a word in a programming language)
 /// </summary>
-internal class Token
+public class Token
 {
     /// <summary>
     /// The lexeme of the Token, meaning its representation as a string

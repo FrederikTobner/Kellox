@@ -15,7 +15,7 @@ namespace Kellox.Interpreter;
 /// <summary>
 /// Contains method to interpret a KelloxProgram that was produced by the 
 /// </summary>
-internal static class KelloxInterpreter
+public static class KelloxInterpreter
 {
     /// <summary>
     /// Boolean value indicating wheather an error has ocurred during the interpretation of the program
@@ -111,7 +111,7 @@ internal static class KelloxInterpreter
     /// Executes a Kellox program
     /// </summary>
     /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
-    private static void Run(string sourceCode, bool onlyAnalyze)
+    public static void Run(string sourceCode, bool onlyAnalyze)
     {
         IReadOnlyList<Token> tokens = KelloxLexer.ScanTokens(sourceCode);
         // Error during the lexical analysis

@@ -3,7 +3,7 @@
 /// <summary>
 /// The different Types of Tokens in the Kellox
 /// </summary>
-internal enum TokenType
+public enum TokenType
 {
     #region SingleCharacterTokens
 

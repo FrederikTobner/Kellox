@@ -7,7 +7,7 @@ namespace Kellox.Expressions;
 /// <summary>
 /// Models a CallExpression in Lox
 /// </summary>
-internal class CallExpression : IExpression
+public class CallExpression : IExpression
 {
     /// <summary>
     /// The Expression that was called e.g. rect(5, 6).area() -> 'rect(5, 6)'
