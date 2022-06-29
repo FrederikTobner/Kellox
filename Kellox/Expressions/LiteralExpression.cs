@@ -1,4 +1,6 @@
 ﻿using Kellox.Keywords;
+using Kellox.Tokens;
+using Kellox.Utils;
 
 namespace Kellox.Expressions;
 
@@ -12,8 +14,18 @@ internal class LiteralExpression : IExpression
     /// </summary>
     public object? Value { get; init; }
 
-    public LiteralExpression(object? value)
+    public Token? LiteralToken { get; init; }
+
+    public LiteralExpression(object? value, Token? literalToken = null)
     {
+        if (value is string text && literalToken is not null)
+        {
+            if (text.Contains('\\'))
+            {
+                text = EscapeSequenceFabricator.EnrichString(text, literalToken);
+            }
+            this.Value = text;
+        }
         this.Value = value;
     }
 

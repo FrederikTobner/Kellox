@@ -41,14 +41,7 @@ internal class PrintStatement : IStatement
                 Console.Write(KeywordConstants.NilKeyword);
                 break;
             case string text:
-                if (!text.Contains('\\'))
-                {
-                    Console.Write(text);
-                }
-                else
-                {
-                    Console.Write(EscapeSequenceFabricator.EnrichString(text, printToken));
-                }
+                Console.Write(text);
                 break;
             case bool logicalValue:
                 Console.Write(logicalValue ? KeywordConstants.TrueKeyword : KeywordConstants.FalseKeyword);

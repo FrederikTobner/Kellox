@@ -74,6 +74,6 @@ internal static class EscapeSequenceFabricator
             errorMessageBuilder.Append(i == 0 ? ' ' : i != list.Count - 1 ? ", " : " and ");
             errorMessageBuilder.Append(patternMatch.ToString());
         }
-        throw new RunTimeError(printToken, errorMessageBuilder.ToString());
+        throw new ParseError(printToken, errorMessageBuilder.ToString());
     }
 }

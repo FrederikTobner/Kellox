@@ -57,7 +57,8 @@ internal static class KelloxParser
         {
             statement = new BreakStatement(Advance(tokens));
         }
-        else if(Check(tokens, TokenType.CONTINUE)){
+        else if (Check(tokens, TokenType.CONTINUE))
+        {
             statement = new ContinueStatement(Advance(tokens));
         }
         else if (Match(tokens, TokenType.IF))
@@ -537,9 +538,14 @@ internal static class KelloxParser
         {
             return new LiteralExpression(null);
         }
-        if (Check(tokens, TokenType.NUMBER, TokenType.STRING))
+        if (Check(tokens, TokenType.NUMBER))
         {
             return new LiteralExpression(Advance(tokens).Literal);
+        }
+        if (Check(tokens, TokenType.STRING))
+        {
+            Token stringLiteralToken = Advance(tokens);
+            return new LiteralExpression(stringLiteralToken.Literal, stringLiteralToken);
         }
         if (Check(tokens, TokenType.SUPER))
         {
