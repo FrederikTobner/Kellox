@@ -14,6 +14,9 @@ internal class LiteralExpression : IExpression
     /// </summary>
     public object? Value { get; init; }
 
+    /// <summary>
+    /// The Token of the literal Expression -> null if it is not a string literal and only used for escape sequence specific error logging
+    /// </summary>
     public Token? LiteralToken { get; init; }
 
     public LiteralExpression(object? value, Token? literalToken = null)

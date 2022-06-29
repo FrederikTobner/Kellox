@@ -1,4 +1,3 @@
-var s = "Hallo\s W\yelt\x";
 if(false or true)
 	println "Yes";
 else

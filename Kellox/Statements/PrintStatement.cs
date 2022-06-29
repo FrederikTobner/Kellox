@@ -1,4 +1,5 @@
-﻿using Kellox.Expressions;
+﻿using Kellox.Classes;
+using Kellox.Expressions;
 using Kellox.Keywords;
 using Kellox.Tokens;
 using Kellox.Utils;
@@ -10,6 +11,7 @@ namespace Kellox.Statements;
 /// </summary>
 internal class PrintStatement : IStatement
 {
+
     /// <summary>
     /// The Expression that shall be printed e.g "Hallo" / 6.3
     /// </summary>
@@ -40,13 +42,10 @@ internal class PrintStatement : IStatement
             case null:
                 Console.Write(KeywordConstants.NilKeyword);
                 break;
-            case string text:
-                Console.Write(text);
-                break;
             case bool logicalValue:
                 Console.Write(logicalValue ? KeywordConstants.TrueKeyword : KeywordConstants.FalseKeyword);
                 break;
-            case object:
+            case double or string or KelloxInstance or int:
                 Console.Write(obj);
                 break;
             default:
