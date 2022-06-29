@@ -30,14 +30,12 @@ public static class KelloxInterpreter
     /// <summary>
     /// The current Environment where the program is getting executed
     /// </summary>
-    internal readonly static KelloxEnvironment globalEnvironment = KelloxEnvironmentInitializer.InitializeGlobal();
-
+    internal static KelloxEnvironment globalEnvironment = KelloxEnvironmentInitializer.InitializeGlobal();
 
     /// <summary>
     /// Contains the local (not global) expressions, that reference a variabale from an outer scope
     /// </summary>
     private static readonly Dictionary<IExpression, int> locals = new();
-
 
     /// <summary>
     /// The current Environment, where the program is getting executed
@@ -64,6 +62,12 @@ public static class KelloxInterpreter
             Environment.Exit(64);
         }
         ArgumentPostProcessor.Process(options, specifiedFile);
+    }
+
+    public static void ResetEnvironment()
+    {
+        globalEnvironment = KelloxEnvironmentInitializer.InitializeGlobal();
+        currentEnvironment = globalEnvironment;
     }
 
     /// <summary>
