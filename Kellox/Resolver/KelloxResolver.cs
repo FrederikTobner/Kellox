@@ -95,6 +95,9 @@ internal static class KelloxResolver
             case BreakStatement breakStatement:
                 ResolveStatement(breakStatement);
                 return;
+            case ContinueStatement continueStatement:
+                ResolveStatement(continueStatement);
+                return;
             default:
                 throw new NotImplementedException();
         }
@@ -254,12 +257,24 @@ internal static class KelloxResolver
     /// <summary>
     /// Resolves a Breakstatement
     /// </summary>
-    /// <param name="whileStatement">The ReturnStatement that shall be resolved</param>
+    /// <param name="whileStatement">The BreakStatement that shall be resolved</param>
     private static void ResolveStatement(BreakStatement breakStatement)
     {
         if (currentLoopType == LoopType.NONE)
         {
             ErrorLogger.Error(breakStatement.Token, "Can't use break outside of a loop");
+        }
+    }
+
+        /// <summary>
+    /// Resolves a Breakstatement
+    /// </summary>
+    /// <param name="continueStatement">The ContinueStatement that shall be resolved</param>
+    private static void ResolveStatement(ContinueStatement continueStatement)
+    {
+        if (currentLoopType == LoopType.NONE)
+        {
+            ErrorLogger.Error(continueStatement.Token, "Can't use continue outside of a loop");
         }
     }
 

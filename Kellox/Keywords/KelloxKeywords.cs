@@ -26,6 +26,7 @@ namespace Kellox.Keywords
             keyWords.Add(KeywordConstants.AndKeyword, TokenType.AND);
             keyWords.Add(KeywordConstants.BreakKeyword, TokenType.BREAK);
             keyWords.Add(KeywordConstants.ClassKeyword, TokenType.CLASS);
+            keyWords.Add(KeywordConstants.ContinueKeyword, TokenType.CONTINUE);
             keyWords.Add(KeywordConstants.ElseKeyword, TokenType.ELSE);
             keyWords.Add(KeywordConstants.FalseKeyword, TokenType.FALSE);
             keyWords.Add(KeywordConstants.ForKeyWord, TokenType.FOR);

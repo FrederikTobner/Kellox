@@ -210,14 +210,19 @@ internal enum TokenType
     FOR,
 
     /// <summary>
+    /// break keyword, for stoping a loop -> "break" 🛑
+    /// </summary>
+    BREAK,
+
+    /// <summary>
+    /// continue keyword, for forcing the next iterration of a loop -> "continue"
+    /// </summary>
+    CONTINUE,
+
+    /// <summary>
     /// var keyword, for declaring a variable -> "var"
     /// </summary>
     VAR,
-
-    /// <summary>
-    /// break keyword, for stpoing a loop -> "break"
-    /// </summary>
-    BREAK,
 
 
     #region FunctionSpecific

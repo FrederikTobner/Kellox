@@ -224,8 +224,6 @@ internal static class KelloxLexer
         tokens.Add(new Token(tokenType, text, literal, line));
     }
 
-
-
     /// <summary>
     /// Indicates weather the Lexer has reached the end of the file
     /// </summary>

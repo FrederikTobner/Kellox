@@ -34,6 +34,10 @@ internal class WhileStatement : IStatement
             {
                 Body.Execute();
             }
+            catch(Continue)
+            {
+                KelloxInterpreter.currentEnvironment = kelloxEnvironment;
+            }
             catch (Break)
             {
                 KelloxInterpreter.currentEnvironment = kelloxEnvironment;

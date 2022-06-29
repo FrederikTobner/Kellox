@@ -5,6 +5,7 @@
         internal const string AndKeyword = "and";
         internal const string BreakKeyword = "break";
         internal const string ClassKeyword = "class";
+        internal const string ContinueKeyword = "continue";
         internal const string ElseKeyword = "else";
         internal const string FalseKeyword = "false";
         internal const string ForKeyWord = "for";
