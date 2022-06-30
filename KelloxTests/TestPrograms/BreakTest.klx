@@ -1,0 +1,10 @@
+var testNumber = 0; 
+while(testNumber < 10)
+{
+	testNumber++;
+	if(testNumber == 7)
+	{
+		break;
+	}
+	println testNumber;	
+}

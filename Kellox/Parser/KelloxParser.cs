@@ -80,7 +80,7 @@ internal static class KelloxParser
         else if (Check(tokens, TokenType.PRINT, TokenType.PRINTLN))
         {
             Token printToken = Advance(tokens);
-            statement = new PrintStatement(Expression(tokens), printToken, printToken.TokenType is TokenType.PRINTLN);
+            statement = new PrintStatement(Expression(tokens), printToken.TokenType is TokenType.PRINTLN);
         }
         else if (Check(tokens, TokenType.RETURN))
         {

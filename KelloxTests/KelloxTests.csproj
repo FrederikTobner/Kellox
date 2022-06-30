@@ -38,10 +38,4 @@
     <Resource Include="TestPrograms\FibonacciProgram.klx" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="NestedFunctionTests.cs">
-      <CustomToolNamespace></CustomToolNamespace>
-    </Compile>
-  </ItemGroup>
-
 </Project>

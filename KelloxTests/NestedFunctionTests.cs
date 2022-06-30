@@ -1,6 +1,4 @@
-using Kellox.Expressions;
 using Kellox.Interpreter;
-using Kellox.Tokens;
 using System;
 using System.IO;
 using System.Text;
@@ -10,12 +8,15 @@ namespace KelloxTests;
 
 public class NestedFunctionTests
 {
+    //Used to redirect the console output to the stringWriter
+    private readonly StringWriter output = new();
+
     /// <summary>
     /// Resets Environment after each test execution
     /// </summary>
     public NestedFunctionTests()
     {
-        KelloxInterpreter.ResetEnvironment();
+        Console.SetOut(output);
     }
 
     /// <summary>
@@ -24,24 +25,33 @@ public class NestedFunctionTests
     private static readonly string fibonacciProgramPath = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}\\TestPrograms\\FibonacciProgram.klx";
 
     /// <summary>
-    /// The first 25 fibonacci numbers stored in an array
+    /// Path of the Fibonacci Test Program
     /// </summary>
-    private static readonly double[] fibonacciNumbers = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368 };
+    private static readonly string breakProgramPath = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}\\TestPrograms\\BreakTest.klx";
 
-    [Fact]
+    /// <summary>
+    /// Output of the fibonacci program
+    /// </summary>
+    private static readonly string expectedFibonacciOutput = $"0{Environment.NewLine}1{Environment.NewLine}1{Environment.NewLine}2{Environment.NewLine}3{Environment.NewLine}5{Environment.NewLine}8{Environment.NewLine}13{Environment.NewLine}21{Environment.NewLine}34{Environment.NewLine}";
+
+    /// <summary>
+    /// Output of the break program
+    /// </summary>
+    private static readonly string expectedBreakOutput = $"1{Environment.NewLine}2{Environment.NewLine}3{Environment.NewLine}4{Environment.NewLine}5{Environment.NewLine}6{Environment.NewLine}";
+
+    [Fact, ResetEnvironmentAfterTest]
     public void TestFibonacciProgram()
     {
-        CallExpression fibonacciFunction = new(
-        new VariableExpression(
-            new Token(TokenType.VAR, "fibo", null, 0)),
-            new Token(TokenType.RIGHT_PARENTHESIS, ")", null, 0),
-            new());
         string program = Encoding.UTF8.GetString(File.ReadAllBytes(fibonacciProgramPath));
         KelloxInterpreter.Run(program, false);
-        for (int i = 0; i < 25; i++)
-        {
-            Assert.Equal(fibonacciNumbers[i], fibonacciFunction.Evaluate());
-        }
+        Assert.Equal(expectedFibonacciOutput, output.ToString());
+    }
 
+    [Fact, ResetEnvironmentAfterTest]
+    public void TestBreakProgram()
+    {
+        string program = Encoding.UTF8.GetString(File.ReadAllBytes(breakProgramPath));
+        KelloxInterpreter.Run(program, false);
+        Assert.Equal(expectedBreakOutput, output.ToString());
     }
 }

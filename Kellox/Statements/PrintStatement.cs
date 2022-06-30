@@ -22,15 +22,9 @@ internal class PrintStatement : IStatement
     /// </summary>
     private readonly bool addLineBreak;
 
-    /// <summary>
-    /// Token of the print statement used for error logging
-    /// </summary>
-    private readonly Token printToken;
-
-    public PrintStatement(IExpression expression, Token printToken, bool addLineBreak)
+    public PrintStatement(IExpression expression, bool addLineBreak)
     {
         this.Expression = expression;
-        this.printToken = printToken;
         this.addLineBreak = addLineBreak;
     }
 
