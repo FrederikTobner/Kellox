@@ -249,7 +249,7 @@ internal static class KelloxParser
             //If there is no Condition specified it is always true
             conditionalExpression = new LiteralExpression(true);
         }
-        body = new WhileStatement(conditionalExpression, body);
+        body = new WhileStatement(conditionalExpression, body, incrementExpression is null ? null : new ExpressionStatement(incrementExpression));
         if (initializerExpression is not null)
         {
             IStatement[] statements = { initializerExpression, body };

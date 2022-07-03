@@ -19,10 +19,13 @@ internal class WhileStatement : IStatement
     /// </summary>
     public IStatement Body { get; init; }
 
-    public WhileStatement(IExpression expression, IStatement body)
+    public IStatement IncrementStatement { get; init; }
+
+    public WhileStatement(IExpression expression, IStatement body, IStatement? IncrementStatement = null)
     {
         this.Condition = expression;
         this.Body = body;
+        this.IncrementStatement = IncrementStatement;
     }
 
     public void Execute()
@@ -34,8 +37,16 @@ internal class WhileStatement : IStatement
             {
                 Body.Execute();
             }
-            catch(Continue)
+            catch (Continue)
             {
+                if (this.IncrementStatement is not null)
+                {
+                    while (KelloxInterpreter.currentEnvironment.Enclosing != kelloxEnvironment)
+                    {
+                        KelloxInterpreter.currentEnvironment = KelloxInterpreter.currentEnvironment.Enclosing;
+                    }
+                    IncrementStatement.Execute();
+                }
                 KelloxInterpreter.currentEnvironment = kelloxEnvironment;
             }
             catch (Break)
