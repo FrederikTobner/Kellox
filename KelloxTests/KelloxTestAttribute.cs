@@ -18,8 +18,6 @@ namespace KelloxTests
 
         public override void After(MethodInfo methodUnderTest)
         {
-            KelloxInterpreter.ErrorOccurred = false;
-            KelloxInterpreter.RunTimeErrorOccurred = false;
             KelloxInterpreter.ResetEnvironment();
         }
     }

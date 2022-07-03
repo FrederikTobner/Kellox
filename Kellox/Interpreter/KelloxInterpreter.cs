@@ -117,6 +117,8 @@ public static class KelloxInterpreter
     /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
     public static void Run(string sourceCode, bool onlyAnalyze)
     {
+        RunTimeErrorOccurred = false;
+        ErrorOccurred = false;
         IReadOnlyList<Token> tokens = KelloxLexer.ScanTokens(sourceCode);
         // Error during the lexical analysis
         if (ErrorOccurred)

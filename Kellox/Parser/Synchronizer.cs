@@ -17,7 +17,11 @@ internal static class Synchronizer
 
     private static void SynchronizeWithTokenTypes(IReadOnlyList<Token> tokens, TokenType tokenType, ref int current, ref int scopeDepth)
     {
-        if (tokens[current].TokenType is TokenType.EOF || tokens[current - 1].TokenType == tokenType)
+        if (tokens[current].TokenType is TokenType.EOF)
+        {
+            return;
+        }
+        if (tokens[current - 1].TokenType == tokenType)
         {
             if (scopeDepth < 1)
             {

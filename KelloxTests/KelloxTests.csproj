@@ -20,8 +20,14 @@
     </PackageReference>
   </ItemGroup>
 
+  <!--Reference to the kellox interpeter project-->
   <ItemGroup>
     <ProjectReference Include="..\Kellox\Kellox.csproj" />
+  </ItemGroup>
+
+  <!--Coding style-->
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
 </Project>
