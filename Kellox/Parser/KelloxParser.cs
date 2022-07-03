@@ -227,12 +227,13 @@ internal static class KelloxParser
         {
             Advance(tokens);
             conditionalExpression = Expression(tokens);
+            Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after loop condition");
         }
 
         IExpression? incrementExpression = null;
         if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
         {
-            Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after loop condition");
+            
             incrementExpression = Expression(tokens);
         }
         Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");

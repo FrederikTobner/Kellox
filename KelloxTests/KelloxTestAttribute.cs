@@ -5,8 +5,11 @@ using Xunit.Sdk;
 
 namespace KelloxTests
 {
+    /// <summary>
+    /// Atribut for a tests that affects the environment
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    internal class ResetEnvironmentAfterTest : BeforeAfterTestAttribute
+    internal class KelloxTestAttribute : BeforeAfterTestAttribute
     {
         public override void Before(MethodInfo methodUnderTest)
         {
@@ -15,6 +18,8 @@ namespace KelloxTests
 
         public override void After(MethodInfo methodUnderTest)
         {
+            KelloxInterpreter.ErrorOccurred = false;
+            KelloxInterpreter.RunTimeErrorOccurred = false;
             KelloxInterpreter.ResetEnvironment();
         }
     }

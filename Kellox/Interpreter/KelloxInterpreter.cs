@@ -20,12 +20,12 @@ public static class KelloxInterpreter
     /// <summary>
     /// Boolean value indicating wheather an error has ocurred during the interpretation of the program
     /// </summary>
-    public static bool ErrorOccurred { get; internal set; }
+    public static bool ErrorOccurred { get; set; }
 
     /// <summary>
     /// Boolean value indicating wheather an error has ocurred while running the program
     /// </summary>
-    public static bool RunTimeErrorOccurred { get; internal set; }
+    public static bool RunTimeErrorOccurred { get; set; }
 
     /// <summary>
     /// The current Environment where the program is getting executed

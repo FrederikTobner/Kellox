@@ -1,3 +1,5 @@
+for (var c = 0; c < 3;) println c = c + 1;
+
 for (var i = 1; i < 10; i++)
 {
 	if(i == 7)
