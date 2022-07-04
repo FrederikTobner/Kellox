@@ -9,13 +9,13 @@ internal static class CharacterAnalysizer
     /// Determines weather a char is from the Alphabet or a underscore
     /// </summary>
     /// <param name="c">The char that is evaluated</param>
-    public static bool IsAlpha(char c) => c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
+    public static bool IsAlpha(char c) => c is >= 'a' and <= 'z' or >= 'A' and <= 'Z';
 
     /// <summary>
     /// Determines weather a char is a number (0-9)
     /// </summary>
     /// <param name="c">The char that is evaluated</param>
-    public static bool IsDigit(char c) => c >= '0' && c <= '9';
+    public static bool IsDigit(char c) => c is >= '0' and <= '9';
 
     /// <summary>
     /// Determines weather a char is from the Alphabet, a number or an underscore
