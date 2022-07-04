@@ -5,7 +5,7 @@ namespace Kellox.Statements;
 /// <summary>
 /// Models a epression statement
 /// </summary>
-public class ExpressionStatement : IStatement
+internal class ExpressionStatement : IStatement
 {
     /// <summary>
     /// The inner Expression of the statement

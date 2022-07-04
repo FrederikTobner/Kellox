@@ -1,5 +1,6 @@
 ﻿using Kellox.Interpreter;
 using System;
+using System.IO;
 using Xunit;
 
 namespace KelloxTests;
@@ -9,22 +10,22 @@ public class ForLoopTests : KelloxTest
     /// <summary>
     /// Path of the Fibonacci Test Program
     /// </summary>
-    private static readonly string breakProgramPath = TestProgramFolderPath + "BreakTest.klx";
+    private static readonly string breakProgramPath = CreateKelloxTestFilePath("BreakTest.klx");
 
     /// <summary>
     /// Path of the Fibonacci Test Program
     /// </summary>
-    private static readonly string continueProgramPath = TestProgramFolderPath + "ContinueTest.klx";
+    private static readonly string continueProgramPath = CreateKelloxTestFilePath("ContinueTest.klx");
 
     /// <summary>
     /// Path of the Fibonacci Test Program
     /// </summary>
-    private static readonly string singleExpressionForProgramPath = TestProgramFolderPath + "SingleExpressionForTest.klx";
+    private static readonly string singleExpressionForProgramPath = CreateKelloxTestFilePath("SingleExpressionForTest.klx");
 
     /// <summary>
     /// Path of the Fibonacci Test Program
     /// </summary>
-    private static readonly string normalForProgramPath = TestProgramFolderPath + "NormalForTest.klx";
+    private static readonly string normalForProgramPath = CreateKelloxTestFilePath("NormalForTest.klx");
 
     /// <summary>
     /// Output of the break program

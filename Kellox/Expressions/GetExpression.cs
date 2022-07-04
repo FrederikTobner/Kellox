@@ -9,8 +9,6 @@ namespace Kellox.Expressions;
 /// </summary>
 internal class GetExpression : IExpression
 {
-    private const string OnlyIstancesHaveProbsErrorMessage = "Only Instances have properties";
-
     /// <summary>
     /// Object of the Expression rect.x -> 'rect'
     /// </summary>
@@ -34,7 +32,7 @@ internal class GetExpression : IExpression
         {
             return loxInstance.Get(Name);
         }
-        throw new RunTimeError(Name, OnlyIstancesHaveProbsErrorMessage);
+        throw new RunTimeError(Name, "Only Instances have properties");
     }
 
     public override string ToString() => Object.ToString() + " get -> " + Name.Lexeme;

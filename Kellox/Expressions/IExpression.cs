@@ -5,7 +5,7 @@ namespace Kellox.Expressions;
 /// <summary>
 /// Interface for a Expression that can be evaluated and converted to a string
 /// </summary>
-public interface IExpression
+internal interface IExpression
 {
     /// <summary>
     /// Returns a representation of the Expression as a string

@@ -8,6 +8,7 @@ using Kellox.Resolver;
 using Kellox.Statements;
 using Kellox.Tokens;
 using Kellox.Utils;
+using System.Security;
 using System.Text;
 
 namespace Kellox.Interpreter;
@@ -75,8 +76,54 @@ public static class KelloxInterpreter
     /// </summary>
     public static void RunFile(string path, bool onlyAnalyze = false)
     {
-        byte[] file = File.ReadAllBytes(path);
-        Run(Encoding.UTF8.GetString(file), onlyAnalyze);
+        byte[]? file = null;
+        //Try catch block for reading a file
+        try
+        {
+            file = File.ReadAllBytes(path);
+        }
+        //Catches Argument and ArgumentNullException
+        catch (Exception exception)
+        {
+            switch (exception)
+            {
+                case PathTooLongException:
+                    Console.WriteLine("The specified path, file name, or both exceed the system-defined maximum length");
+                    break;
+                case DirectoryNotFoundException:
+                    Console.WriteLine("The specified path is invalid (for example, it is on an unmapped drive)");
+                    break;
+                case IOException:
+                    Console.WriteLine("An I/O error occurred while opening the file");
+                    break;
+                case UnauthorizedAccessException:
+                    Console.WriteLine("This operation is not supported on the current platform. -or- path specified is a directory. -or- The caller does not have the required permission");
+                    break;
+                case NotSupportedException:
+                    Console.WriteLine("path is in an invalid format.");
+                    break;
+                case SecurityException:
+                    Console.WriteLine("The caller does not have the required permission.");
+                    break;
+                default:
+                    Console.WriteLine("The file couldn't be found.");
+                    break;
+            }
+            //Its almost always a layer 8 problem
+            Environment.Exit(65);
+        }
+        string? sourceCode = null;
+        try
+        {
+            sourceCode = Encoding.UTF8.GetString(file);
+        }
+        //Catches all three exceptions
+        catch (ArgumentException)
+        {
+            Console.WriteLine("Couldn't endcode the file with using UTF-8");
+            Environment.Exit(70);
+        }
+        Run(sourceCode, onlyAnalyze);
         if (RunTimeErrorOccurred)
         {
             // An internal software error has been detected
