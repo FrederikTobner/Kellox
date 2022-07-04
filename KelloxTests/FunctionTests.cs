@@ -1,12 +1,10 @@
 using Kellox.Interpreter;
 using System;
-using System.IO;
-using System.Text;
 using Xunit;
 
 namespace KelloxTests;
 
-public class FunctionTests : KelloxTests
+public class FunctionTests : KelloxTest
 {
     /// <summary>
     /// Path of the Fibonacci Test Program
@@ -21,8 +19,7 @@ public class FunctionTests : KelloxTests
     [Fact]
     public void TestFibonacciProgram()
     {
-        string program = Encoding.UTF8.GetString(File.ReadAllBytes(fibonacciProgramPath));
-        KelloxInterpreter.Run(program, false);
+        KelloxInterpreter.RunFile(fibonacciProgramPath);
         Assert.Equal(expectedFibonacciOutput, output.ToString());
     }
 }

@@ -1,12 +1,10 @@
 ﻿using Kellox.Interpreter;
 using System;
-using System.IO;
-using System.Text;
 using Xunit;
 
 namespace KelloxTests;
 
-public class ForLoopTests : KelloxTests
+public class ForLoopTests : KelloxTest
 {
     /// <summary>
     /// Path of the Fibonacci Test Program
@@ -51,32 +49,28 @@ public class ForLoopTests : KelloxTests
     [Fact]
     public void TestBreakProgram()
     {
-        string program = Encoding.UTF8.GetString(File.ReadAllBytes(breakProgramPath));
-        KelloxInterpreter.Run(program, false);
+        KelloxInterpreter.RunFile(breakProgramPath);
         Assert.Equal(expectedBreakOutput, output.ToString());
     }
 
     [Fact]
     public void TestContinueProgram()
     {
-        string program = Encoding.UTF8.GetString(File.ReadAllBytes(continueProgramPath));
-        KelloxInterpreter.Run(program, false);
+        KelloxInterpreter.RunFile(continueProgramPath);
         Assert.Equal(expectedContinueOutput, output.ToString());
     }
 
     [Fact]
     public void TestSingleExpressionForProgram()
     {
-        string program = Encoding.UTF8.GetString(File.ReadAllBytes(singleExpressionForProgramPath));
-        KelloxInterpreter.Run(program, false);
+        KelloxInterpreter.RunFile(singleExpressionForProgramPath);
         Assert.Equal(expectedSingleExpressionForOutput, output.ToString());
     }
 
     [Fact]
     public void TestNormalForProgram()
     {
-        string program = Encoding.UTF8.GetString(File.ReadAllBytes(normalForProgramPath));
-        KelloxInterpreter.Run(program, false);
+        KelloxInterpreter.RunFile(normalForProgramPath);
         Assert.Equal(expectedNormalForOutput, output.ToString());
     }
 }

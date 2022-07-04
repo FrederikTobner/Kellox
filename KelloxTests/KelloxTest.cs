@@ -7,15 +7,18 @@ namespace KelloxTests;
 /// KelloxTests affect each other so we have to use a collection to prevent the tests from running in parallel
 /// </summary>
 [KelloxTestAttribute, Collection("KelloxTest")]
-public abstract class KelloxTests
+public abstract class KelloxTest
 {
+    //Folder of the test programs
     protected static readonly string TestProgramFolderPath = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}\\TestPrograms\\";
 
-    //Used to redirect the console output to the stringWriter
-    protected readonly StringWriter output = new();
+    //Used to redirect the console output
+    protected readonly StringWriter output;
 
-    public KelloxTests()
+    //Initial setup shared among all kellox tests
+    public KelloxTest()
     {
+        output = new();
         Console.SetOut(output);
     }
 }

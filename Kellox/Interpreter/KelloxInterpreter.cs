@@ -73,7 +73,7 @@ public static class KelloxInterpreter
     /// <summary>
     /// Executes a Kellox program from a file
     /// </summary>
-    internal static void RunFile(string path, bool onlyAnalyze)
+    public static void RunFile(string path, bool onlyAnalyze = false)
     {
         byte[] file = File.ReadAllBytes(path);
         Run(Encoding.UTF8.GetString(file), onlyAnalyze);
