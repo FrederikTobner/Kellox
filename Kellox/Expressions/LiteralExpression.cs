@@ -27,7 +27,7 @@ internal class LiteralExpression : IExpression
             {
                 text = EscapeSequenceFabricator.EnrichString(text, literalToken);
             }
-            this.Value = text;
+            value = text;
         }
         this.Value = value;
     }

@@ -83,7 +83,7 @@ internal class KelloxClass : IFunction
     {
         KelloxInstance instance = new(this);
         if (methods.TryGetValue(KeywordConstants.InitKeyword, out KelloxFunction? initializer))
-        {   
+        {
             // Binds this instance to a copy of the initializer and then calls it with the arguments provided in the initalizer (and the closing paren for error logging)
             initializer.Bind(instance).Call(arguments, paren);
         }

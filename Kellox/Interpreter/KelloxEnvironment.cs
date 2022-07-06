@@ -55,7 +55,7 @@ internal class KelloxEnvironment
     /// Assign a value to a variable at the Environemt at a specified distance
     /// </summary>
     /// <param name="distance">distance to the specified environment ()from the current Environment</param>
-    /// <param name="token">The Token (var identifierr)</param>
+    /// <param name="token">The Token (var identifier)</param>
     /// <param name="value">The value assigned to the variable</param>
     public void AssignAt(int distance, Token token, object? value) => Ancestor(distance).values[token.Lexeme] = value;
 

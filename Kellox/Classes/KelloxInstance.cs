@@ -2,6 +2,7 @@
 using Kellox.Functions;
 using Kellox.Tokens;
 using Kellox.Utils;
+using System.Text.Json.Serialization;
 
 namespace Kellox.Classes;
 

@@ -19,12 +19,12 @@ namespace Kellox.Interpreter;
 public static class KelloxInterpreter
 {
     /// <summary>
-    /// Boolean value indicating wheather an error has ocurred during the interpretation of the program
+    /// Boolean value indicating whether an error has ocurred during the interpretation of the program
     /// </summary>
     public static bool ErrorOccurred { get; set; }
 
     /// <summary>
-    /// Boolean value indicating wheather an error has ocurred while running the program
+    /// Boolean value indicating whether an error has ocurred while running the program
     /// </summary>
     public static bool RunTimeErrorOccurred { get; set; }
 
@@ -106,6 +106,7 @@ public static class KelloxInterpreter
                     Console.WriteLine("The caller does not have the required permission.");
                     break;
                 default:
+                    //Argumentexception 😕
                     Console.WriteLine("The file couldn't be found.");
                     break;
             }
@@ -162,7 +163,7 @@ public static class KelloxInterpreter
     /// Executes a Kellox program
     /// </summary>
     /// <param name="sourceCode">The sourcecode of the program that shall be executed</param>
-    public static void Run(string sourceCode, bool onlyAnalyze)
+    public static void Run(string sourceCode, bool onlyAnalyze = false)
     {
         RunTimeErrorOccurred = false;
         ErrorOccurred = false;

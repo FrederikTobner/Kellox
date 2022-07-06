@@ -225,7 +225,7 @@ internal static class KelloxLexer
     }
 
     /// <summary>
-    /// Indicates weather the Lexer has reached the end of the file
+    /// Indicates whether the Lexer has reached the end of the file
     /// </summary>
     private static bool IsAtEnd(string source) => current >= source.Length;
 
@@ -253,6 +253,12 @@ internal static class KelloxLexer
     /// </summary>
     private static void AString(string source)
     {
+        if (Peek(source) is '\"')
+        {
+            AddToken(source, TokenType.STRING, string.Empty);
+            Advance(source);
+            return;
+        }
         while (!IsAtEnd(source))
         {
             //Is the quote not escaped?

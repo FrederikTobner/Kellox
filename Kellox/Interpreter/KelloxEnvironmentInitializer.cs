@@ -26,15 +26,15 @@ internal static class KelloxEnvironmentInitializer
     /// <summary>
     /// Defines the native functions of lox
     /// </summary>
-    private static void DefineNativeFunctions(KelloxEnvironment loxEnvironment)
+    private static void DefineNativeFunctions(KelloxEnvironment kelloxEnvironment)
     {
-        loxEnvironment.Define(BeepFunctionName, new BeepFunction());
-        loxEnvironment.Define(ClearFunctionName, new ClearFunction());
-        loxEnvironment.Define(ClockFunctionName, new ClockFunction());
-        loxEnvironment.Define(ExitFunctionName, new ExitFunction());
-        loxEnvironment.Define(RandomFunctionName, new RandomFunction());
-        loxEnvironment.Define(ReadFunctionName, new ReadFunction());
-        loxEnvironment.Define(TypeOfFunctionName, new TypeOfFunction());
-        loxEnvironment.Define(WaitFunctionName, new WaitFunction());
+        kelloxEnvironment.Define(BeepFunctionName, new BeepFunction());
+        kelloxEnvironment.Define(ClearFunctionName, new ClearFunction());
+        kelloxEnvironment.Define(ClockFunctionName, new ClockFunction());
+        kelloxEnvironment.Define(ExitFunctionName, new ExitFunction());
+        kelloxEnvironment.Define(RandomFunctionName, new RandomFunction());
+        kelloxEnvironment.Define(ReadFunctionName, new ReadFunction());
+        kelloxEnvironment.Define(TypeOfFunctionName, new TypeOfFunction());
+        kelloxEnvironment.Define(WaitFunctionName, new WaitFunction());
     }
 }
