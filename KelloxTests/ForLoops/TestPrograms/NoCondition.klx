@@ -1,0 +1,7 @@
+fun bar() {
+  for (var i = 0;; i = i + 1) {
+    println i;
+    if (i >= 2) return;
+  }
+}
+bar();

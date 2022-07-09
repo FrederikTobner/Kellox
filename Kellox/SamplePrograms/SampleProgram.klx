@@ -1,4 +1,8 @@
-for (var c = 0; c < 3;) println c = c + 1;
+// No clauses.
+fun foo() {
+  for (;;) return "done";
+}
+print foo(); // expect: done
 
 for (var i = 1; i < 10; i++)
 {

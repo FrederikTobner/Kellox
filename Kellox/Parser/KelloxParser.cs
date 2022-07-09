@@ -216,6 +216,7 @@ public static class KelloxParser
         if (Match(tokens, TokenType.VAR))
         {
             initializerExpression = CreateDeclarationStatement(tokens);
+            Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after loop initializer");
         }
         else if (!Match(tokens, TokenType.SEMICOLON))
         {
@@ -223,17 +224,15 @@ public static class KelloxParser
         }
 
         IExpression? conditionalExpression = null;
-        if (Check(tokens, TokenType.SEMICOLON))
+        if (!Match(tokens, TokenType.SEMICOLON))
         {
-            Advance(tokens);
             conditionalExpression = Expression(tokens);
             Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after loop condition");
-        }
+        }        
 
         IExpression? incrementExpression = null;
         if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
         {
-
             incrementExpression = Expression(tokens);
         }
         Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");

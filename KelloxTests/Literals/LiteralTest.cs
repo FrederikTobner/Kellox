@@ -2,34 +2,17 @@
 using System.IO;
 using Xunit;
 
-namespace KelloxTests;
+namespace KelloxTests.Literals;
 
 public class LiteralTest : KelloxTest
 {
     //Folder of the test programs
     protected override string ProjectPath { get; init; } = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}{Path.DirectorySeparatorChar}Literals";
 
-    protected override string FolderName { get; init; } = "TestPrograms";
-
-    /// <summary>
-    /// Output of the numbers literal test program
-    /// </summary>
-    private static readonly string expectedNumberLiteralsOutput = $"123{Environment.NewLine}987654{Environment.NewLine}0{Environment.NewLine}-0{Environment.NewLine}{123.456}{Environment.NewLine}{-0.001}{Environment.NewLine}";
-
-    /// <summary>
-    /// Output of the boolean literal test program
-    /// </summary>
-    private static readonly string expectedBooleanLiteralsOutput = $"true{Environment.NewLine}false{Environment.NewLine}";
-
-
-    /// <summary>
-    /// Output of the string literal test program
-    /// </summary>
-    private static readonly string expectedStringLiteralsOutput = $"{Environment.NewLine}a{Environment.NewLine}A{Environment.NewLine}123{Environment.NewLine}!\"$%&/()=?{Environment.NewLine}";
-
     [Fact]
     public void TestNumberLiterals()
     {
+        string expectedNumberLiteralsOutput = $"123{Environment.NewLine}987654{Environment.NewLine}0{Environment.NewLine}-0{Environment.NewLine}{123.456}{Environment.NewLine}{-0.001}{Environment.NewLine}";
         RunTestFile(CreateKelloxTestFilePath("NumberLiterals.klx"));
         Assert.Equal(expectedNumberLiteralsOutput, output.ToString());
     }
@@ -37,6 +20,7 @@ public class LiteralTest : KelloxTest
     [Fact]
     public void TestBooleanLiterals()
     {
+        string expectedBooleanLiteralsOutput = $"true{Environment.NewLine}false{Environment.NewLine}";
         RunTestFile(CreateKelloxTestFilePath("BooleanLiterals.klx"));
         Assert.Equal(expectedBooleanLiteralsOutput, output.ToString());
     }
@@ -44,6 +28,7 @@ public class LiteralTest : KelloxTest
     [Fact]
     public void TestStringLiterals()
     {
+        string expectedStringLiteralsOutput = $"{Environment.NewLine}a{Environment.NewLine}A{Environment.NewLine}123{Environment.NewLine}!\"$%&/()=?{Environment.NewLine}";
         RunTestFile(CreateKelloxTestFilePath("StringLiterals.klx"));
         Assert.Equal(expectedStringLiteralsOutput, output.ToString());
     }

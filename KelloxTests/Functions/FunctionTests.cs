@@ -2,30 +2,19 @@ using System;
 using System.IO;
 using Xunit;
 
-namespace KelloxTests;
+namespace KelloxTests.Functions;
 
 public class FunctionTests : KelloxTest
 {
     //Folder of the test programs
     protected override string ProjectPath { get; init; } = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}{Path.DirectorySeparatorChar}Functions";
 
-    protected override string FolderName { get; init; } = "TestPrograms";
-
-    /// <summary>
-    /// Output of the fibonacci program
-    /// </summary>
-    private static readonly string expectedFibonacciOutput = $"0{Environment.NewLine}1{Environment.NewLine}1{Environment.NewLine}2{Environment.NewLine}3{Environment.NewLine}5{Environment.NewLine}8{Environment.NewLine}13{Environment.NewLine}21{Environment.NewLine}34{Environment.NewLine}";
-
-    /// <summary>
-    /// Output of the parameters program
-    /// </summary>
-    private static readonly string expectedParametersOutput = $"0{Environment.NewLine}1{Environment.NewLine}3{Environment.NewLine}6{Environment.NewLine}10{Environment.NewLine}15{Environment.NewLine}21{Environment.NewLine}28{Environment.NewLine}36{Environment.NewLine}";
-
     [Fact]
     public void TestNestedFunction()
     {
-        RunTestFile(CreateKelloxTestFilePath("FibonacciProgram.klx"));
-        Assert.Equal(expectedFibonacciOutput, output.ToString());
+        string expectedNestedFunctionOutput = $"0{Environment.NewLine}1{Environment.NewLine}1{Environment.NewLine}2{Environment.NewLine}3{Environment.NewLine}5{Environment.NewLine}8{Environment.NewLine}13{Environment.NewLine}21{Environment.NewLine}34{Environment.NewLine}";
+        RunTestFile(CreateKelloxTestFilePath("NestedFunction.klx"));
+        Assert.Equal(expectedNestedFunctionOutput, output.ToString());
     }
 
     [Fact]
@@ -38,6 +27,7 @@ public class FunctionTests : KelloxTest
     [Fact]
     public void TestParameters()
     {
+        string expectedParametersOutput = $"0{Environment.NewLine}1{Environment.NewLine}3{Environment.NewLine}6{Environment.NewLine}10{Environment.NewLine}15{Environment.NewLine}21{Environment.NewLine}28{Environment.NewLine}36{Environment.NewLine}";
         RunTestFile(CreateKelloxTestFilePath("Parameters.klx"));
         Assert.Equal(expectedParametersOutput, output.ToString());
     }

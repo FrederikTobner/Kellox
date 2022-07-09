@@ -1,0 +1,3 @@
+println 123 + 456;
+println 100 + 23.45;
+println "hel" + "lo";

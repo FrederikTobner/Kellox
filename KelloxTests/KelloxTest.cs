@@ -20,8 +20,6 @@ public abstract class KelloxTest
     //Folder of the test programs
     protected abstract string ProjectPath { get; init; }
 
-    protected abstract string FolderName { get; init; }
-
     //Used to redirect the console output
     protected readonly StringWriter output;
 
@@ -30,7 +28,7 @@ public abstract class KelloxTest
     {
         // We create a new StringWriter for each test
         output = new();
-        //We redirect the Console output to the StringWriter
+        //and redirect the Console output to the StringWriter
         Console.SetOut(output);
     }
 
@@ -39,7 +37,7 @@ public abstract class KelloxTest
         string s = "";
         try
         {
-            s = Path.Combine(ProjectPath, FolderName, filename);
+            s = Path.Combine(ProjectPath, "TestPrograms", filename);
         }
         catch (Exception)
         {

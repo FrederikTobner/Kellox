@@ -1,0 +1,10 @@
+var i = 1;
+for (;;)
+{
+	if(i == 4)
+	{
+		break;
+	}
+	println i;
+	i++;
+}

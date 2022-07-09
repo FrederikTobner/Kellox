@@ -1,0 +1,2 @@
+println 5 * 3;
+println 12.34 * 0.3;
