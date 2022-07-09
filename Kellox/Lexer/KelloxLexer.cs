@@ -7,7 +7,7 @@ namespace Kellox.Lexer;
 /// <summary>
 /// Performs a lexical analysis on a linear stream of characters and groups them together to a flat sequence of Tokens
 /// </summary>
-internal static class KelloxLexer
+public static class KelloxLexer
 {
     /// <summary>
     /// StartIndex of the token that is currently getting evaluated in the sourcecode
@@ -32,7 +32,7 @@ internal static class KelloxLexer
     /// <summary>
     /// Scans the Tokens in a file and returns them, as a List
     /// </summary>
-    internal static IReadOnlyList<Token> ScanTokens(string source)
+    public static IReadOnlyList<Token> ScanTokens(string source)
     {
         start = 0;
         current = 0;

@@ -10,7 +10,7 @@ namespace Kellox.Resolver;
 /// <summary>
 /// Walks over the Syntaxtree before it is executed and resolves all the variables it contains
 /// </summary>
-internal static class KelloxResolver
+public static class KelloxResolver
 {
     /// <summary>
     /// Stack for keeping track of the variables in the current scope and all outer scopes.
@@ -266,7 +266,7 @@ internal static class KelloxResolver
         }
     }
 
-        /// <summary>
+    /// <summary>
     /// Resolves a Breakstatement
     /// </summary>
     /// <param name="continueStatement">The ContinueStatement that shall be resolved</param>

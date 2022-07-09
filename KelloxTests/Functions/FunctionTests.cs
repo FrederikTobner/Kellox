@@ -1,4 +1,3 @@
-using Kellox.Interpreter;
 using System;
 using System.IO;
 using Xunit;
@@ -7,25 +6,10 @@ namespace KelloxTests;
 
 public class FunctionTests : KelloxTest
 {
-    /// <summary>
-    /// Path of the Fibonacci Test Program
-    /// </summary>
-    private static readonly string fibonacciProgramPath = CreateKelloxTestFilePath("FibonacciProgram.klx");
+    //Folder of the test programs
+    protected override string ProjectPath { get; init; } = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}{Path.DirectorySeparatorChar}Functions";
 
-    /// <summary>
-    /// Path of the wrong argument count Test Program
-    /// </summary>
-    private static readonly string emptyBodyProgramPath = CreateKelloxTestFilePath("EmptyBody.klx");
-
-    /// <summary>
-    /// Path of the parameters Test Program
-    /// </summary>
-    private static readonly string parametersProgramPath = CreateKelloxTestFilePath("Parameters.klx");
-
-    /// <summary>
-    /// Path of the parameters Test Program
-    /// </summary>
-    private static readonly string recursionProgramPath = CreateKelloxTestFilePath("Recursion.klx");
+    protected override string FolderName { get; init; } = "TestPrograms";
 
     /// <summary>
     /// Output of the fibonacci program
@@ -40,28 +24,28 @@ public class FunctionTests : KelloxTest
     [Fact]
     public void TestNestedFunction()
     {
-        KelloxInterpreter.RunFile(fibonacciProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("FibonacciProgram.klx"));
         Assert.Equal(expectedFibonacciOutput, output.ToString());
     }
 
     [Fact]
     public void TestEmptyBody()
     {
-        KelloxInterpreter.RunFile(emptyBodyProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("EmptyBody.klx"));
         Assert.Equal("nil", output.ToString());
     }
 
     [Fact]
     public void TestParameters()
     {
-        KelloxInterpreter.RunFile(parametersProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("Parameters.klx"));
         Assert.Equal(expectedParametersOutput, output.ToString());
     }
 
     [Fact]
     public void TestRecursion()
     {
-        KelloxInterpreter.RunFile(recursionProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("Recursion.klx"));
         Assert.Equal("21", output.ToString());
     }
 }

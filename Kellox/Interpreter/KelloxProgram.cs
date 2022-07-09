@@ -6,7 +6,7 @@ namespace Kellox.Interpreter;
 /// <summary>
 /// Model of a program written in Kellox
 /// </summary>
-internal class KelloxProgram : IEnumerable<IStatement>
+public class KelloxProgram : IEnumerable<IStatement>
 {
     /// <summary>
     /// A readonly list containing of parsed statements/instructions that can be executed

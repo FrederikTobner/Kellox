@@ -6,7 +6,7 @@ using Xunit.Sdk;
 namespace KelloxTests
 {
     /// <summary>
-    /// Atribut for a tests that affects the environment
+    /// Atribut for a tests that affects the environment and could produce an error
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     internal class KelloxTestAttribute : BeforeAfterTestAttribute
@@ -18,6 +18,8 @@ namespace KelloxTests
 
         public override void After(MethodInfo methodUnderTest)
         {
+            KelloxInterpreter.RunTimeErrorOccurred = false;
+            KelloxInterpreter.ErrorOccurred = false;
             KelloxInterpreter.ResetEnvironment();
         }
     }

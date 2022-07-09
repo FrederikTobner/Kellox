@@ -10,7 +10,7 @@ namespace Kellox.Parser;
 /// <summary>
 /// Takes a flat sequence of tokens and builds a syntax tree based on the tokens
 /// </summary>
-internal static class KelloxParser
+public static class KelloxParser
 {
     /// <summary>
     /// The current Position in the sequence of tokens
@@ -20,7 +20,7 @@ internal static class KelloxParser
     /// <summary>
     /// Builds a KelloxProgram (containing an abstract syntax tree) out of a flat sequence of Tokens
     /// </summary>
-    internal static KelloxProgram Parse(IReadOnlyList<Token> tokens)
+    public static KelloxProgram Parse(IReadOnlyList<Token> tokens)
     {
         current = 0;
         List<IStatement> statements = new();
@@ -233,7 +233,7 @@ internal static class KelloxParser
         IExpression? incrementExpression = null;
         if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
         {
-            
+
             incrementExpression = Expression(tokens);
         }
         Consume(tokens, TokenType.RIGHT_PARENTHESIS, "Expect \')\' after for.");

@@ -1,6 +1,6 @@
 ﻿namespace Kellox.Statements;
 
-internal interface IStatement
+public interface IStatement
 {
     /// <summary>
     /// Executes the Statement

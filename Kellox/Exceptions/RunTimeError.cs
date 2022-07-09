@@ -5,7 +5,7 @@ namespace Kellox.Exceptions;
 /// <summary>
 /// Models an Error that occured during runtime
 /// </summary>
-internal class RunTimeError : ApplicationException
+public class RunTimeError : ApplicationException
 {
     /// <summary>
     /// The Token that has triggered the runtime error

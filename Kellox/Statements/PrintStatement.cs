@@ -1,8 +1,6 @@
 ﻿using Kellox.Classes;
 using Kellox.Expressions;
 using Kellox.Keywords;
-using Kellox.Tokens;
-using Kellox.Utils;
 
 namespace Kellox.Statements;
 
@@ -18,7 +16,7 @@ internal class PrintStatement : IStatement
     public IExpression Expression { get; init; }
 
     /// <summary>
-    /// Boolean value that determines weather a line break will be added after the printing the Expression
+    /// Boolean value that determines weather a line break will be added after the printing the Expression - println
     /// </summary>
     private readonly bool addLineBreak;
 

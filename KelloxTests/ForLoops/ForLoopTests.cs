@@ -1,5 +1,4 @@
-﻿using Kellox.Interpreter;
-using System;
+﻿using System;
 using System.IO;
 using Xunit;
 
@@ -7,25 +6,10 @@ namespace KelloxTests;
 
 public class ForLoopTests : KelloxTest
 {
-    /// <summary>
-    /// Path of the Fibonacci Test Program
-    /// </summary>
-    private static readonly string breakProgramPath = CreateKelloxTestFilePath("BreakTest.klx");
+    //Folder of the test programs
+    protected override string ProjectPath { get; init; } = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}{Path.DirectorySeparatorChar}ForLoops";
 
-    /// <summary>
-    /// Path of the Fibonacci Test Program
-    /// </summary>
-    private static readonly string continueProgramPath = CreateKelloxTestFilePath("ContinueTest.klx");
-
-    /// <summary>
-    /// Path of the Fibonacci Test Program
-    /// </summary>
-    private static readonly string singleExpressionForProgramPath = CreateKelloxTestFilePath("SingleExpressionForTest.klx");
-
-    /// <summary>
-    /// Path of the Fibonacci Test Program
-    /// </summary>
-    private static readonly string normalForProgramPath = CreateKelloxTestFilePath("NormalForTest.klx");
+    protected override string FolderName { get; init; } = "TestPrograms";
 
     /// <summary>
     /// Output of the break program
@@ -50,28 +34,28 @@ public class ForLoopTests : KelloxTest
     [Fact]
     public void TestBreakProgram()
     {
-        KelloxInterpreter.RunFile(breakProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("BreakTest.klx"));
         Assert.Equal(expectedBreakOutput, output.ToString());
     }
 
     [Fact]
     public void TestContinueProgram()
     {
-        KelloxInterpreter.RunFile(continueProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("ContinueTest.klx"));
         Assert.Equal(expectedContinueOutput, output.ToString());
     }
 
     [Fact]
     public void TestSingleExpressionForProgram()
     {
-        KelloxInterpreter.RunFile(singleExpressionForProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("SingleExpressionForTest.klx"));
         Assert.Equal(expectedSingleExpressionForOutput, output.ToString());
     }
 
     [Fact]
     public void TestNormalForProgram()
     {
-        KelloxInterpreter.RunFile(normalForProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("NormalForTest.klx"));
         Assert.Equal(expectedNormalForOutput, output.ToString());
     }
 }

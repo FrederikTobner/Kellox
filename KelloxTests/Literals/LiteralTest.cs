@@ -1,15 +1,15 @@
-﻿using Kellox.Interpreter;
-using System;
+﻿using System;
+using System.IO;
 using Xunit;
 
 namespace KelloxTests;
 
 public class LiteralTest : KelloxTest
 {
-    /// <summary>
-    /// Path of the NumberLiterals Test Program
-    /// </summary>
-    private static readonly string numberLiteralsProgramPath = CreateKelloxTestFilePath("NumberLiterals.klx");
+    //Folder of the test programs
+    protected override string ProjectPath { get; init; } = $"{Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName}{Path.DirectorySeparatorChar}Literals";
+
+    protected override string FolderName { get; init; } = "TestPrograms";
 
     /// <summary>
     /// Output of the numbers literal test program
@@ -17,20 +17,10 @@ public class LiteralTest : KelloxTest
     private static readonly string expectedNumberLiteralsOutput = $"123{Environment.NewLine}987654{Environment.NewLine}0{Environment.NewLine}-0{Environment.NewLine}{123.456}{Environment.NewLine}{-0.001}{Environment.NewLine}";
 
     /// <summary>
-    /// Path of the BooleanLiterals Test Program
-    /// </summary>
-    private static readonly string booleanLiteralsProgramPath = CreateKelloxTestFilePath("BooleanLiterals.klx");
-
-    /// <summary>
     /// Output of the boolean literal test program
     /// </summary>
     private static readonly string expectedBooleanLiteralsOutput = $"true{Environment.NewLine}false{Environment.NewLine}";
 
-
-    /// <summary>
-    /// Path of the StringLiterals Test Program
-    /// </summary>
-    private static readonly string stringLiteralsProgramPath = CreateKelloxTestFilePath("StringLiterals.klx");
 
     /// <summary>
     /// Output of the string literal test program
@@ -40,28 +30,28 @@ public class LiteralTest : KelloxTest
     [Fact]
     public void TestNumberLiterals()
     {
-        KelloxInterpreter.RunFile(numberLiteralsProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("NumberLiterals.klx"));
         Assert.Equal(expectedNumberLiteralsOutput, output.ToString());
     }
 
     [Fact]
     public void TestBooleanLiterals()
     {
-        KelloxInterpreter.RunFile(booleanLiteralsProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("BooleanLiterals.klx"));
         Assert.Equal(expectedBooleanLiteralsOutput, output.ToString());
     }
 
     [Fact]
     public void TestStringLiterals()
     {
-        KelloxInterpreter.RunFile(stringLiteralsProgramPath);
+        RunTestFile(CreateKelloxTestFilePath("StringLiterals.klx"));
         Assert.Equal(expectedStringLiteralsOutput, output.ToString());
     }
 
     [Fact]
     public void TestNilLiteral()
     {
-        KelloxInterpreter.Run("print nil;");
+        RunTest("print nil;");
         Assert.Equal("nil", output.ToString());
     }
 }
