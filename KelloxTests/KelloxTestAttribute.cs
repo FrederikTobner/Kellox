@@ -6,7 +6,7 @@ using Xunit.Sdk;
 namespace KelloxTests
 {
     /// <summary>
-    /// Atribut for a tests that affects the environment and could produce an error
+    /// Atribut for a tests that affect the environment and could produce an error
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     internal class KelloxTestAttribute : BeforeAfterTestAttribute

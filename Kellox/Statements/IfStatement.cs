@@ -18,10 +18,7 @@ internal class IfStatement : IStatement
     /// </summary>
     public IStatement ThenBranch { get; init; }
 
-    /// <summary>
-    /// The ElseBranch of the if-Statement e.g a Block- or Printstatement
-    /// only optional
-    /// </summary>
+    /// @brief The ElseBranch of the if-Statement e.g a Block- or Printstatement
     public IStatement? ElseBranch { get; init; }
 
     public IfStatement(IExpression condition, IStatement ifStatement, IStatement? elseStatement)

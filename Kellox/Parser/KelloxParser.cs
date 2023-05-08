@@ -228,7 +228,7 @@ public static class KelloxParser
         {
             conditionalExpression = Expression(tokens);
             Consume(tokens, TokenType.SEMICOLON, "Expect \';\' after loop condition");
-        }        
+        }
 
         IExpression? incrementExpression = null;
         if (!Check(tokens, TokenType.RIGHT_PARENTHESIS))
@@ -244,11 +244,8 @@ public static class KelloxParser
             IStatement[] statements = { body, new ExpressionStatement(incrementExpression) };
             body = new BlockStatement(statements.ToList());
         }
-        if (conditionalExpression is null)
-        {
-            //If there is no Condition specified it is always true
-            conditionalExpression = new LiteralExpression(true);
-        }
+        //If there is no Condition specified it is always true
+        conditionalExpression ??= new LiteralExpression(true);
         body = new WhileStatement(conditionalExpression, body, incrementExpression is null ? null : new ExpressionStatement(incrementExpression));
         if (initializerExpression is not null)
         {

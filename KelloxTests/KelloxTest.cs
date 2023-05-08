@@ -61,10 +61,10 @@ public abstract class KelloxTest
             return;
         }
         string sourceCode = Encoding.UTF8.GetString(file);
-        RunTest(sourceCode, false);
+        RunTest(sourceCode);
     }
 
-    protected static void RunTest(string sourceCode, bool onlyAnalyze = false)
+    protected static void RunTest(string sourceCode)
     {
         IReadOnlyList<Token> tokens = KelloxLexer.ScanTokens(sourceCode);
         // Error during the lexical analysis
@@ -74,12 +74,8 @@ public abstract class KelloxTest
         }
         KelloxProgram program = KelloxParser.Parse(tokens);
         // Error during the Parsing process
-        if (!program.Runnable || onlyAnalyze)
+        if (!program.Runnable)
         {
-            if (program.Runnable)
-            {
-                Console.WriteLine("Syntax OK");
-            }
             return;
         }
         KelloxResolver.Resolve(program);
