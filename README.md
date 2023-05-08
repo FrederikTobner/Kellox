@@ -1,4 +1,6 @@
 # Kellox
+[![Build Kellox](https://github.com/FrederikTobner/Kellox/actions/workflows/build.yml/badge.svg)](https://github.com/FrederikTobner/Kellox/actions/workflows/build.yml)
+
 Interpreter based on the book [Crafting interpreters](https://craftinginterpreters.com/contents.html) for the programming language kellox.
 <br/>
 Kellox is a dynamically typed, object oriented, high-level scripting language with automatic memory management using the Garbage Collector of the .Net Framework.
